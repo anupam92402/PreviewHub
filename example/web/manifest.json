@@ -1,6 +1,6 @@
 {
-    "name": "preview_hub",
-    "short_name": "preview_hub",
+    "name": "preview_hub_example",
+    "short_name": "preview_hub_example",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
