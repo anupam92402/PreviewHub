@@ -1,0 +1,14 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "package_landing_web",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd example/build/web && python3 -m http.server 8150 --bind 127.0.0.1"
+      ],
+      "port": 8150
+    }
+  ]
+}
