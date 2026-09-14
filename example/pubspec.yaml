@@ -65,6 +65,41 @@ flutter:
     - assets/images/
     - assets/icons/
 
+  # Declared under fonts, not assets, so FontManifest carries the family and
+  # weight of each face. Flutter lists the files in AssetManifest as well; the
+  # image gallery drops them, since .ttf is not a supported image extension.
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto/Roboto-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/Roboto/Roboto-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Roboto/Roboto-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Roboto/Roboto-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Roboto/Roboto-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Roboto/Roboto-Black.ttf
+          weight: 900
+    - family: Roboto Mono
+      fonts:
+        - asset: assets/fonts/RobotoMono/RobotoMono-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/RobotoMono/RobotoMono-Light.ttf
+          weight: 300
+        - asset: assets/fonts/RobotoMono/RobotoMono-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/RobotoMono/RobotoMono-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/RobotoMono/RobotoMono-Bold.ttf
+          weight: 700
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter/Inter-Regular.ttf
+          weight: 400
+
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
