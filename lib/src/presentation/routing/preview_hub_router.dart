@@ -30,7 +30,9 @@ class PreviewHubRouter {
       case PreviewHubRoutes.iconsAndImages:
         final IconsAndImagesArguments args =
             settings.arguments as IconsAndImagesArguments;
-        return IconsAndImagesScreen(config: args.config);
+        return IconsAndImagesScreen(
+          networkImages: args.config.networkImages,
+        );
 
       case PreviewHubRoutes.assetDetail:
         final AssetDetailArguments args =
