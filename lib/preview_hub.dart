@@ -2,6 +2,4 @@
 library;
 
 export 'src/dashboard/preview_hub_dashboard.dart';
-export 'src/preview_hub_app.dart';
-export 'src/preview_hub_theme.dart';
-export 'src/preview_section.dart';
+export 'src/domain/models/preview_hub_config.dart';

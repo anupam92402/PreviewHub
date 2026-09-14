@@ -2,9 +2,6 @@
 class PreviewHubStrings {
   const PreviewHubStrings._();
 
-  /// Title the host OS shows for the gallery.
-  static const String appTitle = 'Preview Hub';
-
   /// Capsule above the headline.
   static const String badgeLabel = 'PREVIEW HUB';
 
@@ -43,6 +40,94 @@ class PreviewHubStrings {
   /// Summary of the icons and images section.
   static const String sectionIconsAndImagesDescription =
       'SVG and PNG artwork, bundled or straight off the network.';
+
+  /// Placeholder in the asset search field.
+  static const String searchAssetsHint = 'Search name or path';
+
+  /// Shown when no asset matches the search and filters.
+  static const String emptyAssets = 'Nothing matches those filters';
+
+  /// Title of the validation report sheet.
+  static const String validationReportTitle = 'Validation report';
+
+  /// Shown in the report when nothing went wrong.
+  static const String validationReportEmpty = 'Every entry loaded cleanly.';
+
+  /// Says how many entries the report covers.
+  static String validationReportChecked(int count) => count == 0
+      ? 'No remote entries were supplied.'
+      : '$count remote ${count == 1 ? 'entry was' : 'entries were'} checked.';
+
+  /// Tooltip on the report button.
+  static const String validationReportTooltip = 'Validation report';
+
+  /// Summary line above the list of [count] problems.
+  static String validationReportSummary(int count) =>
+      '$count ${count == 1 ? 'entry' : 'entries'} could not be used as '
+      'supplied.';
+
+  /// Caption on a tile whose artwork could not be drawn.
+  static const String assetLoadFailed = 'Some Error Occurred';
+
+  /// Reason shown when an asset failed with no recorded cause.
+  static const String assetCannotDisplay = 'This file could not be displayed';
+
+  /// Stands in for the size and dimensions of a failed asset.
+  static const String assetUnavailable = 'Unavailable';
+
+  /// Heading above the column choices in the view menu.
+  static const String viewColumnsLabel = 'Per row';
+
+  /// Names the choice that puts [count] tiles in a row.
+  static String viewColumns(int count) => '$count per row';
+
+  /// Tooltip on the sort button.
+  static const String sortTooltip = 'Sort by size';
+
+  /// Title of the source filter row.
+  static const String filterSourceLabel = 'Source';
+
+  /// Title of the format filter row.
+  static const String filterTypeLabel = 'Type';
+
+  /// Filter chip that clears its whole row.
+  static const String filterAll = 'All';
+
+  /// Detail row labels.
+  static const String detailName = 'Name';
+
+  /// Label for the format row.
+  static const String detailType = 'Type';
+
+  /// Label for the origin row.
+  static const String detailSource = 'Source';
+
+  /// Label for the pixel size row.
+  static const String detailDimensions = 'Dimensions';
+
+  /// Label for the byte size row.
+  static const String detailSize = 'Size';
+
+  /// Label for the manifest key row.
+  static const String detailPath = 'Path';
+
+  /// Label for the URL row.
+  static const String detailUrl = 'URL';
+
+  /// Label for the failure row.
+  static const String detailError = 'Error';
+
+  /// Shown in place of a size while it is still being measured.
+  static const String measuring = 'Measuring…';
+
+  /// Shown in place of a size that could not be measured.
+  static const String unknown = 'Unknown';
+
+  /// Tooltip on the copy button.
+  static const String copy = 'Copy';
+
+  /// Confirmation after copying.
+  static const String copied = 'Copied';
 
   /// Title of the fonts section.
   static const String sectionFontsTitle = 'Fonts';
