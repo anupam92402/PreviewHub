@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:preview_hub/preview_hub.dart';
 
+import 'network_assets.dart';
+
 void main() => runApp(const ExampleApp());
 
 /// Ordinary client app; its bundled assets are what the gallery will preview.
@@ -43,7 +45,9 @@ class _CounterPageState extends State<CounterPage> {
   void _openPreviewHub() {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (BuildContext context) => const PreviewHubDashboard(),
+        builder: (BuildContext context) => const PreviewHubDashboard(
+          config: PreviewHubConfig(networkImages: allNetworkImages),
+        ),
       ),
     );
   }

@@ -3,18 +3,6 @@
 /// A real consumer supplies their own; these cover every supported format.
 library;
 
-/// A network asset with a label to show alongside it.
-class NetworkAsset {
-  /// Creates a named network asset.
-  const NetworkAsset({required this.name, required this.url});
-
-  /// Label shown with the asset.
-  final String name;
-
-  /// Absolute http or https URL.
-  final String url;
-}
-
 /// PNG endpoints.
 const List<String> pngs = <String>[
   'https://picsum.photos/400/400.png',
@@ -52,25 +40,19 @@ const List<String> jpegs = <String>[
 ];
 
 /// GIF endpoints.
-const List<NetworkAsset> gifs = <NetworkAsset>[
-  NetworkAsset(
-    name: 'Loading',
-    url: 'https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif',
-  ),
-  NetworkAsset(
-    name: 'Success',
-    url: 'https://media.giphy.com/media/ICOgUNjpvO0PC/giphy.gif',
-  ),
-  NetworkAsset(
-    name: 'Rocket',
-    url: 'https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif',
-  ),
-  NetworkAsset(
-    name: 'Coding',
-    url: 'https://media.giphy.com/media/ZVik7pBtu9dNS/giphy.gif',
-  ),
-  NetworkAsset(
-    name: 'Truck',
-    url: 'https://media.giphy.com/media/xTiTnxpQ3ghPiB2Hp6/giphy.gif',
-  ),
+const List<String> gifs = <String>[
+  'https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif',
+  'https://media.giphy.com/media/ICOgUNjpvO0PC/giphy.gif',
+  'https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif',
+  'https://media.giphy.com/media/ZVik7pBtu9dNS/giphy.gif',
+  'https://media.giphy.com/media/xTiTnxpQ3ghPiB2Hp6/giphy.gif',
+];
+
+/// Every entry above, in the order the gallery lists them.
+const List<String> allNetworkImages = <String>[
+  ...pngs,
+  ...jpegs,
+  ...webps,
+  ...gifs,
+  ...svgs,
 ];
