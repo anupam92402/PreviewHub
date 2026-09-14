@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../domain/models/preview_hub_config.dart';
+import '../domain/models/preview_hub_route_arguments.dart';
+import '../presentation/routing/preview_hub_router.dart';
+import '../presentation/routing/preview_hub_routes.dart';
+import '../presentation/theme/preview_hub_theme_controller.dart';
 import '../preview_hub_strings.dart';
 import '../preview_section.dart';
 import 'dashboard_header.dart';
@@ -7,51 +12,116 @@ import 'entrance_transition.dart';
 import 'preview_section_card.dart';
 
 /// Landing screen listing every previewable collection.
-class PreviewHubDashboard extends StatelessWidget {
-  /// Creates the landing screen.
-  const PreviewHubDashboard({this.onThemeToggle, super.key});
+class PreviewHubDashboard extends StatefulWidget {
+  const PreviewHubDashboard({
+    this.config = const PreviewHubConfig(),
+    super.key,
+  });
 
-  /// Called when the theme toggle is tapped; `null` hides it.
-  final VoidCallback? onThemeToggle;
+  /// Tells the gallery about assets it cannot discover, such as remote URLs.
+  final PreviewHubConfig config;
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    body: CustomScrollView(
-      slivers: <Widget>[
-        SliverToBoxAdapter(
-          child: DashboardHeader(onThemeToggle: onThemeToggle),
+  State<PreviewHubDashboard> createState() => _PreviewHubDashboardState();
+}
+
+class _PreviewHubDashboardState extends State<PreviewHubDashboard> {
+  final PreviewHubThemeController _themeController =
+      PreviewHubThemeController();
+
+  @override
+  void dispose() {
+    _themeController.dispose();
+    super.dispose();
+  }
+
+  /// Opens the collection behind [section], for the ones that exist yet.
+  void _openSection(PreviewSection section) {
+    if (section.type != PreviewSectionType.iconsAndImages) {
+      return;
+    }
+    Navigator.of(context).push(
+      PreviewHubRouter.route(
+        PreviewHubRoutes.iconsAndImages,
+        arguments: IconsAndImagesArguments(
+          config: widget.config,
+          themeController: _themeController,
         ),
-        const SliverPadding(
-          padding: EdgeInsets.fromLTRB(20, 0, 20, 14),
-          sliver: SliverToBoxAdapter(child: _SectionLabel()),
-        ),
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          sliver: SliverList.separated(
-            itemCount: PreviewSection.assetsList.length,
-            separatorBuilder: (BuildContext context, int index) =>
-                const SizedBox(height: 12),
-            itemBuilder: (BuildContext context, int index) {
-              final PreviewSection section = PreviewSection.assetsList[index];
-              return EntranceTransition(
-                delay: Duration(milliseconds: 70 * index),
-                child: PreviewSectionCard(section: section, onTap: () {}),
-              );
-            },
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PreviewHubTheming(
+      controller: _themeController,
+      child: _DashboardBody(
+        themeController: _themeController,
+        onSectionTap: _openSection,
+      ),
+    );
+  }
+}
+
+/// The landing screen itself, below the gallery's own theme.
+class _DashboardBody extends StatelessWidget {
+  const _DashboardBody({
+    required this.themeController,
+    required this.onSectionTap,
+  });
+
+  /// Theme the toggle flips.
+  final PreviewHubThemeController themeController;
+
+  /// Called when a collection card is tapped.
+  final ValueChanged<PreviewSection> onSectionTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverToBoxAdapter(
+            child: DashboardHeader(
+              onThemeToggle: () =>
+                  themeController.toggle(Theme.of(context).brightness),
+            ),
           ),
-        ),
-        SliverPadding(
-          padding: EdgeInsets.fromLTRB(
-            20,
-            28,
-            20,
-            MediaQuery.paddingOf(context).bottom + 28,
+          const SliverPadding(
+            padding: EdgeInsets.fromLTRB(20, 0, 20, 14),
+            sliver: SliverToBoxAdapter(child: _SectionLabel()),
           ),
-          sliver: const SliverToBoxAdapter(child: _Footnote()),
-        ),
-      ],
-    ),
-  );
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            sliver: SliverList.separated(
+              itemCount: PreviewSection.assetsList.length,
+              separatorBuilder: (BuildContext context, int index) =>
+                  const SizedBox(height: 12),
+              itemBuilder: (BuildContext context, int index) {
+                final PreviewSection section = PreviewSection.assetsList[index];
+                return EntranceTransition(
+                  delay: Duration(milliseconds: 70 * index),
+                  child: PreviewSectionCard(
+                    section: section,
+                    onTap: () => onSectionTap(section),
+                  ),
+                );
+              },
+            ),
+          ),
+          SliverPadding(
+            padding: EdgeInsets.fromLTRB(
+              20,
+              28,
+              20,
+              MediaQuery.paddingOf(context).bottom + 28,
+            ),
+            sliver: const SliverToBoxAdapter(child: _Footnote()),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 /// Heading above the section list.

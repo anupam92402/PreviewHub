@@ -4,11 +4,10 @@ import '../preview_hub_strings.dart';
 
 /// Gradient hero at the top of the landing screen.
 class DashboardHeader extends StatelessWidget {
-  /// Creates the hero, with a theme toggle when [onThemeToggle] is given.
-  const DashboardHeader({this.onThemeToggle, super.key});
+  const DashboardHeader({required this.onThemeToggle, super.key});
 
-  /// Called when the theme toggle is tapped; `null` hides it.
-  final VoidCallback? onThemeToggle;
+  /// Called when the theme toggle is tapped.
+  final VoidCallback onThemeToggle;
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +48,7 @@ class DashboardHeader extends StatelessWidget {
                   children: <Widget>[
                     const _HeaderBadge(),
                     const Spacer(),
-                    if (onThemeToggle != null)
-                      _ThemeToggle(onPressed: onThemeToggle!),
+                    _ThemeToggle(onPressed: onThemeToggle),
                   ],
                 ),
                 const SizedBox(height: 20),
