@@ -34,11 +34,6 @@ dependencies:
   preview_hub:
     path: ../
 
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.8
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -64,6 +59,8 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/lottie/
+    - assets/rive/
 
   # Declared under fonts, not assets, so FontManifest carries the family and
   # weight of each face. Flutter lists the files in AssetManifest as well; the
