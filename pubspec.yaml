@@ -13,6 +13,8 @@ dependencies:
 
   flutter_svg: ^2.0.10+1
   http: ^1.2.2
+  lottie: ^3.5.1
+  rive: ^0.14.11
 
 dev_dependencies:
   flutter_test:

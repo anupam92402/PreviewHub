@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:preview_hub/preview_hub.dart';
 
 import 'network_assets.dart';
+import 'network_lotties.dart';
+import 'network_rives.dart';
 
 void main() => runApp(const ExampleApp());
 
@@ -46,7 +48,11 @@ class _CounterPageState extends State<CounterPage> {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (BuildContext context) => const PreviewHubDashboard(
-          config: PreviewHubConfig(networkImages: allNetworkImages),
+          config: PreviewHubConfig(
+            networkImages: allNetworkImages,
+            networkLotties: lotties,
+            networkRives: riveUrls,
+          ),
         ),
       ),
     );
