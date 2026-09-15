@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../preview_hub_strings.dart';
+
 /// The gallery's search field, shared by every collection screen.
 /// Owns nothing but its text controller: the query is reported through
 /// [onChanged] and the screen's view model decides what it means.
@@ -157,7 +159,7 @@ class _Field extends StatelessWidget {
                     onPressed: onClear,
                     iconSize: 17,
                     visualDensity: VisualDensity.compact,
-                    tooltip: 'Clear',
+                    tooltip: PreviewHubStrings.clear,
                     icon: const Icon(Icons.close_rounded),
                   ),
                   const SizedBox(width: 4),

@@ -32,7 +32,24 @@ class PreviewHubStrings {
 
   /// Summary of the widget preview section.
   static const String sectionWidgetsDescription =
-      'Every `@Preview` builder, searchable and running full screen.';
+      'Every component and screen you register, running full size.';
+
+  /// Placeholder in the widget search field.
+  static const String searchWidgetsHint = 'Filter by widget or group';
+
+  /// Shown when no widget matches the search and chips.
+  static const String emptyWidgets = 'Nothing matches those filters';
+
+  /// Shown when the host registered no widgets at all.
+  static const String emptyWidgetsUnregistered =
+      'No widgets were registered.\nPass them to PreviewHubConfig.widgets.';
+
+  /// Says how many renderings an entry holds.
+  static String widgetCaseCount(int count) =>
+      '$count ${count == 1 ? 'preview' : 'previews'}';
+
+  /// Tooltip on the button closing a full-screen preview.
+  static const String widgetStageClose = 'Close preview';
 
   /// Title of the icons and images section.
   static const String sectionIconsAndImagesTitle = 'Icons & Images';
@@ -81,6 +98,71 @@ class PreviewHubStrings {
   /// Names the choice that puts [count] tiles in a row.
   static String viewColumns(int count) => '$count per row';
 
+  /// Words every font sample is set in.
+  static const String fontSampleText =
+      'The quick brown fox jumps over the lazy dog';
+
+  /// Heading above one face's size ramp.
+  static String fontWeightHeading(int weight) => 'Weight $weight';
+
+  /// Marks an italic cut in a weight heading.
+  static const String fontItalicSuffix = 'Italic';
+
+  /// Title of the screen where a consumer writes their own sample.
+  static const String fontSampleTitle = 'Custom text';
+
+  /// Tooltip on the button that opens it.
+  static const String fontSampleTooltip = 'Try your own text';
+
+  /// Heading of the checklist shown before anything is chosen.
+  static const String fontSampleChecklist = 'Pick all three to start writing';
+
+  /// Label of the family field.
+  static const String fontFieldFamily = 'Family';
+
+  /// Label of the weight field.
+  static const String fontFieldWeight = 'Weight';
+
+  /// Label of the size field.
+  static const String fontFieldSize = 'Size';
+
+  /// Label of the text field.
+  static const String fontFieldText = 'Your text';
+
+  /// Placeholder in the text field.
+  static const String fontTextHint = 'Type or paste something';
+
+  /// Explains why the text field is not ready yet.
+  static String fontSampleLocked(List<String> missing) {
+    final List<String> names = missing
+        .map((String name) => name.toLowerCase())
+        .toList();
+    final String joined = names.length == 1
+        ? names.single
+        : '${names.sublist(0, names.length - 1).join(', ')} and ${names.last}';
+    return 'Choose a $joined to start writing';
+  }
+
+  /// Sits under the preview, naming what it is set in.
+  static String fontSampleCaption(String family, String face, double size) =>
+      '$family · $face · ${size.toInt()}';
+
+  /// Stands in for the sample before anything is typed.
+  static const String fontSamplePlaceholder = 'Your text appears here';
+
+  /// Title of the family chip row.
+  static const String fontFamilyFilterLabel = 'Family';
+
+  /// Placeholder in the font search field.
+  static const String searchFontsHint = 'Search family';
+
+  /// Shown when no family matches the search.
+  static const String emptyFonts = 'No family matches that search';
+
+  /// Says how many faces a family ships.
+  static String fontFaceCount(int count) =>
+      '$count ${count == 1 ? 'face' : 'faces'}';
+
   /// Tooltip on the sort button.
   static const String sortTooltip = 'Sort by size';
 
@@ -122,6 +204,55 @@ class PreviewHubStrings {
 
   /// Shown in place of a size that could not be measured.
   static const String unknown = 'Unknown';
+
+  /// Placeholder in the Lottie search field.
+  static const String searchLottieHint = 'Search name or path';
+
+  /// Shown when no animation matches the search and filters.
+  static const String emptyLottie = 'Nothing matches those filters';
+
+  /// Caption on an animation that could not be played.
+  static const String lottieFailed = 'Not a playable Lottie';
+
+  /// Tooltip on the button that pauses an animation.
+  static const String lottiePause = 'Pause';
+
+  /// Tooltip on the button that resumes an animation.
+  static const String lottiePlay = 'Play';
+
+  /// Tooltip on the button that plays an animation from the start.
+  static const String lottieRestart = 'Restart';
+
+  /// How long an animation runs, as `1.5s`.
+  static String lottieDuration(Duration duration) =>
+      '${(duration.inMilliseconds / 1000).toStringAsFixed(1)}s';
+
+  /// Label of the animation's running time.
+  static const String lottieDetailDuration = 'Duration';
+
+  /// Label of the animation's frame count and rate.
+  static const String lottieDetailFrames = 'Frames';
+
+  /// Placeholder in the Rive search field.
+  static const String searchRiveHint = 'Search name or path';
+
+  /// Shown when no animation matches the search and filters.
+  static const String emptyRive = 'Nothing matches those filters';
+
+  /// Caption on an animation that could not be played.
+  static const String riveFailed = 'Not a playable Rive file';
+
+  /// Label of the artboard row.
+  static const String riveDetailArtboard = 'Artboard';
+
+  /// Label of the state machine row.
+  static const String riveDetailStateMachine = 'State machine';
+
+  /// Stands in for a file with no state machine.
+  static const String riveNoStateMachine = 'None';
+
+  /// Tooltip on a button that empties a field.
+  static const String clear = 'Clear';
 
   /// Tooltip on the copy button.
   static const String copy = 'Copy';

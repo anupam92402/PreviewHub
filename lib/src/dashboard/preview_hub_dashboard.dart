@@ -36,20 +36,57 @@ class _PreviewHubDashboardState extends State<PreviewHubDashboard> {
   }
 
   /// Opens the collection behind [section], for the ones that exist yet.
+  /// Switching over the type rather than testing one case means a collection
+  /// added later will not silently fall through to doing nothing.
   void _openSection(PreviewSection section) {
-    if (section.type != PreviewSectionType.iconsAndImages) {
-      return;
+    switch (section.type) {
+      case PreviewSectionType.iconsAndImages:
+        _push(
+          PreviewHubRoutes.iconsAndImages,
+          IconsAndImagesArguments(
+            config: widget.config,
+            themeController: _themeController,
+          ),
+        );
+
+      case PreviewSectionType.fonts:
+        _push(
+          PreviewHubRoutes.fonts,
+          FontsArguments(themeController: _themeController),
+        );
+
+      case PreviewSectionType.lottie:
+        _push(
+          PreviewHubRoutes.lottie,
+          LottieArguments(
+            config: widget.config,
+            themeController: _themeController,
+          ),
+        );
+
+      case PreviewSectionType.rive:
+        _push(
+          PreviewHubRoutes.rive,
+          RiveArguments(
+            config: widget.config,
+            themeController: _themeController,
+          ),
+        );
+
+      case PreviewSectionType.widgets:
+        _push(
+          PreviewHubRoutes.widgets,
+          WidgetsArguments(
+            config: widget.config,
+            themeController: _themeController,
+          ),
+        );
     }
-    Navigator.of(context).push(
-      PreviewHubRouter.route(
-        PreviewHubRoutes.iconsAndImages,
-        arguments: IconsAndImagesArguments(
-          config: widget.config,
-          themeController: _themeController,
-        ),
-      ),
-    );
   }
+
+  void _push(String name, PreviewHubArguments arguments) => Navigator.of(
+    context,
+  ).push(PreviewHubRouter.route(name, arguments: arguments));
 
   @override
   Widget build(BuildContext context) {
