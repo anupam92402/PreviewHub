@@ -4,6 +4,7 @@ import 'package:preview_hub/preview_hub.dart';
 import 'network_assets.dart';
 import 'network_lotties.dart';
 import 'network_rives.dart';
+import 'preview_widgets.dart';
 
 void main() => runApp(const ExampleApp());
 
@@ -52,6 +53,7 @@ class _CounterPageState extends State<CounterPage> {
             networkImages: allNetworkImages,
             networkLotties: lotties,
             networkRives: riveUrls,
+            widgets: previewWidgets,
           ),
         ),
       ),
