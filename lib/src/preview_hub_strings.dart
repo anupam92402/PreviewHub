@@ -10,16 +10,16 @@ class PreviewHubStrings {
 
   /// Line under the headline.
   static const String subhead =
-      'Local and network assets — icons, type and motion — rendered exactly '
-      'the way your users will get them.';
+      'Components, screens, icons, type and motion — rendered exactly the way '
+      'your users will get them.';
 
   /// Heading above the section list.
   static const String listLabel = 'COLLECTIONS';
 
   /// Closing nudge under the section list.
   static const String footnote =
-      'Pick a collection and start exploring — every preview runs on the '
-      'device in your hand.';
+      'Every preview runs on the device in your hand, at the size your users '
+      'will see it.';
 
   /// Tooltip on the theme toggle while the dark theme is showing.
   static const String themeToggleToLight = 'Switch to light mode';
@@ -56,7 +56,7 @@ class PreviewHubStrings {
 
   /// Summary of the icons and images section.
   static const String sectionIconsAndImagesDescription =
-      'SVG and PNG artwork, bundled or straight off the network.';
+      'SVG, PNG, WebP, JPEG and GIF, bundled or straight off the network.';
 
   /// Placeholder in the asset search field.
   static const String searchAssetsHint = 'Search name or path';
