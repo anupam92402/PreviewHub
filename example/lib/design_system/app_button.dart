@@ -58,7 +58,6 @@ enum AppButtonSize {
 }
 
 /// The design system's button, in three tones, three variants and three sizes.
-///
 /// Passing a null [onPressed] disables the button, which is the only way to
 /// reach the disabled styling.
 class AppButton extends StatelessWidget {

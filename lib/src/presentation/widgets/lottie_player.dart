@@ -6,10 +6,8 @@ import '../../domain/models/preview_asset.dart';
 import '../../preview_hub_strings.dart';
 
 /// Plays [asset], looping, with the play state under the caller's control.
-///
 /// Drives its own [AnimationController] rather than letting Lottie animate
-/// itself, because pausing has to hold the current frame rather than snap back
-/// to the first one.
+/// itself, so pausing holds the current frame instead of snapping to the first.
 class LottiePlayer extends StatefulWidget {
   /// Creates a player for [asset].
   const LottiePlayer({
@@ -28,10 +26,9 @@ class LottiePlayer extends StatefulWidget {
   /// Whether the animation should be running.
   final bool isPlaying;
 
-  /// Drives the animation instead of the player's own controller.
-  ///
-  /// A caller supplies one when it needs to do more than start and stop —
-  /// rewinding, say. The caller keeps ownership and disposes it.
+  /// Drives the animation instead of the player's own controller. Supplied when
+  /// the caller needs more than start and stop. The caller keeps ownership and
+  /// disposes it.
   final AnimationController? controller;
 
   /// Called once the composition has parsed, with what it describes.
@@ -65,10 +62,10 @@ class _LottiePlayerState extends State<LottiePlayer>
     }
   }
 
+  /// Disposes only the controller this player made; a supplied one belongs to
+  /// its caller and may outlive this widget.
   @override
   void dispose() {
-    // Only the one this player made; a supplied controller belongs to its
-    // caller and may outlive this widget.
     _ownController?.dispose();
     super.dispose();
   }
@@ -88,11 +85,11 @@ class _LottiePlayerState extends State<LottiePlayer>
     widget.onLoaded?.call(composition);
   }
 
+  /// Reports the failure after the current frame, since error builders run
+  /// during layout.
   Widget _onError(BuildContext context, Object error, StackTrace? stack) {
     final VoidCallback? onFailed = widget.onFailed;
     if (onFailed != null) {
-      // Error builders run during layout, so the listener is told after the
-      // frame rather than in the middle of one.
       WidgetsBinding.instance.addPostFrameCallback((_) => onFailed());
     }
     return const SizedBox.shrink();

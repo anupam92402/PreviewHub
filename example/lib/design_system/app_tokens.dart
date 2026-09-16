@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 
 /// Colours and measurements shared by every component in this sample design
-/// system.
-///
-/// Values are spelled out rather than derived, so a preview label such as
-/// `filled · large (52)` can quote the same number the widget uses.
+/// system. Values are spelled out rather than derived, so a preview label such
+/// as `filled · large (52)` quotes the same number the widget uses.
 class AppTokens {
   const AppTokens._();
 

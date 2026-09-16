@@ -10,11 +10,8 @@ import '../models/preview_asset.dart';
 import '../models/validation_issue.dart';
 
 /// Measures an asset's size and dimensions on demand, and remembers the answer.
-///
-/// Nothing is measured until something watches it: measuring a bundled asset
-/// means loading its whole body, and measuring a remote one means a request.
-/// Results are cached for the life of the service, so scrolling a grid back and
-/// forth costs nothing after the first pass.
+/// Nothing is measured until something watches it, since measuring costs a
+/// bundle load or a request. Results are cached for the life of the service.
 class AssetMetricsService {
   /// Measures bundled assets against [bundle] and remote ones with [client].
   AssetMetricsService({
@@ -24,11 +21,8 @@ class AssetMetricsService {
   }) : _bundle = bundle ?? rootBundle,
        _client = client ?? http.Client();
 
-  /// Content types a served body may claim to be.
-  ///
-  /// Each collection expects something different — an image gallery wants
-  /// `image/`, a Lottie gallery wants JSON — so the check is set by whoever
-  /// creates the service rather than hard-coded to one kind of asset.
+  /// Content types a served body may claim to be. Set per collection, since an
+  /// image gallery wants `image/` while a Lottie gallery wants JSON.
   final Set<String> contentTypePrefixes;
 
   final AssetBundle _bundle;
@@ -39,44 +33,36 @@ class AssetMetricsService {
   final ValueNotifier<List<ValidationIssue>> _issues =
       ValueNotifier<List<ValidationIssue>>(const <ValidationIssue>[]);
 
-  /// Problems found while fetching, such as a URL that serves a web page.
-  ///
-  /// This grows as assets resolve, so the report keeps filling in while the
-  /// user scrolls rather than being complete only at startup.
+  /// Problems found while fetching, such as a URL that serves a web page. Grows
+  /// as assets resolve rather than being complete at startup.
   ValueListenable<List<ValidationIssue>> get issues => _issues;
 
-  /// Metrics for [asset], starting the measurement the first time it is watched.
+  /// Metrics for [asset], starting the measurement the first time it is
+  /// watched.
   ValueListenable<AssetMetricsState> watch(MeasurableAsset asset) {
     unawaited(ensureMeasured(asset));
     return _stateFor(asset);
   }
 
   /// Measures [asset] if it has not been measured, and completes when it has.
-  ///
-  /// Repeat calls share the first call's work, so watching an asset in the grid
-  /// and awaiting it for the validation report costs one request between them.
+  /// Repeat calls share the first call's work, so an asset is fetched once.
   Future<void> ensureMeasured(MeasurableAsset asset) =>
       _inFlight[asset.locator] ??= _resolve(asset, _stateFor(asset));
 
-  /// The problem recorded against [asset], or null when there is none.
-  ///
-  /// Lets a screen name the failure rather than only reporting that there was
-  /// one; the grid stays generic, the detail screen says what went wrong.
+  /// The problem recorded against [asset], or null when there is none. Lets a
+  /// screen name the failure rather than only report that there was one.
   ValidationIssue? issueFor(MeasurableAsset asset) => _issues.value
       .where((ValidationIssue issue) => issue.entry == asset.locator)
       .firstOrNull;
 
   /// Size already measured for [asset], or null while it is still unknown.
-  ///
   /// Reads the cache without starting any work, so sorting can consult it
-  /// without pulling in assets that were never asked for.
+  /// without fetching assets.
   int? sizeOf(MeasurableAsset asset) =>
       _states[asset.locator]?.value.metrics.sizeInBytes;
 
-  /// Records the pixel size the decoder reported for [asset].
-  ///
-  /// Dimensions come from the image the UI is already showing, so learning how
-  /// big a remote image is costs no extra download.
+  /// Records the pixel size the decoder reported for [asset]. Dimensions come
+  /// from the image already on screen, so they cost no extra download.
   void recordDimensions(MeasurableAsset asset, int width, int height) {
     final ValueNotifier<AssetMetricsState> state = _stateFor(asset);
     final AssetMetricsState current = state.value;
@@ -121,7 +107,7 @@ class AssetMetricsService {
   }
 
   /// Asks for the size with a HEAD, falling back to a GET when the server
-  /// refuses HEAD or omits `content-length`. Both happen in practice.
+  /// refuses HEAD or omits `content-length`.
   Future<int?> _networkSize(MeasurableAsset asset) async {
     final Uri uri = Uri.parse(asset.locator);
     try {
@@ -133,9 +119,7 @@ class AssetMetricsService {
           return length;
         }
       }
-    } on Object {
-      // HEAD is optional for a server; fall through and try a GET.
-    }
+    } on Object catch (_) {}
 
     final http.Response body = await _client.get(uri);
     if (body.statusCode >= 400) {
@@ -145,10 +129,8 @@ class AssetMetricsService {
     return body.bodyBytes.length;
   }
 
-  /// Flags a URL whose body the server does not describe as an image.
-  ///
-  /// This rides along on the request already being made for the size, so it
-  /// costs nothing extra.
+  /// Flags a URL whose body the server does not describe as an image. Rides
+  /// along on the request already made for the size.
   void _checkContentType(MeasurableAsset asset, String? contentType) {
     if (contentType == null ||
         contentTypePrefixes.any(contentType.startsWith)) {

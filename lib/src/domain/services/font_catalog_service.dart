@@ -4,24 +4,18 @@ import 'package:flutter/services.dart';
 
 import '../models/font_family_info.dart';
 
-/// Discovers the font families bundled with the app.
-///
-/// Families come from `FontManifest.json`, which Flutter writes from the
-/// `fonts:` section of every pubspec in the build — the app's own and its
-/// dependencies' — so a consumer never registers a family by hand.
+/// Discovers the font families bundled with the app. Families come from
+/// `FontManifest.json`, which Flutter writes from the `fonts:` section of every
+/// pubspec in the build, so no family is registered by hand.
 class FontCatalogService {
   /// Reads the manifest from [bundle], defaulting to the app's own bundle.
   FontCatalogService({AssetBundle? bundle}) : _bundle = bundle ?? rootBundle;
 
   final AssetBundle _bundle;
 
-  /// Families Flutter injects that carry icons rather than text.
-  ///
-  /// MaterialIcons arrives with `uses-material-design: true` and looks its
-  /// icons up by ligature, so it has lowercase letters and digits but no
-  /// uppercase — a sample line renders as blank ligature components with only
-  /// the capitals falling back to a real font. Neither family belongs to the
-  /// consumer's design system, so neither is listed.
+  /// Families Flutter injects that carry icons rather than text. They resolve
+  /// glyphs by ligature, so a sample line renders mostly blank, and neither
+  /// belongs to the consumer's design system.
   static const Set<String> _iconFamilies = <String>{
     'MaterialIcons',
     'CupertinoIcons',
@@ -45,6 +39,7 @@ class FontCatalogService {
     return families;
   }
 
+  /// Faces are sorted lightest first, upright before italic at equal weight.
   FontFamilyInfo _familyFrom(Map<String, dynamic> entry) {
     final List<FontFace> faces =
         (entry['fonts'] as List<dynamic>? ?? <dynamic>[])
@@ -56,7 +51,6 @@ class FontCatalogService {
             if (byWeight != 0) {
               return byWeight;
             }
-            // Upright before italic at the same weight.
             return a.isItalic == b.isItalic ? 0 : (a.isItalic ? 1 : -1);
           });
 

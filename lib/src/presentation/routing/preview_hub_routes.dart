@@ -1,7 +1,6 @@
-/// Names of the screens the gallery navigates between.
-///
-/// Attached to each route's settings, so a host app's [RouteObserver] sees a
-/// meaningful name and can tell gallery routes from its own by the prefix.
+/// Names of the screens the gallery navigates between. Attached to each route's
+/// settings, so a host app's [RouteObserver] sees a meaningful name and can
+/// tell gallery routes from its own by the prefix.
 class PreviewHubRoutes {
   const PreviewHubRoutes._();
 

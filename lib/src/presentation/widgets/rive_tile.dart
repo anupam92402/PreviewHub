@@ -34,15 +34,15 @@ class RiveTile extends StatefulWidget {
 class _RiveTileState extends State<RiveTile> {
   final ValueNotifier<bool> _isPlaying = ValueNotifier<bool>(true);
   final ValueNotifier<bool> _failed = ValueNotifier<bool>(false);
-  // A Rive file has no single running time, so the label is the artboard it
-  // opened with.
+
+  /// Artboard the file opened with; a Rive file has no single running time.
   final ValueNotifier<String?> _label = ValueNotifier<String?>(null);
 
+  /// Clears per-asset state, since the grid recycles tiles by position and a
+  /// stale failure or label would stick to the next animation.
   @override
   void didUpdateWidget(RiveTile oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // The grid recycles tiles by position, so a failure or a label left from
-    // the previous animation would stick to a perfectly good one.
     if (widget.asset != oldWidget.asset) {
       _failed.value = false;
       _label.value = null;

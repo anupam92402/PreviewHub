@@ -4,11 +4,9 @@ import '../../domain/models/widget_preview.dart';
 import '../../domain/services/widget_catalog_service.dart';
 
 /// Drives the widget index: the search, the section chips and which groups are
-/// folded away.
-///
-/// Groups start folded, so the index opens as a short list of headings rather
-/// than a wall of entries. Expanded groups live here rather than in a store,
-/// so reopening the gallery folds everything again.
+/// folded away. Groups start folded, so the index opens as a short list of
+/// headings rather than a wall of entries. Expanded groups live here rather
+/// than in a store, so reopening the gallery folds everything again.
 class WidgetsViewModel extends ChangeNotifier {
   /// Creates a view model over [previews], dropping any that cannot be shown.
   WidgetsViewModel({
@@ -44,10 +42,9 @@ class WidgetsViewModel extends ChangeNotifier {
   /// Whether the All chip is the selected one.
   bool get isAllSections => _section == null;
 
-  /// Whether [group] is currently folded away.
-  ///
-  /// A search opens every matching group: entries hidden behind a fold would
-  /// make the search look as though it had found nothing.
+  /// Whether [group] is currently folded away. A search opens every matching
+  /// group: entries hidden behind a fold would make the search look as though
+  /// it had found nothing.
   bool isCollapsed(String group) =>
       _query.isEmpty && !_expanded.contains(group);
 

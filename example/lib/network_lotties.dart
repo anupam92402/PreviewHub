@@ -1,6 +1,5 @@
-/// Remote Lottie animations the gallery is exercised against.
-///
-/// A real consumer supplies their own; these are public samples.
+/// Remote Lottie animations the gallery is exercised against. A real consumer
+/// supplies their own; these are public samples.
 library;
 
 /// Lottie endpoints.

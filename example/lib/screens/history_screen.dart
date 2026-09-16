@@ -118,7 +118,8 @@ class HistoryScreen extends StatelessWidget {
   );
 }
 
-/// One transaction row: title, time, status chip and signed amount.
+/// One transaction row: title, time, status chip and signed amount. Time and
+/// status wrap, since side by side they overflow a narrow phone.
 class _EntryRow extends StatelessWidget {
   const _EntryRow({required this.entry, required this.isLast});
 
@@ -147,8 +148,6 @@ class _EntryRow extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  // A wrap rather than a row: a long time string beside a
-                  // wide status pill overflows a narrow phone otherwise.
                   Wrap(
                     spacing: 8,
                     runSpacing: 4,

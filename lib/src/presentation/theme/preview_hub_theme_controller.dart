@@ -13,10 +13,9 @@ class PreviewHubThemeController extends ValueNotifier<ThemeMode> {
       value = current == Brightness.dark ? ThemeMode.light : ThemeMode.dark;
 }
 
-/// Applies the gallery's theme to [child], following [controller].
-///
-/// Also publishes the controller to the subtree, so a screen that pushes a
-/// further route can pass it along without holding it as a field of its own.
+/// Applies the gallery's theme to [child], following [controller]. Also
+/// publishes the controller to the subtree, so a screen that pushes a further
+/// route can pass it along without holding it as a field of its own.
 class PreviewHubTheming extends StatelessWidget {
   /// Themes [child] according to [controller].
   const PreviewHubTheming({
@@ -31,9 +30,8 @@ class PreviewHubTheming extends StatelessWidget {
   /// Subtree to theme.
   final Widget child;
 
-  /// The controller theming [context], or null outside the gallery.
-  ///
-  /// Read without subscribing: callers want the controller to hand on, not to
+  /// The controller theming [context], or null outside the gallery. Read
+  /// without subscribing: callers want the controller to hand on, not to
   /// rebuild when the mode changes.
   static PreviewHubThemeController? controllerOf(BuildContext context) =>
       context

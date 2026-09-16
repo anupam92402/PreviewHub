@@ -15,13 +15,9 @@ class AssetCatalog {
   final List<ValidationIssue> issues;
 }
 
-/// Builds the list of previewable image assets.
-/// Bundled assets come from the asset manifest, so a consumer never registers
-/// them: anything Flutter bundled and listed there is picked up, including
-/// assets shipped by dependencies under a `packages/<name>/` key.
-/// Supplied URLs are checked for shape here, which costs nothing. Whether the
-/// server actually serves an image is only discovered when something asks for
-/// that asset's metrics.
+/// Builds the list of previewable image assets. Bundled ones come from the
+/// asset manifest, including dependencies' `packages/<name>/` keys; supplied
+/// URLs are only checked for shape until their metrics are measured.
 class AssetCatalogService {
   /// Reads bundled assets from [bundle], defaulting to the app's own bundle.
   AssetCatalogService({AssetBundle? bundle}) : _bundle = bundle ?? rootBundle;
@@ -51,7 +47,6 @@ class AssetCatalogService {
   }
 
   /// Image keys from the asset manifest, sorted by key.
-  ///
   /// [AssetManifest.listAssets] already drops resolution variants, so a `2.0x/`
   /// copy never shows up as a separate asset.
   Future<List<PreviewAsset>> _discoverBundled() async {

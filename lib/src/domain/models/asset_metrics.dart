@@ -15,10 +15,8 @@ enum MetricsStatus {
 /// Measurements taken of one asset.
 @immutable
 class AssetMetrics {
-  /// Creates a set of measurements.
-  ///
-  /// Every field is optional because each is resolved from a different source
-  /// and may land on its own.
+  /// Creates a set of measurements. Every field is optional because each is
+  /// resolved from a different source and may land on its own.
   const AssetMetrics({this.sizeInBytes, this.width, this.height});
 
   /// Encoded size on disk or over the wire.

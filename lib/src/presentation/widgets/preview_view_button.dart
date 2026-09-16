@@ -4,11 +4,10 @@ import '../../domain/models/asset_sort_order.dart';
 import '../../preview_hub_strings.dart';
 import '../../preview_hub_theme.dart';
 
-/// Chooses how the grid is ordered and how densely it is packed.
-///
-/// Sits beside the search field and shows a spinner while a newly chosen
-/// order waits on measurements, so picking one on a large catalogue does not
-/// look like nothing happened.
+/// Chooses how the grid is ordered and how densely it is packed. Shows a
+/// spinner while a newly chosen order waits on measurements. The menu carries
+/// an explicit minimum width because the default is narrower than the longest
+/// sort label.
 class PreviewViewButton extends StatelessWidget {
   /// Creates a button showing [order] and [columns] as the current choices.
   const PreviewViewButton({
@@ -67,8 +66,6 @@ class PreviewViewButton extends StatelessWidget {
                 ),
               ),
             )
-          // Values are either an order or a column count; nothing else is put
-          // in the menu, so the two type tests below cover every entry.
           : PopupMenuButton<Object>(
               tooltip: PreviewHubStrings.sortTooltip,
               onSelected: (Object value) {
@@ -79,7 +76,6 @@ class PreviewViewButton extends StatelessWidget {
                 }
               },
               position: PopupMenuPosition.under,
-              // The default menu is narrower than the longest sort label.
               constraints: const BoxConstraints(minWidth: 220, maxWidth: 320),
               icon: Icon(
                 Icons.filter_list_outlined,
@@ -127,8 +123,7 @@ class PreviewViewButton extends StatelessWidget {
   }
 }
 
-/// Glyph for [order].
-/// Kept here rather than on the enum so the domain stays free of Material.
+/// Glyph for [order]. Kept off the enum so the domain stays free of Material.
 IconData _iconFor(AssetSortOrder order) => switch (order) {
   AssetSortOrder.none => Icons.filter_list_outlined,
   AssetSortOrder.sizeAsc => Icons.arrow_upward_rounded,

@@ -3,10 +3,8 @@ import 'package:flutter/foundation.dart';
 import '../../domain/models/font_family_info.dart';
 import '../../preview_hub_strings.dart';
 
-/// Drives the sheet where a consumer sets their own text in a chosen face.
-///
-/// The three choices gate the text field: there is nothing to preview text in
-/// until a family, a weight and a size have all been picked.
+/// Drives the sheet where a consumer sets their own text in a chosen face. The
+/// text field stays gated until a family, a weight and a size are all chosen.
 class FontSampleViewModel extends ChangeNotifier {
   /// Offers a choice between [families].
   FontSampleViewModel({required this.families});
@@ -69,7 +67,6 @@ class FontSampleViewModel extends ChangeNotifier {
       return;
     }
     _family = family;
-    // A face belongs to one family, so the old choice cannot carry over.
     _face = null;
     notifyListeners();
   }

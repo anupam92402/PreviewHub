@@ -41,9 +41,9 @@ enum AssetType {
   /// Whether Flutter can decode this into a raster image.
   bool get isRaster => this != svg;
 
-  /// Reads the type off the extension at the end of [locator].
-  /// Returns null when the extension is not a supported image format, which is
-  /// how non-image entries are kept out of the gallery.
+  /// Reads the type off the extension at the end of [locator]. Returns null
+  /// when the extension is not a supported image format, which is how non-image
+  /// entries are kept out of the gallery.
   static AssetType? fromLocator(String locator) {
     final String path = Uri.tryParse(locator)?.path ?? locator;
     final int dot = path.lastIndexOf('.');
@@ -72,8 +72,8 @@ class PreviewAsset implements MeasurableAsset {
     required this.locator,
   });
 
-  /// Describes a bundled asset from its manifest [key].
-  /// Returns null when [key] is not a supported image.
+  /// Describes a bundled asset from its manifest [key]. Returns null when [key]
+  /// is not a supported image.
   static PreviewAsset? bundled(String key) {
     final AssetType? type = AssetType.fromLocator(key);
     if (type == null) {
@@ -87,9 +87,8 @@ class PreviewAsset implements MeasurableAsset {
     );
   }
 
-  /// Describes a remote asset from its [url].
-  ///
-  /// Returns null when the URL does not end in a supported image extension.
+  /// Describes a remote asset from its [url]. Returns null when the URL does
+  /// not end in a supported image extension.
   static PreviewAsset? network(String url) {
     final AssetType? type = AssetType.fromLocator(url);
     if (type == null) {
@@ -112,9 +111,9 @@ class PreviewAsset implements MeasurableAsset {
   @override
   final AssetSource source;
 
-  /// The manifest key exactly as Flutter exposes it, or the full URL.
-  /// Never cleaned up or shortened — this is the string a consumer has to
-  /// paste into their own code, so it is shown and copied verbatim.
+  /// The manifest key exactly as Flutter exposes it, or the full URL. Never
+  /// cleaned up or shortened — this is the string a consumer has to paste into
+  /// their own code, so it is shown and copied verbatim.
   @override
   final String locator;
 

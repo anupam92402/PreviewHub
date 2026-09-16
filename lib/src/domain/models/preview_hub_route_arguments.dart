@@ -9,10 +9,9 @@ import 'preview_asset.dart';
 import 'preview_hub_config.dart';
 import 'widget_preview.dart';
 
-/// What every gallery route carries.
-///
-/// The theme controller rides on all of them, so the router can theme a route
-/// without first working out which screen it is about to build.
+/// What every gallery route carries. The theme controller rides on all of them,
+/// so the router can theme a route without first working out which screen it is
+/// about to build.
 @immutable
 sealed class PreviewHubArguments {
   /// Creates arguments carrying [themeController].
@@ -63,9 +62,9 @@ final class IconsAndImagesArguments extends PreviewHubArguments {
   final PreviewHubConfig config;
 }
 
-/// Arguments for the fonts route.
-/// Font families are discovered from the manifest, so there is nothing to
-/// supply beyond the theme every route carries.
+/// Arguments for the fonts route. Font families are discovered from the
+/// manifest, so there is nothing to supply beyond the theme every route
+/// carries.
 final class FontsArguments extends PreviewHubArguments {
   /// Creates arguments for the fonts route.
   const FontsArguments({super.themeController});

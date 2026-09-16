@@ -77,10 +77,9 @@ class FontsViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Applies [value] as the search text.
-  ///
-  /// A search that hides the open family moves to the first one still
-  /// showing, so the sheet below the chips never belongs to a hidden chip.
+  /// Applies [value] as the search text. A search that hides the open family
+  /// moves to the first one still showing, so the sheet below the chips never
+  /// belongs to a hidden chip.
   void search(String value) {
     if (value == _query) {
       return;

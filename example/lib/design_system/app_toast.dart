@@ -25,10 +25,9 @@ enum AppToastKind {
   final IconData icon;
 }
 
-/// An inline status card, in a success, failure or pending flavour.
-///
-/// The pending flavour shows an indeterminate spinner, so a widget test must
-/// pump a bounded duration rather than settling.
+/// An inline status card, in a success, failure or pending flavour. The pending
+/// flavour shows an indeterminate spinner, so a widget test must pump a bounded
+/// duration rather than settling.
 class AppToast extends StatelessWidget {
   /// Creates a toast of [kind] headed [title].
   const AppToast({

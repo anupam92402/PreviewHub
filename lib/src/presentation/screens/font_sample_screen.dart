@@ -5,10 +5,8 @@ import '../../preview_hub_strings.dart';
 import '../viewmodels/font_sample_view_model.dart';
 import '../widgets/preview_filter_bar.dart';
 
-/// A type tester: words the consumer writes, set in a face they choose.
-///
-/// The preview takes the room, because it is the point; the controls sit
-/// beneath it and stay out of the way.
+/// A type tester: words the consumer writes, set in a face they choose. The
+/// preview takes the room; the controls sit beneath it.
 class FontSampleScreen extends StatefulWidget {
   /// Creates the screen over [families].
   const FontSampleScreen({required this.families, super.key});
@@ -316,6 +314,9 @@ class _SampleField extends StatelessWidget {
   final FontSampleViewModel viewModel;
   final TextEditingController controller;
 
+  /// Builds the field. The clear button follows the controller, so the screen
+  /// tracks no typed state, and clearing calls the view model directly because
+  /// onChanged does not fire for a programmatic clear.
   @override
   Widget build(BuildContext context) {
     final ColorScheme scheme = Theme.of(context).colorScheme;
@@ -331,7 +332,6 @@ class _SampleField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: ready
             ? PreviewHubStrings.fontTextHint
-            // Says what is still missing rather than only grey­ing the field out.
             : PreviewHubStrings.fontSampleLocked(viewModel.missingChoices),
         hintStyle: TextStyle(
           color: ready ? null : scheme.error,
@@ -345,8 +345,6 @@ class _SampleField extends StatelessWidget {
           size: 18,
           color: ready ? scheme.primary : scheme.onSurfaceVariant,
         ),
-        // Driven by the controller, so the button appears and disappears
-        // without the screen having to track whether anything is typed.
         suffixIcon: ValueListenableBuilder<TextEditingValue>(
           valueListenable: controller,
           builder: (BuildContext context, TextEditingValue value, Widget? _) =>
@@ -358,8 +356,6 @@ class _SampleField extends StatelessWidget {
                   visualDensity: VisualDensity.compact,
                   onPressed: () {
                     controller.clear();
-                    // The field's own onChanged does not fire for a
-                    // programmatic clear, so the preview is told directly.
                     viewModel.setText('');
                   },
                   icon: const Icon(Icons.close_rounded),

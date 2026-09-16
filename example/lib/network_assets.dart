@@ -1,6 +1,5 @@
-/// Network endpoints the gallery is exercised against.
-///
-/// A real consumer supplies their own; these cover every supported format.
+/// Network endpoints the gallery is exercised against. A real consumer supplies
+/// their own; these cover every supported format.
 library;
 
 /// PNG endpoints.

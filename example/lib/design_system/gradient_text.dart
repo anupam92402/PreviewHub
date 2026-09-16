@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'app_tokens.dart';
 
-/// Text painted with a gradient instead of a flat colour.
-///
-/// The shader is masked onto the glyphs, so the gradient spans the laid-out
-/// text rather than the whole line box.
+/// Text painted with a gradient instead of a flat colour. The shader is masked
+/// onto the glyphs, so the gradient spans the laid-out text rather than the
+/// whole line box. The text colour must be opaque for `srcIn` to keep the
+/// glyphs.
 class GradientText extends StatelessWidget {
   /// Creates gradient text showing [text].
   const GradientText(
@@ -48,8 +48,6 @@ class GradientText extends StatelessWidget {
             fontSize: 30,
             fontWeight: FontWeight.w800,
             height: 1.15,
-            // Masked away by the shader, but a colour must be opaque for
-            // srcIn to keep the glyph.
             color: AppTokens.onAccent,
           ),
     ),

@@ -27,10 +27,9 @@ class WidgetGroupHeader extends StatelessWidget {
   /// Called when the heading is tapped.
   final VoidCallback onTap;
 
-  /// Kind of entry beneath the heading, shown as a tag beside the name.
-  ///
-  /// Null while the chips have already narrowed to one kind, where repeating
-  /// it on every heading says nothing.
+  /// Kind of entry beneath the heading, shown as a tag beside the name. Null
+  /// while the chips have already narrowed to one kind, where repeating it on
+  /// every heading says nothing.
   final WidgetSection? section;
 
   @override

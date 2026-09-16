@@ -5,21 +5,16 @@ import '../../domain/models/preview_asset.dart';
 import '../../domain/models/rive_asset.dart';
 import '../../preview_hub_strings.dart';
 
-/// Starts the Rive runtime once, on first use.
-///
-/// Keeping this inside the package means a tile renders on its own — there is
-/// no bootstrap call for the host app's `main`, so the gallery stays something
-/// a consumer can simply push.
+/// Starts the Rive runtime once, on first use. Kept inside the package so a
+/// tile renders without a bootstrap call in the host app's `main`.
 class RiveRuntime {
   const RiveRuntime._();
 
   static Future<bool>? _initialisation;
 
-  /// Completes with whether the native runtime came up.
-  ///
-  /// [rive.RiveNative.init] throws outright where the native library cannot be
-  /// loaded, so the failure is reported rather than thrown; a future that
-  /// threw would leave every tile waiting instead of saying it cannot play.
+  /// Completes with whether the native runtime came up. Reports failure rather
+  /// than throwing, so a tile shows an error instead of waiting on a future
+  /// that never completes.
   static Future<bool> ensureInitialised() => _initialisation ??= _start();
 
   static Future<bool> _start() async {
@@ -63,10 +58,8 @@ class RivePlayer extends StatefulWidget {
 }
 
 class _RivePlayerState extends State<RivePlayer> {
-  /// Built once the runtime is up, then reused.
-  ///
-  /// Making it here rather than in `build` matters: a loader built each frame
-  /// would fetch the file again on every rebuild.
+  /// Built once the runtime is up, then reused. Held here rather than built in
+  /// `build`, which would refetch the file on every rebuild.
   final ValueNotifier<rive.FileLoader?> _loader =
       ValueNotifier<rive.FileLoader?>(null);
   final ValueNotifier<bool> _failed = ValueNotifier<bool>(false);
@@ -100,7 +93,9 @@ class _RivePlayerState extends State<RivePlayer> {
     super.dispose();
   }
 
-  /// Brings the runtime up, then opens the file it needs.
+  /// Brings the runtime up, then opens the file it needs. Uses
+  /// `Factory.flutter` so the animation draws through Flutter's own renderer
+  /// and works wherever Flutter does.
   Future<void> _prepare() async {
     try {
       final bool ready = await RiveRuntime.ensureInitialised();
@@ -111,9 +106,6 @@ class _RivePlayerState extends State<RivePlayer> {
         _failed.value = true;
         return;
       }
-      // Factory.flutter draws through Flutter's own renderer, so a tile works
-      // wherever Flutter does rather than only where Rive's renderer is
-      // available.
       _loader.value = widget.asset.source == AssetSource.bundled
           ? rive.FileLoader.fromAsset(
               widget.asset.locator,
@@ -164,9 +156,6 @@ class _RivePlayerState extends State<RivePlayer> {
                     builder: (BuildContext context, rive.RiveState state) =>
                         switch (state) {
                           rive.RiveLoading() => const _Spinner(),
-                          // The builder reports this state without
-                          // calling onFailed, so the tile is told here or
-                          // its border would stay the healthy colour.
                           rive.RiveFailed() => _ReportedFailure(
                             onFailed: _onFailed,
                           ),
@@ -181,7 +170,9 @@ class _RivePlayerState extends State<RivePlayer> {
   );
 }
 
-/// Shows the failure panel and tells the tile about it, once.
+/// Shows the failure panel and reports the failure once, after the frame.
+/// [rive.RiveWidgetBuilder] does not call `onFailed` for its failed state, and
+/// builders run during layout.
 class _ReportedFailure extends StatelessWidget {
   const _ReportedFailure({required this.onFailed});
 
@@ -189,8 +180,6 @@ class _ReportedFailure extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Builders run during layout, so the listener is told after the frame
-    // rather than in the middle of one.
     WidgetsBinding.instance.addPostFrameCallback((_) => onFailed());
     return RivePlayerFailure(accent: Theme.of(context).colorScheme.error);
   }

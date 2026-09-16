@@ -13,11 +13,9 @@ class LottieAsset implements MeasurableAsset {
     required this.locator,
   });
 
-  /// Describes a bundled animation from its manifest [key].
-  ///
-  /// Returns null for anything that is not JSON. Whether the JSON is really a
-  /// Lottie file is only known once it is parsed, so a stray config file shows
-  /// up here and fails visibly rather than being guessed at.
+  /// Describes a bundled animation from its manifest [key]. Returns null for
+  /// anything that is not JSON. Whether the JSON is really a Lottie is known
+  /// only once parsed, so a stray config file fails visibly.
   static LottieAsset? bundled(String key) {
     if (!key.toLowerCase().endsWith('.json')) {
       return null;

@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'app_tokens.dart';
 
-/// A labelled checkbox with optional tristate and error styling.
-///
-/// The control is fully controlled: it draws [value] and reports taps through
-/// [onChanged], so the caller owns the state. A null [onChanged] disables it.
+/// A labelled checkbox with optional tristate and error styling. The control is
+/// fully controlled: it draws [value] and reports taps through [onChanged], so
+/// the caller owns the state. A null [onChanged] disables it.
 class AppCheckbox extends StatelessWidget {
   /// Creates a checkbox labelled [label].
   const AppCheckbox({
@@ -107,7 +106,8 @@ class AppCheckbox extends StatelessWidget {
   }
 }
 
-/// The 22pt box itself, filled once the value is anything but false.
+/// The 22pt box itself, filled once the value is anything but false. Nudged
+/// down a point so it sits on the label's first line once the label wraps.
 class _CheckboxBox extends StatelessWidget {
   const _CheckboxBox({
     required this.value,
@@ -137,8 +137,6 @@ class _CheckboxBox extends StatelessWidget {
     return Container(
       width: 22,
       height: 22,
-      // Nudged down so the box sits on the label's first line rather than
-      // above it once the label wraps.
       margin: const EdgeInsets.only(top: 1),
       decoration: BoxDecoration(
         color: fill,

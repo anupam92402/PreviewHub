@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import '../../domain/models/widget_preview.dart';
 import '../../preview_hub_strings.dart';
 
-/// One registered screen, running at the size it will ship at.
-///
-/// A screen is given the whole display rather than a card in a list: shrunk
-/// into a thumbnail it proves nothing about the layout it will really get.
+/// One registered screen, running at the size it will ship at. The screen
+/// gets the whole display: a thumbnail proves nothing about the layout it
+/// will really receive.
 class WidgetStageScreen extends StatelessWidget {
   /// Creates the stage for [preview].
   const WidgetStageScreen({required this.preview, super.key});
@@ -14,18 +13,16 @@ class WidgetStageScreen extends StatelessWidget {
   /// Entry being shown, which carries exactly one case.
   final WidgetPreview preview;
 
+  /// Builds the stage. The case goes through a Builder so a throwing host
+  /// screen fails in its own element, and the dismiss control sits at the
+  /// bottom, clear of the corners screens normally occupy.
   @override
   Widget build(BuildContext context) => Scaffold(
     body: Stack(
       children: <Widget>[
-        // Built through a Builder so the host screen gets its own element:
-        // anything it throws surfaces here, not up the tree.
         Positioned.fill(
           child: Builder(builder: preview.usableCases.first.builder),
         ),
-        // The dismiss control floats along the bottom rather than the top:
-        // every screen puts something in its top corners, and an overlay
-        // there covers the very thing being reviewed.
         Positioned(
           left: 16,
           bottom: MediaQuery.paddingOf(context).bottom + 12,

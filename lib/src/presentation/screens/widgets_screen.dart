@@ -14,10 +14,8 @@ import '../widgets/preview_search_bar.dart';
 import '../widgets/widget_group_header.dart';
 import '../widgets/widget_index_tile.dart';
 
-/// Index of every component and screen the host registered.
-///
-/// Nothing here builds a host widget: the list is metadata only, so a widget
-/// that throws can only take down its own preview, never this screen.
+/// Index of every component and screen the host registered. Metadata only: a
+/// widget that throws can take down its own preview, never this screen.
 class WidgetsScreen extends StatefulWidget {
   /// Creates the index over [previews].
   const WidgetsScreen({this.previews = const <WidgetPreview>[], super.key});
@@ -88,6 +86,9 @@ class _WidgetsScreenState extends State<WidgetsScreen> {
     return rows;
   }
 
+  /// Builds the index. A host that registered nothing gets guidance, a search
+  /// that matched nothing does not, and the section label shows only while
+  /// both sections are listed together.
   @override
   Widget build(BuildContext context) => AnimatedBuilder(
     animation: _viewModel,
@@ -116,8 +117,6 @@ class _WidgetsScreenState extends State<WidgetsScreen> {
               SliverFillRemaining(
                 hasScrollBody: false,
                 child: _EmptyState(
-                  // A host that registered nothing is told what to do about
-                  // it; a search that matched nothing is not.
                   message: widget.previews.isEmpty
                       ? PreviewHubStrings.emptyWidgetsUnregistered
                       : PreviewHubStrings.emptyWidgets,
@@ -139,8 +138,6 @@ class _WidgetsScreenState extends State<WidgetsScreen> {
                           name: row.group.name,
                           count: row.group.count,
                           collapsed: row.collapsed,
-                          // Only worth saying while both kinds are on screen
-                          // together.
                           section: _viewModel.isAllSections
                               ? row.group.section
                               : null,
@@ -188,10 +185,10 @@ class _WidgetsHeader extends StatelessWidget {
 
   final WidgetsViewModel viewModel;
 
+  /// Offsets the controls clear of the toolbar and status bar, which the
+  /// flexible space reaches behind.
   @override
   Widget build(BuildContext context) => Padding(
-    // The flexible space reaches behind the toolbar and the status bar, so the
-    // controls are pushed clear of both.
     padding: EdgeInsets.only(
       top: kToolbarHeight + MediaQuery.paddingOf(context).top,
     ),

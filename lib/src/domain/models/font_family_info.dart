@@ -20,9 +20,9 @@ class FontFace {
   /// Whether the file is an italic cut.
   final bool isItalic;
 
-  /// Weight as Flutter renders it.
-  /// [FontWeight.values] runs w100 to w900 in order, so the hundreds digit
-  /// picks the entry; anything unexpected falls back to regular.
+  /// Weight as Flutter renders it. [FontWeight.values] runs w100 to w900 in
+  /// order, so the hundreds digit picks the entry; anything unexpected falls
+  /// back to regular.
   FontWeight get fontWeight {
     final int index = (weight ~/ 100) - 1;
     if (index < 0 || index >= FontWeight.values.length) {
@@ -62,12 +62,10 @@ class FontFamilyInfo {
     required this.faces,
   });
 
-  /// Builds a family from its manifest key and faces.
-  ///
-  /// A dependency's family arrives as `packages/<package>/<family>`; [name]
-  /// keeps only the family so it reads cleanly, while [manifestKey] stays
-  /// exactly as Flutter exposes it, because that is the string a consumer puts
-  /// in a [TextStyle].
+  /// Builds a family from its manifest key and faces. A dependency's family
+  /// arrives as `packages/<package>/<family>`; [name] keeps only the family,
+  /// while [manifestKey] stays as Flutter exposes it, which is the string a
+  /// [TextStyle] needs.
   factory FontFamilyInfo.fromManifest({
     required String manifestKey,
     required List<FontFace> faces,

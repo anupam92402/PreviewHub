@@ -34,15 +34,15 @@ class LottieTile extends StatefulWidget {
 class _LottieTileState extends State<LottieTile> {
   final ValueNotifier<bool> _isPlaying = ValueNotifier<bool>(true);
   final ValueNotifier<bool> _failed = ValueNotifier<bool>(false);
-  // A composition carries no name of its own, so the label is what it can
-  // actually tell us: how long it runs.
+
+  /// Running time; a composition carries no name of its own.
   final ValueNotifier<Duration?> _label = ValueNotifier<Duration?>(null);
 
+  /// Clears per-asset state, since the grid recycles tiles by position and a
+  /// stale failure or label would stick to the next animation.
   @override
   void didUpdateWidget(LottieTile oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // The grid recycles tiles by position, so a failure or a label left from
-    // the previous animation would stick to a perfectly good one.
     if (widget.asset != oldWidget.asset) {
       _failed.value = false;
       _label.value = null;

@@ -10,9 +10,8 @@ import '../theme/asset_type_style.dart';
 import '../widgets/asset_preview.dart';
 import '../widgets/asset_tile.dart';
 
-/// Everything known about one asset, with the artwork at full size.
-///
-/// Where the grid only says an asset is broken, this names the failure.
+/// Everything known about one asset, with the artwork at full size. Where
+/// the grid only says an asset is broken, this names the failure.
 class AssetDetailScreen extends StatefulWidget {
   /// Creates the detail screen for [asset].
   const AssetDetailScreen({

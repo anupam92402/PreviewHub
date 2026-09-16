@@ -21,15 +21,13 @@ class WidgetPreviewGroup {
   /// How many entries the heading covers.
   int get count => previews.length;
 
-  /// Identity used to remember whether this group is folded.
-  ///
-  /// The name alone is not enough: a host may well file both a component and a
-  /// screen under `Money`, and folding one must not fold the other.
+  /// Identity used to remember whether this group is folded. The name alone is
+  /// not enough: a host may well file both a component and a screen under
+  /// `Money`, and folding one must not fold the other.
   String get key => '${section.name}/$name';
 }
 
 /// Turns the host's flat list of previews into what the index screen draws.
-///
 /// There is nothing to read from disk or the network here, so unlike the asset
 /// catalogs this is synchronous and holds no state.
 class WidgetCatalogService {
@@ -41,13 +39,9 @@ class WidgetCatalogService {
       .where((WidgetPreview preview) => preview.isUsable)
       .toList(growable: false);
 
-  /// Splits [previews] into groups, first seen first.
-  ///
-  /// Grouping is by section and name together, so the same heading used for a
-  /// component and for a screen stays two separate groups.
-  ///
-  /// Order comes from the host's list rather than the alphabet, because the
-  /// order a design system is declared in is usually the deliberate one.
+  /// Splits [previews] into groups, first seen first. Grouping is by section
+  /// and name together, so one heading used for both a component and a screen
+  /// stays two groups. Order follows the host's list rather than the alphabet.
   List<WidgetPreviewGroup> group(List<WidgetPreview> previews) {
     final Map<String, List<WidgetPreview>> byKey =
         <String, List<WidgetPreview>>{};

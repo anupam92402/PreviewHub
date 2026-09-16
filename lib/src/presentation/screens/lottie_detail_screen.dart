@@ -30,8 +30,8 @@ class LottieDetailScreen extends StatefulWidget {
 
 class _LottieDetailScreenState extends State<LottieDetailScreen>
     with SingleTickerProviderStateMixin {
-  // Owned here rather than inside the player, because restarting means
-  // rewinding the animation, not just starting and stopping it.
+  /// Owned here rather than by the player, because restarting rewinds the
+  /// animation instead of merely resuming it.
   late final AnimationController _controller = AnimationController(vsync: this);
   final ValueNotifier<bool> _isPlaying = ValueNotifier<bool>(true);
   final ValueNotifier<bool> _failed = ValueNotifier<bool>(false);
@@ -198,6 +198,8 @@ class _Transport extends StatelessWidget {
   final ValueNotifier<LottieComposition?> composition;
   final VoidCallback onRestart;
 
+  /// Builds the controls; restart stays disabled until the composition parses,
+  /// since before that there is no first frame to return to.
   @override
   Widget build(BuildContext context) => Row(
     mainAxisAlignment: MainAxisAlignment.center,
@@ -224,8 +226,6 @@ class _Transport extends StatelessWidget {
         builder:
             (BuildContext context, LottieComposition? loaded, Widget? child) =>
                 OutlinedButton.icon(
-                  // Nothing has started until the composition has parsed, and
-                  // there is no first frame to go back to.
                   onPressed: loaded == null ? null : onRestart,
                   icon: const Icon(Icons.replay_rounded, size: 18),
                   label: const Text(PreviewHubStrings.lottieRestart),

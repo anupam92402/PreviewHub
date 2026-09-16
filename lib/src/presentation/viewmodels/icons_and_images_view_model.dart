@@ -6,9 +6,8 @@ import '../../domain/models/validation_issue.dart';
 import '../../domain/services/asset_catalog_service.dart';
 import '../../domain/services/asset_metrics_service.dart';
 
-/// Drives the icons and images screen: loading, searching and filtering.
-///
-/// The screen renders [visibleAssets] and nothing else decides what is shown.
+/// Drives the icons and images screen: loading, searching and filtering. The
+/// screen renders [visibleAssets] and nothing else decides what is shown.
 class IconsAndImagesViewModel extends ChangeNotifier {
   /// Loads through [catalog], listing [networkImages] after the bundled ones.
   IconsAndImagesViewModel({
@@ -38,9 +37,8 @@ class IconsAndImagesViewModel extends ChangeNotifier {
   /// Whether the first load is still running.
   bool get isLoading => _isLoading;
 
-  /// Whether every remote entry has been checked and [issues] is complete.
-  ///
-  /// The report stays hidden until this is true, because a report that has not
+  /// Whether every remote entry has been checked and [issues] is complete. The
+  /// report stays hidden until this is true, because a report that has not
   /// finished checking would claim everything is fine when it does not yet
   /// know. Bundled assets are excluded: one listed in the manifest exists by
   /// definition, so there is nothing to validate.
@@ -50,10 +48,9 @@ class IconsAndImagesViewModel extends ChangeNotifier {
   int get checkedCount =>
       _assets.where((PreviewAsset a) => a.source == AssetSource.network).length;
 
-  /// The one source being shown, or null while every source is shown.
-  ///
-  /// Sources are mutually exclusive: an asset is either bundled or remote, so
-  /// picking both would mean the same thing as picking neither.
+  /// The one source being shown, or null while every source is shown. Sources
+  /// are mutually exclusive: an asset is either bundled or remote, so picking
+  /// both would mean the same thing as picking neither.
   AssetSource? get selectedSource => _source;
 
   /// Whether no source is being filtered out.
@@ -77,9 +74,8 @@ class IconsAndImagesViewModel extends ChangeNotifier {
   /// Whether no format is being filtered out.
   bool get isAllTypes => _types.isEmpty;
 
-  /// Everything rejected up front, plus anything that has failed since.
-  ///
-  /// Entries rejected for their shape are known immediately; content-type and
+  /// Everything rejected up front, plus anything that has failed since. Entries
+  /// rejected for their shape are known immediately; content-type and
   /// reachability problems surface as each asset is measured.
   List<ValidationIssue> get issues => <ValidationIssue>[
     ..._catalogIssues,
@@ -117,10 +113,9 @@ class IconsAndImagesViewModel extends ChangeNotifier {
     return List<PreviewAsset>.unmodifiable(matching);
   }
 
-  /// Orders by measured size, keeping anything unmeasured at the end.
-  ///
-  /// Ties break on the locator so the order stays put between rebuilds;
-  /// [List.sort] gives no stability guarantee of its own.
+  /// Orders by measured size, keeping anything unmeasured at the end. Ties
+  /// break on the locator so the order stays put between rebuilds; [List.sort]
+  /// gives no stability guarantee of its own.
   int _bySize(PreviewAsset a, PreviewAsset b) {
     final int? sizeA = _metrics.sizeOf(a);
     final int? sizeB = _metrics.sizeOf(b);
@@ -152,10 +147,9 @@ class IconsAndImagesViewModel extends ChangeNotifier {
     await _checkNetworkEntries();
   }
 
-  /// Contacts every remote entry so the report can be trusted.
-  ///
-  /// These measurements are cached, so a tile scrolled into view later reuses
-  /// this result rather than asking again.
+  /// Contacts every remote entry so the report can be trusted. These
+  /// measurements are cached, so a tile scrolled into view later reuses this
+  /// result rather than asking again.
   Future<void> _checkNetworkEntries() async {
     await Future.wait(
       _assets
@@ -178,11 +172,10 @@ class IconsAndImagesViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Applies [order], measuring anything still unmeasured first.
-  ///
-  /// Sizes are resolved for the whole catalogue before the order changes, so
-  /// the grid reorders once rather than shuffling as each measurement lands.
-  /// The measurements are cached, so choosing a sort a second time is instant.
+  /// Applies [order], measuring anything still unmeasured first. Sizes are
+  /// resolved for the whole catalogue before the order changes, so the grid
+  /// reorders once rather than shuffling as each measurement lands. The
+  /// measurements are cached, so choosing a sort a second time is instant.
   Future<void> setSortOrder(AssetSortOrder order) async {
     if (_sortOrder == order) {
       return;
@@ -222,10 +215,9 @@ class IconsAndImagesViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Adds or removes [type] from the format filter.
-  ///
-  /// Removing the last one falls back to showing every format, so the filter
-  /// never lands in a state where nothing can match.
+  /// Adds or removes [type] from the format filter. Removing the last one falls
+  /// back to showing every format, so the filter never lands in a state where
+  /// nothing can match.
   void toggleType(AssetType type) {
     _types.contains(type) ? _types.remove(type) : _types.add(type);
     notifyListeners();

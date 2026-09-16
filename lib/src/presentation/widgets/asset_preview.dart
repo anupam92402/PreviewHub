@@ -6,10 +6,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../domain/models/preview_asset.dart';
 import '../../preview_hub_strings.dart';
 
-/// Renders [asset] whatever its format and source.
-/// Raster formats report the size they decoded to through [onDimensions],
-/// which is where the gallery's width and height come from: the artwork is on
-/// screen anyway, so measuring it costs no extra network traffic.
+/// Renders [asset] whatever its format and source. Raster formats report their
+/// decoded size through [onDimensions], which is where the gallery's width and
+/// height come from at no extra network cost.
 class AssetPreview extends StatelessWidget {
   /// Creates a preview of [asset].
   const AssetPreview({
@@ -29,14 +28,12 @@ class AssetPreview extends StatelessWidget {
   /// Called with the decoded pixel size, for raster formats only.
   final void Function(int width, int height)? onDimensions;
 
-  /// Called when the artwork cannot be drawn at all.
-  /// Failing to draw is the signal the tile uses, rather than a failed
-  /// measurement: a URL can serve a perfectly good image whose size cannot be
-  /// read, and that asset is not broken.
+  /// Called when the artwork cannot be drawn at all. A failed measurement is
+  /// not a failure; an image whose size cannot be read still draws fine.
   final VoidCallback? onFailed;
 
   /// Reports a failure after the current frame, since builders run during
-  /// layout and the listener they notify rebuilds the tile around them.
+  /// layout and the listener rebuilds the tile around them.
   void _reportFailure() {
     final VoidCallback? onFailed = this.onFailed;
     if (onFailed == null) {
@@ -125,9 +122,10 @@ class _RasterPreviewState extends State<_RasterPreview> {
     _stream = stream..addListener(_listener);
   }
 
+  /// Reports the decoded size and releases this listener's own clone of the
+  /// image, which the completer hands out per listener.
   void _onImage(ImageInfo info, bool synchronousCall) {
     widget.onDimensions?.call(info.image.width, info.image.height);
-    // The completer hands every listener its own clone to release.
     info.dispose();
   }
 
@@ -171,11 +169,9 @@ class _Spinner extends StatelessWidget {
   );
 }
 
-/// Stands in for artwork that could not be drawn.
-///
-/// Sizes itself to whatever box it is handed: the preview area is a few dozen
-/// pixels across at four tiles per row, and a fixed glyph plus caption does
-/// not fit there.
+/// Stands in for artwork that could not be drawn. Sizes itself to whatever box
+/// it is handed; a fixed glyph and caption do not fit the few dozen pixels a
+/// tile gets at four per row.
 class AssetPreviewFailure extends StatelessWidget {
   /// Creates a failure panel tinted with [accent].
   const AssetPreviewFailure({

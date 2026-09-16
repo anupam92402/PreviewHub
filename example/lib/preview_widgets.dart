@@ -15,9 +15,9 @@ import 'screens/settings_screen.dart';
 import 'screens/sign_in_screen.dart';
 import 'screens/success_screen.dart';
 
-/// Every component and screen this app hands to the gallery.
-/// One list, in the order it should be read: components first, then whole
-/// screens. The gallery files each entry under its group and section.
+/// Every component and screen this app hands to the gallery, components first
+/// and whole screens after. Builders are top-level functions so this list stays
+/// `const`.
 const List<WidgetPreview> previewWidgets = <WidgetPreview>[
   WidgetPreview.component(
     group: 'Buttons',
@@ -143,9 +143,6 @@ const List<WidgetPreview> previewWidgets = <WidgetPreview>[
   ),
 ];
 
-// Buttons. Each builder is a top-level function so the whole list above stays
-// const, which a closure would prevent.
-
 Widget _primaryLarge(BuildContext context) =>
     AppButton(label: 'Continue', size: AppButtonSize.large, onPressed: () {});
 
@@ -218,8 +215,6 @@ Widget _tertiaryText(BuildContext context) => AppButton(
   onPressed: () {},
 );
 
-// Feedback.
-
 Widget _toastSuccess(BuildContext context) => const AppToast(
   kind: AppToastKind.success,
   title: 'Payment sent',
@@ -240,8 +235,6 @@ Widget _toastPending(BuildContext context) => const AppToast(
   title: 'Fuel card top-up in progress',
   message: '14 vehicles · started 9:15 AM',
 );
-
-// Inputs.
 
 Widget _fieldEmpty(BuildContext context) => const AppTextField(
   label: 'Email',
@@ -278,8 +271,6 @@ Widget _fieldDisabled(BuildContext context) => const AppTextField(
   helperText: 'Managed by your administrator.',
 );
 
-// Selection.
-
 Widget _checkboxLive(BuildContext context) =>
     const _CheckboxDemo(label: 'Keep me signed in', initial: true);
 
@@ -299,8 +290,6 @@ Widget _checkboxError(BuildContext context) => const AppCheckbox(
 Widget _checkboxDisabled(BuildContext context) =>
     const AppCheckbox(label: 'Managed by your administrator', value: true);
 
-// Typography.
-
 Widget _gradientBrand(BuildContext context) =>
     const GradientText('Welcome back');
 
@@ -316,8 +305,6 @@ Widget _gradientTwoLines(BuildContext context) => const GradientText(
     color: AppTokens.onAccent,
   ),
 );
-
-// Screens.
 
 Widget _signIn(BuildContext context) => const SignInScreen();
 

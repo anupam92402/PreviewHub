@@ -2,11 +2,8 @@ import 'package:flutter/services.dart';
 
 import '../models/font_family_info.dart';
 
-/// Measures the font files behind a family.
-///
-/// A family has a handful of faces at most, so they are measured together when
-/// one is opened rather than lazily per row. Results are cached for the life of
-/// the service, so returning to a family costs nothing.
+/// Measures the font files behind a family. A family's faces are measured
+/// together when it is opened, and cached for the life of the service.
 class FontMetricsService {
   /// Reads font files from [bundle], defaulting to the app's own bundle.
   FontMetricsService({AssetBundle? bundle}) : _bundle = bundle ?? rootBundle;
@@ -30,15 +27,13 @@ class FontMetricsService {
     await Future.wait(family.faces.map(_measureFace));
   }
 
+  /// A face the bundle cannot load stays unmeasured rather than failing.
   Future<void> _measureFace(FontFace face) async {
     if (face.asset.isEmpty || _sizes.containsKey(face.asset)) {
       return;
     }
     try {
       _sizes[face.asset] = (await _bundle.load(face.asset)).lengthInBytes;
-    } on Object {
-      // A face the bundle cannot produce simply stays unmeasured; the row
-      // shows the type without a size rather than failing the screen.
-    }
+    } on Object catch (_) {}
   }
 }

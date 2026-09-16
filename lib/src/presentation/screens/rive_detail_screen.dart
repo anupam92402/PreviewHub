@@ -34,11 +34,11 @@ class _RiveDetailScreenState extends State<RiveDetailScreen> {
   final ValueNotifier<rive.RiveWidgetController?> _controller =
       ValueNotifier<rive.RiveWidgetController?>(null);
 
+  /// Disposes the notifiers; the Rive controller itself belongs to the player.
   @override
   void dispose() {
     _isPlaying.dispose();
     _failed.dispose();
-    // The controller itself belongs to the player, which disposes it.
     _controller.dispose();
     super.dispose();
   }
@@ -190,6 +190,8 @@ class _Transport extends StatelessWidget {
   final ValueNotifier<rive.RiveWidgetController?> controller;
   final VoidCallback onRestart;
 
+  /// Builds the controls; restart stays disabled until the file loads, since
+  /// before that there is no first frame to return to.
   @override
   Widget build(BuildContext context) => Row(
     mainAxisAlignment: MainAxisAlignment.center,
@@ -219,8 +221,6 @@ class _Transport extends StatelessWidget {
               rive.RiveWidgetController? loaded,
               Widget? child,
             ) => OutlinedButton.icon(
-              // Nothing has started until the file has loaded, and there
-              // is no first frame to go back to.
               onPressed: loaded == null ? null : onRestart,
               icon: const Icon(Icons.replay_rounded, size: 18),
               label: const Text(PreviewHubStrings.lottieRestart),

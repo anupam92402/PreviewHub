@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'app_tokens.dart';
 
-/// The design system's single-line text field.
-///
-/// Draws its own container so the focus, error and disabled states are visible
-/// side by side in a preview. Supply a [controller] to read the text; one is
-/// created and disposed internally when none is given.
+/// The design system's single-line text field. Draws its own container so
+/// focus, error and disabled states are visible side by side. Supply a
+/// [controller] to read the text; one is created and disposed internally when
+/// none is given.
 class AppTextField extends StatefulWidget {
   /// Creates a field labelled [label].
   const AppTextField({
@@ -61,6 +60,8 @@ class AppTextField extends StatefulWidget {
   State<AppTextField> createState() => _AppTextFieldState();
 }
 
+/// The border repaints on focus change; the field content is passed as the
+/// builder's child so it is built once.
 class _AppTextFieldState extends State<AppTextField> {
   final FocusNode _focusNode = FocusNode();
   final ValueNotifier<bool> _hasFocus = ValueNotifier<bool>(false);
@@ -132,8 +133,6 @@ class _AppTextFieldState extends State<AppTextField> {
               child: child,
             );
           },
-          // Built once and handed to the builder, so a focus change repaints
-          // the border without rebuilding the field itself.
           child: ValueListenableBuilder<bool>(
             valueListenable: _obscured,
             builder: (BuildContext context, bool obscured, Widget? child) =>

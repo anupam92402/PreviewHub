@@ -2,10 +2,9 @@ import 'package:flutter/foundation.dart';
 
 import 'widget_preview.dart';
 
-/// What the gallery cannot work out for itself.
-///
-/// Bundled assets are discovered through the asset manifest and never need
-/// registering, so this carries only the remote URLs:
+/// What the gallery cannot work out for itself. Bundled assets are discovered
+/// through the asset manifest and never need registering, so this carries only
+/// the remote URLs:
 ///
 /// ```dart
 /// PreviewHubDashboard(
@@ -24,25 +23,20 @@ class PreviewHubConfig {
     this.widgets = const <WidgetPreview>[],
   });
 
-  /// Remote icons and images to list alongside the bundled ones.
-  ///
-  /// Entries whose URL does not end in a supported image extension are ignored.
+  /// Remote icons and images to list alongside the bundled ones. Entries whose
+  /// URL does not end in a supported image extension are ignored.
   final List<String> networkImages;
 
-  /// Remote Lottie animations to list alongside the bundled ones.
-  ///
-  /// Entries that are not http or https URLs are ignored.
+  /// Remote Lottie animations to list alongside the bundled ones. Entries that
+  /// are not http or https URLs are ignored.
   final List<String> networkLotties;
 
-  /// Remote Rive animations to list alongside the bundled ones.
-  ///
-  /// Entries that are not http or https URLs are ignored.
+  /// Remote Rive animations to list alongside the bundled ones. Entries that
+  /// are not http or https URLs are ignored.
   final List<String> networkRives;
 
-  /// Components and screens to list in the widget gallery.
-  ///
-  /// A widget is code rather than an asset, so there is no manifest to read:
-  /// the host registers what it wants previewed. Entries missing a title, a
-  /// group or a usable case are ignored.
+  /// Components and screens to list in the widget gallery. A widget is code, so
+  /// there is no manifest to read and the host registers what it wants
+  /// previewed. Entries missing a title, group or usable case are ignored.
   final List<WidgetPreview> widgets;
 }

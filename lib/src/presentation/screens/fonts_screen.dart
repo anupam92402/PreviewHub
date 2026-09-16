@@ -14,11 +14,8 @@ import '../widgets/font_weight_section.dart';
 import '../widgets/preview_filter_bar.dart';
 import '../widgets/preview_search_bar.dart';
 
-/// Every font family bundled with the app, one family at a time.
-///
-/// Families are discovered from the font manifest, so nothing is registered by
-/// hand, and there is nothing to fetch: a font is either in the bundle or it
-/// is not.
+/// Every font family bundled with the app, shown one family at a time.
+/// Families come from the font manifest; nothing is registered by hand.
 class FontsScreen extends StatefulWidget {
   /// Creates the screen.
   const FontsScreen({super.key});
@@ -48,6 +45,8 @@ class _FontsScreenState extends State<FontsScreen> {
     super.dispose();
   }
 
+  /// Builds the family view; the sample action stays hidden until a family
+  /// loads, so the sheet can never open with an empty family list.
   @override
   Widget build(BuildContext context) => AnimatedBuilder(
     animation: _viewModel,
@@ -57,8 +56,6 @@ class _FontsScreenState extends State<FontsScreen> {
       final List<FontFamilyInfo> families = _viewModel.visibleFamilies;
 
       return Scaffold(
-        // Hidden until there is a family to set text in, so the sheet can
-        // never open with an empty family list.
         floatingActionButton: families.isEmpty
             ? null
             : FloatingActionButton(
@@ -128,13 +125,13 @@ class _FontsHeader extends StatelessWidget {
 
   final FontsViewModel viewModel;
 
+  /// Offsets the controls clear of the toolbar and status bar, which the
+  /// flexible space reaches behind.
   @override
   Widget build(BuildContext context) {
     final List<FontFamilyInfo> families = viewModel.visibleFamilies;
 
     return Padding(
-      // The flexible space reaches behind the toolbar and the status bar, so
-      // the controls are pushed clear of both.
       padding: EdgeInsets.only(
         top: kToolbarHeight + MediaQuery.paddingOf(context).top,
       ),
@@ -157,8 +154,6 @@ class _FontsHeader extends StatelessWidget {
                   for (final FontFamilyInfo family in families)
                     PreviewFilter(
                       label: family.name,
-                      // One family at a time, so choosing one replaces the
-                      // last rather than adding to it.
                       selected: viewModel.selected == family,
                       onSelected: () => viewModel.select(family),
                     ),
@@ -196,7 +191,6 @@ class _FamilySummary extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  // Set in the family itself, so the name is its own sample.
                   fontFamily: family.manifestKey,
                   fontSize: 26,
                   fontWeight: family.representativeFace.fontWeight,

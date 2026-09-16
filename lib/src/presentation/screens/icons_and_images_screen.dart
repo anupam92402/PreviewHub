@@ -19,7 +19,6 @@ import '../widgets/preview_view_button.dart';
 import '../widgets/validation_report_sheet.dart';
 
 /// Every bundled and supplied icon or image, searchable and filterable.
-
 class IconsAndImagesScreen extends StatefulWidget {
   /// Creates the screen, listing [networkImages] after the bundled assets.
   const IconsAndImagesScreen({
@@ -54,11 +53,8 @@ class _IconsAndImagesScreenState extends State<IconsAndImagesScreen> {
     return available / columns + _tileFooterHeight;
   }
 
-  /// Height the expanded bar needs to hold the search field and both filter
-  /// rows without either peeking out once collapsed.
-  ///
-  /// Scaled with the text setting, since both controls grow with it; being a
-  /// little generous costs blank space, being short clips the filters.
+  /// Expanded bar height for the search field and both filter rows, scaled
+  /// with the text setting so neither is clipped.
   static double _expandedHeight(BuildContext context) =>
       kToolbarHeight +
       MediaQuery.textScalerOf(
@@ -85,6 +81,8 @@ class _IconsAndImagesScreenState extends State<IconsAndImagesScreen> {
     super.dispose();
   }
 
+  /// Opens the detail route for [asset], taking theming from the route context
+  /// rather than a field.
   void _open(PreviewAsset asset) {
     Navigator.of(context).push(
       PreviewHubRouter.route(
@@ -92,13 +90,17 @@ class _IconsAndImagesScreenState extends State<IconsAndImagesScreen> {
         arguments: AssetDetailArguments(
           asset: asset,
           metrics: _metrics,
-          // Read from the route's own theming rather than carried in a field.
           themeController: PreviewHubTheming.controllerOf(context),
         ),
       ),
     );
   }
 
+  /// Builds the grid. The bar keeps one flat colour instead of the Material 3
+  /// scrolled-under tint, and the validation report waits until every remote
+  /// entry has been contacted. Tiles take a fixed height so the footer survives
+  /// every column count, and are keyed by asset so filtering rebinds them
+  /// rather than reusing the tile at that index.
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -113,15 +115,10 @@ class _IconsAndImagesScreenState extends State<IconsAndImagesScreen> {
               SliverAppBar(
                 pinned: true,
                 expandedHeight: _expandedHeight(context),
-                // Material 3 tints the bar once content scrolls under it; the
-                // gallery keeps one flat colour instead.
                 scrolledUnderElevation: 0,
                 surfaceTintColor: Colors.transparent,
                 title: const Text(PreviewHubStrings.sectionIconsAndImagesTitle),
                 actions: <Widget>[
-                  // Hidden until every remote entry has been contacted: a
-                  // report shown earlier would claim all is well before it
-                  // knows.
                   if (_viewModel.isReportReady)
                     IconButton(
                       tooltip: PreviewHubStrings.validationReportTooltip,
@@ -165,15 +162,10 @@ class _IconsAndImagesScreenState extends State<IconsAndImagesScreen> {
                       crossAxisCount: _viewModel.columns,
                       mainAxisSpacing: _gridSpacing,
                       crossAxisSpacing: _gridSpacing,
-                      // A fixed height rather than an aspect ratio: the footer
-                      // needs the same room whatever the column count, and a
-                      // ratio would squeeze it away at four across.
                       mainAxisExtent: _tileHeight(context, _viewModel.columns),
                     ),
                     itemCount: assets.length,
                     itemBuilder: (BuildContext context, int index) => AssetTile(
-                      // Keyed by asset so a filter change rebinds rather than
-                      // reusing the tile that happened to sit at this index.
                       key: ValueKey<String>(assets[index].locator),
                       asset: assets[index],
                       metrics: _metrics,

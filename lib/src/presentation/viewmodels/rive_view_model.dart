@@ -80,10 +80,9 @@ class RiveViewModel extends ChangeNotifier {
     );
   }
 
-  /// Keeps discovery order unless a size sort is on.
-  ///
-  /// Ties break on the locator so the order stays put between rebuilds;
-  /// [List.sort] gives no stability guarantee of its own.
+  /// Keeps discovery order unless a size sort is on. Ties break on the locator
+  /// so the order stays put between rebuilds; [List.sort] gives no stability
+  /// guarantee of its own.
   int _order(RiveAsset a, RiveAsset b) {
     if (!_sortOrder.needsSizes) {
       return 0;

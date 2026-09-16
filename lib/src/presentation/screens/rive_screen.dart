@@ -87,6 +87,9 @@ class _RiveScreenState extends State<RiveScreen> {
     );
   }
 
+  /// Builds the grid. The validation report stays hidden until every remote
+  /// entry has been contacted, and tiles are keyed by asset so filtering
+  /// rebinds rather than reusing the tile at that index.
   @override
   Widget build(BuildContext context) => AnimatedBuilder(
     animation: _viewModel,
@@ -108,8 +111,6 @@ class _RiveScreenState extends State<RiveScreen> {
               surfaceTintColor: Colors.transparent,
               title: const Text(PreviewHubStrings.sectionRiveTitle),
               actions: <Widget>[
-                // Hidden until every remote entry has been contacted: a report
-                // shown earlier would claim all is well before it knows.
                 if (_viewModel.isReportReady)
                   IconButton(
                     tooltip: PreviewHubStrings.validationReportTooltip,
@@ -157,8 +158,6 @@ class _RiveScreenState extends State<RiveScreen> {
                   ),
                   itemCount: assets.length,
                   itemBuilder: (BuildContext context, int index) => RiveTile(
-                    // Keyed by asset so a filter change rebinds rather than
-                    // reusing the tile that happened to sit at this index.
                     key: ValueKey<String>(assets[index].locator),
                     asset: assets[index],
                     metrics: _metrics,
@@ -180,10 +179,10 @@ class _RiveHeader extends StatelessWidget {
   final RiveViewModel viewModel;
   final int resultCount;
 
+  /// Offsets the controls clear of the toolbar and status bar, which the
+  /// flexible space reaches behind.
   @override
   Widget build(BuildContext context) => Padding(
-    // The flexible space reaches behind the toolbar and the status bar, so the
-    // controls are pushed clear of both.
     padding: EdgeInsets.only(
       top: kToolbarHeight + MediaQuery.paddingOf(context).top,
     ),

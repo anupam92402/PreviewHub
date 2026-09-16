@@ -1,6 +1,5 @@
-/// Remote Rive animations the gallery is exercised against.
-///
-/// A real consumer supplies their own; these are Rive's public samples.
+/// Remote Rive animations the gallery is exercised against. A real consumer
+/// supplies their own; these are Rive's public samples.
 library;
 
 /// Rive endpoints.

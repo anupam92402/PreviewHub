@@ -21,9 +21,8 @@ class PreviewFilter {
   final VoidCallback onSelected;
 
   /// Colour the chip fills with once selected, and labels itself in while off.
-  ///
-  /// Every chip shares the same neutral background while unselected, so the
-  /// row reads as one control; the accent shows in the label until then.
+  /// Every chip shares the same neutral background while unselected, so the row
+  /// reads as one control; the accent shows in the label until then.
   final Color? accent;
 
   /// Optional glyph shown before the label.
@@ -35,9 +34,8 @@ class PreviewFilterGroup {
   /// Creates a row titled [label], or untitled when [label] is null.
   const PreviewFilterGroup({required this.filters, this.label});
 
-  /// Title shown to the left of the chips.
-  /// Null on a bar of one row, where a title only repeats what the chips
-  /// already say.
+  /// Title shown to the left of the chips. Null on a bar of one row, where a
+  /// title only repeats what the chips already say.
   final String? label;
 
   /// Chips in this row, in display order.
@@ -45,9 +43,8 @@ class PreviewFilterGroup {
 }
 
 /// Stacked rows of filter chips, each row labelled and scrolling on its own.
-///
-/// Splitting the filters across rows keeps either one short enough to read on
-/// a phone without running off the edge.
+/// Splitting the filters across rows keeps either one short enough to read on a
+/// phone without running off the edge.
 class PreviewFilterBar extends StatelessWidget {
   /// Creates a bar showing each group in [groups], top to bottom.
   const PreviewFilterBar({required this.groups, super.key});
