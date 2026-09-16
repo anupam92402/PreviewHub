@@ -2,17 +2,26 @@ name: preview_hub
 description: "A runnable gallery for previewing a design system's widgets, icons, images, animations and font families on a real device."
 version: 0.0.1
 repository: https://github.com/anupam92402/PreviewHub
+issue_tracker: https://github.com/anupam92402/PreviewHub/issues
+documentation: https://github.com/anupam92402/PreviewHub#readme
+
+topics:
+  - design-system
+  - preview
+  - gallery
+  - widgets
+  - developer-tools
 
 environment:
   sdk: ^3.12.2
-  flutter: ">=1.17.0"
+  flutter: ">=3.44.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  flutter_svg: ^2.0.10+1
-  http: ^1.2.2
+  flutter_svg: ^2.3.0
+  http: ^1.6.0
   lottie: ^3.5.1
   rive: ^0.14.11
 
@@ -23,3 +32,21 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+screenshots:
+  - description: "Landing screen listing every collection."
+    path: screenshots/dashboard.png
+  - description: "Index of registered components and screens."
+    path: screenshots/widgets_index.png
+  - description: "Every labelled case of one component."
+    path: screenshots/widgets_detail.png
+  - description: "A registered screen running at full size."
+    path: screenshots/widgets_stage.png
+  - description: "Icons and images with dimensions and byte sizes."
+    path: screenshots/icons.png
+  - description: "Font families set on a size ramp."
+    path: screenshots/fonts.png
+  - description: "Lottie animations playing in the grid."
+    path: screenshots/lottie.png
+  - description: "Rive files with artboard and state machine."
+    path: screenshots/rive.png

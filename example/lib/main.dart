@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:preview_hub/preview_hub.dart';
 
@@ -70,12 +71,14 @@ class _CounterPageState extends State<CounterPage> {
           children: <Widget>[],
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        heroTag: 'open-preview-hub',
-        onPressed: _openPreviewHub,
-        icon: const Icon(Icons.grid_view_rounded),
-        label: const Text('Preview Hub'),
-      ),
+      floatingActionButton: kDebugMode
+          ? FloatingActionButton.extended(
+              heroTag: 'open-preview-hub',
+              onPressed: _openPreviewHub,
+              icon: const Icon(Icons.grid_view_rounded),
+              label: const Text('Preview Hub'),
+            )
+          : null,
     );
   }
 }
