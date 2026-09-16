@@ -5,9 +5,9 @@ fonts, Lottie animations, and Rive files inside your own app. Everything is rend
 Flutter engine, theme, assets, and runtime configuration used by your application.  No code generation. 
 No build_runner. No custom tooling.
 
-| Collections | Widgets | One component | One screen |
-| --- | --- | --- | --- |
-| ![Landing screen](https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/dashboard.png) | ![Widget index](https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/widgets_index.png) | ![Component detail](https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/widgets_detail.png) | ![Screen preview](https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/widgets_stage.png) |
+| Collections | Dark theme | Widgets | One component | One screen |
+| --- | --- | --- | --- | --- |
+| ![Landing screen](https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/dashboard.png) | ![Landing screen in dark](https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/dashboard_dark.png) | ![Widget index](https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/widgets_index.png) | ![Component detail](https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/widgets_detail.png) | ![Screen preview](https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/widgets_stage.png) |
 
 ## Requirements
 

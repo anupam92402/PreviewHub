@@ -36,6 +36,8 @@ flutter:
 screenshots:
   - description: "Landing screen listing every collection."
     path: screenshots/dashboard.png
+  - description: "The same landing screen in the gallery's dark theme."
+    path: screenshots/dashboard_dark.png
   - description: "Index of registered components and screens."
     path: screenshots/widgets_index.png
   - description: "Every labelled case of one component."
