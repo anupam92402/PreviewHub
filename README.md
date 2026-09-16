@@ -17,6 +17,13 @@ their theme and their pixel density. `preview_hub` puts that catalogue inside
 your own app, so every preview runs through the real Flutter engine on the real
 device.
 
+## Why not IDE previews?
+
+IDE previews are great for individual widgets during development.
+preview_hub focuses on browsing an entire design system on a real device,
+with the same rendering engine, fonts, assets, theme and runtime behavior
+used by your application.
+
 ## Install
 
 ```yaml
@@ -105,35 +112,26 @@ This is a development tool. It walks your whole asset bundle and builds every
 widget you register, so gate the entry point rather than shipping it to end
 users.
 
-The cheapest gate is `kDebugMode`, which is a compile-time constant, so the
-dashboard and the preview list are tree-shaken out of a release build entirely:
+`kDebugMode` is a compile-time constant, so the gallery is tree-shaken out of a
+release build entirely rather than merely hidden:
 
 ```dart
 import 'package:flutter/foundation.dart';
 
-// _openPreviewHub is the push shown above.
-floatingActionButton: kDebugMode
-    ? FloatingActionButton(
-        onPressed: _openPreviewHub,
-        child: const Icon(Icons.grid_view_rounded),
-      )
-    : null,
+if (kDebugMode) {
+  Navigator.of(context).push(
+    MaterialPageRoute<void>(
+      builder: (BuildContext context) => const PreviewHubDashboard(
+        config: PreviewHubConfig(widgets: previewWidgets),
+      ),
+    ),
+  );
+}
 ```
 
-If you need previews in a profile or internal build too, use a dart-define
-instead, which is also a compile-time constant:
-
-```dart
-const bool showPreviewHub =
-    bool.fromEnvironment('PREVIEW_HUB', defaultValue: false);
-```
-
-```sh
-flutter run --dart-define=PREVIEW_HUB=true
-```
-
-Checking a runtime flag, such as a value read from a settings store, works but
-keeps the gallery and everything it references in the release binary.
+Note that this removes the Dart code, not the native libraries its
+dependencies bring: `rive` ships a prebuilt binary that is packaged whether or
+not the gallery can be reached.
 
 ## What each collection shows
 
