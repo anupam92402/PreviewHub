@@ -290,9 +290,7 @@ class _MovementRow extends StatelessWidget {
                 ? Icons.south_west_rounded
                 : Icons.north_east_rounded,
             size: 19,
-            color: movement.incoming
-                ? AppTokens.success
-                : AppTokens.secondary,
+            color: movement.incoming ? AppTokens.success : AppTokens.secondary,
           ),
         ),
         const SizedBox(width: 12),

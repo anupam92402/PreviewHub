@@ -89,14 +89,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
               padding: const EdgeInsets.symmetric(vertical: 4),
               child: ValueListenableBuilder<bool?>(
                 valueListenable: _marketing,
-                builder:
-                    (BuildContext context, bool? value, Widget? child) =>
-                        AppCheckbox(
-                          label: 'Send me product news',
-                          helperText: 'You can turn this off at any time.',
-                          value: value,
-                          onChanged: (bool? next) => _marketing.value = next,
-                        ),
+                builder: (BuildContext context, bool? value, Widget? child) =>
+                    AppCheckbox(
+                      label: 'Send me product news',
+                      helperText: 'You can turn this off at any time.',
+                      value: value,
+                      onChanged: (bool? next) => _marketing.value = next,
+                    ),
               ),
             ),
           ],

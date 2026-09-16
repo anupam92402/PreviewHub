@@ -20,8 +20,7 @@ class RiveRuntime {
   /// [rive.RiveNative.init] throws outright where the native library cannot be
   /// loaded, so the failure is reported rather than thrown; a future that
   /// threw would leave every tile waiting instead of saying it cannot play.
-  static Future<bool> ensureInitialised() =>
-      _initialisation ??= _start();
+  static Future<bool> ensureInitialised() => _initialisation ??= _start();
 
   static Future<bool> _start() async {
     try {
@@ -162,21 +161,20 @@ class _RivePlayerState extends State<RivePlayer> {
                     fileLoader: loader,
                     onLoaded: _onLoaded,
                     onFailed: (Object error, StackTrace stack) => _onFailed(),
-                    builder:
-                        (BuildContext context, rive.RiveState state) =>
-                            switch (state) {
-                              rive.RiveLoading() => const _Spinner(),
-                              // The builder reports this state without
-                              // calling onFailed, so the tile is told here or
-                              // its border would stay the healthy colour.
-                              rive.RiveFailed() => _ReportedFailure(
-                                onFailed: _onFailed,
-                              ),
-                              rive.RiveLoaded() => rive.RiveWidget(
-                                controller: state.controller,
-                                fit: widget.fit,
-                              ),
-                            },
+                    builder: (BuildContext context, rive.RiveState state) =>
+                        switch (state) {
+                          rive.RiveLoading() => const _Spinner(),
+                          // The builder reports this state without
+                          // calling onFailed, so the tile is told here or
+                          // its border would stay the healthy colour.
+                          rive.RiveFailed() => _ReportedFailure(
+                            onFailed: _onFailed,
+                          ),
+                          rive.RiveLoaded() => rive.RiveWidget(
+                            controller: state.controller,
+                            fit: widget.fit,
+                          ),
+                        },
                   ),
       );
     },
@@ -215,7 +213,11 @@ class _Spinner extends StatelessWidget {
 /// Stands in for an animation that could not be played.
 class RivePlayerFailure extends StatelessWidget {
   /// Creates a failure panel tinted with [accent].
-  const RivePlayerFailure({required this.accent, this.iconSize = 28, super.key});
+  const RivePlayerFailure({
+    required this.accent,
+    this.iconSize = 28,
+    super.key,
+  });
 
   /// Colour of the glyph and caption.
   final Color accent;

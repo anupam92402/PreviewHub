@@ -110,11 +110,7 @@ const List<WidgetPreview> previewWidgets = <WidgetPreview>[
       WidgetPreviewCase(label: 'title · two lines', builder: _gradientTwoLines),
     ],
   ),
-  WidgetPreview.screen(
-    group: 'Auth',
-    title: 'SignInScreen',
-    builder: _signIn,
-  ),
+  WidgetPreview.screen(group: 'Auth', title: 'SignInScreen', builder: _signIn),
   WidgetPreview.screen(
     group: 'Money',
     title: 'DashboardScreen',

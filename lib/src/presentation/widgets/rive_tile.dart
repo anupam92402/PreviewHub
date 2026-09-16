@@ -69,8 +69,7 @@ class _RiveTileState extends State<RiveTile> {
       isPlaying: _isPlaying,
       label: _label,
       onFailed: () => _failed.value = true,
-      onLoaded: (rive.RiveWidgetController c) =>
-          _label.value = c.artboard.name,
+      onLoaded: (rive.RiveWidgetController c) => _label.value = c.artboard.name,
     ),
   );
 }
@@ -154,7 +153,10 @@ class _TileCard extends StatelessWidget {
                       Positioned(
                         bottom: 6,
                         right: 6,
-                        child: _PlayToggle(isPlaying: isPlaying, accent: accent),
+                        child: _PlayToggle(
+                          isPlaying: isPlaying,
+                          accent: accent,
+                        ),
                       ),
                   ],
                 ),
@@ -292,9 +294,8 @@ class _TileFooter extends StatelessWidget {
           const SizedBox(height: 2),
           ValueListenableBuilder<String?>(
             valueListenable: label,
-            builder:
-                (BuildContext context, String? artboard, Widget? child) =>
-                    _FactsLine(
+            builder: (BuildContext context, String? artboard, Widget? child) =>
+                _FactsLine(
                   asset: asset,
                   metrics: metrics,
                   label: artboard,
@@ -339,8 +340,8 @@ class _FactsLine extends StatelessWidget {
 
     return ValueListenableBuilder<AssetMetricsState>(
       valueListenable: metrics.watch(asset),
-      builder:
-          (BuildContext context, AssetMetricsState state, Widget? child) => Text(
+      builder: (BuildContext context, AssetMetricsState state, Widget? child) =>
+          Text(
             <String>[
               if (label != null && label!.isNotEmpty) label!,
               switch (state.status) {

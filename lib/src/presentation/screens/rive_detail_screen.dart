@@ -219,12 +219,12 @@ class _Transport extends StatelessWidget {
               rive.RiveWidgetController? loaded,
               Widget? child,
             ) => OutlinedButton.icon(
-                  // Nothing has started until the file has loaded, and there
-                  // is no first frame to go back to.
-                  onPressed: loaded == null ? null : onRestart,
-                  icon: const Icon(Icons.replay_rounded, size: 18),
-                  label: const Text(PreviewHubStrings.lottieRestart),
-                ),
+              // Nothing has started until the file has loaded, and there
+              // is no first frame to go back to.
+              onPressed: loaded == null ? null : onRestart,
+              icon: const Icon(Icons.replay_rounded, size: 18),
+              label: const Text(PreviewHubStrings.lottieRestart),
+            ),
       ),
     ],
   );

@@ -99,8 +99,7 @@ class AppButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool enabled = onPressed != null;
     final Color background = switch (variant) {
-      AppButtonVariant.filled =>
-        enabled ? tone.accent : AppTokens.disabledFill,
+      AppButtonVariant.filled => enabled ? tone.accent : AppTokens.disabledFill,
       AppButtonVariant.outlined || AppButtonVariant.text => Colors.transparent,
     };
     final Color foreground = switch (variant) {

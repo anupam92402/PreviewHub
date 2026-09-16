@@ -31,7 +31,9 @@ class LottieCatalogService {
         .map(LottieAsset.bundled)
         .nonNulls
         .toList();
-    found.sort((LottieAsset a, LottieAsset b) => a.locator.compareTo(b.locator));
+    found.sort(
+      (LottieAsset a, LottieAsset b) => a.locator.compareTo(b.locator),
+    );
     return found;
   }
 }

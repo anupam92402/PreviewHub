@@ -58,124 +58,106 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
     final AssetMetricsService metrics = widget.metrics;
 
     return Scaffold(
-            appBar: AppBar(
-              title: Text(asset.name),
-              scrolledUnderElevation: 0,
-              surfaceTintColor: Colors.transparent,
-            ),
-            body: ListView(
-              padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
-              children: <Widget>[
-                ValueListenableBuilder<bool>(
-                  valueListenable: _failed,
-                  builder:
-                      (BuildContext context, bool failed, Widget? child) {
-                        final Color accent = failed
-                            ? Theme.of(context).colorScheme.error
-                            : AssetTypeStyle.colorOf(asset.type);
+      appBar: AppBar(
+        title: Text(asset.name),
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
+      ),
+      body: ListView(
+        padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
+        children: <Widget>[
+          ValueListenableBuilder<bool>(
+            valueListenable: _failed,
+            builder: (BuildContext context, bool failed, Widget? child) {
+              final Color accent = failed
+                  ? Theme.of(context).colorScheme.error
+                  : AssetTypeStyle.colorOf(asset.type);
 
-                        return Container(
-                          height: 280,
-                          padding: const EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            color: accent.withValues(
-                              alpha: failed ? 0.10 : 0.07,
-                            ),
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                              color: accent.withValues(alpha: 0.22),
-                            ),
-                          ),
-                          child: failed
-                              ? AssetPreviewFailure(
-                                  accent: accent,
-                                  iconSize: 44,
-                                )
-                              : AssetPreview(
-                                  asset: asset,
-                                  onDimensions: (int width, int height) =>
-                                      metrics.recordDimensions(
-                                        asset,
-                                        width,
-                                        height,
-                                      ),
-                                  onFailed: () => _failed.value = true,
-                                ),
-                        );
-                      },
+              return Container(
+                height: 280,
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: accent.withValues(alpha: failed ? 0.10 : 0.07),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: accent.withValues(alpha: 0.22)),
                 ),
-                const SizedBox(height: 22),
-                ValueListenableBuilder<AssetMetricsState>(
-                  valueListenable: metrics.watch(asset),
-                  builder:
-                      (
-                        BuildContext context,
-                        AssetMetricsState state,
-                        Widget? child,
-                      ) => Column(
-                        children: <Widget>[
-                          _Row(
-                            label: PreviewHubStrings.detailName,
-                            value: asset.name,
-                          ),
-                          _Row(
-                            label: PreviewHubStrings.detailType,
-                            value: asset.type.label,
-                            valueColor: AssetTypeStyle.colorOf(asset.type),
-                          ),
-                          _Row(
-                            label: PreviewHubStrings.detailSource,
-                            value: asset.source.label,
-                          ),
-                          _Row(
-                            label: PreviewHubStrings.detailDimensions,
-                            value: state.status == MetricsStatus.failed
-                                ? PreviewHubStrings.assetUnavailable
-                                : describeDimensions(asset, state.metrics),
-                          ),
-                          _Row(
-                            label: PreviewHubStrings.detailSize,
-                            value: switch (state.status) {
-                              MetricsStatus.loading =>
-                                PreviewHubStrings.measuring,
-                              MetricsStatus.failed =>
-                                PreviewHubStrings.assetUnavailable,
-                              MetricsStatus.ready => AssetMetrics.formatBytes(
-                                state.metrics.sizeInBytes,
-                              ),
-                            },
-                          ),
-                          _Row(
-                            label: asset.source == AssetSource.bundled
-                                ? PreviewHubStrings.detailPath
-                                : PreviewHubStrings.detailUrl,
-                            value: asset.locator,
-                            onCopy: () => _copy(context, asset.locator),
-                          ),
-                          ValueListenableBuilder<bool>(
-                            valueListenable: _failed,
-                            builder:
-                                (
-                                  BuildContext context,
-                                  bool failed,
-                                  Widget? child,
-                                ) =>
-                                    failed ||
-                                        state.status == MetricsStatus.failed
-                                    ? _Row(
-                                        label: PreviewHubStrings.detailError,
-                                        value: _describeFailure(),
-                                        valueColor: Theme.of(
-                                          context,
-                                        ).colorScheme.error,
-                                      )
-                                    : const SizedBox.shrink(),
-                          ),
-                        ],
+                child: failed
+                    ? AssetPreviewFailure(accent: accent, iconSize: 44)
+                    : AssetPreview(
+                        asset: asset,
+                        onDimensions: (int width, int height) =>
+                            metrics.recordDimensions(asset, width, height),
+                        onFailed: () => _failed.value = true,
                       ),
+              );
+            },
+          ),
+          const SizedBox(height: 22),
+          ValueListenableBuilder<AssetMetricsState>(
+            valueListenable: metrics.watch(asset),
+            builder:
+                (
+                  BuildContext context,
+                  AssetMetricsState state,
+                  Widget? child,
+                ) => Column(
+                  children: <Widget>[
+                    _Row(
+                      label: PreviewHubStrings.detailName,
+                      value: asset.name,
+                    ),
+                    _Row(
+                      label: PreviewHubStrings.detailType,
+                      value: asset.type.label,
+                      valueColor: AssetTypeStyle.colorOf(asset.type),
+                    ),
+                    _Row(
+                      label: PreviewHubStrings.detailSource,
+                      value: asset.source.label,
+                    ),
+                    _Row(
+                      label: PreviewHubStrings.detailDimensions,
+                      value: state.status == MetricsStatus.failed
+                          ? PreviewHubStrings.assetUnavailable
+                          : describeDimensions(asset, state.metrics),
+                    ),
+                    _Row(
+                      label: PreviewHubStrings.detailSize,
+                      value: switch (state.status) {
+                        MetricsStatus.loading => PreviewHubStrings.measuring,
+                        MetricsStatus.failed =>
+                          PreviewHubStrings.assetUnavailable,
+                        MetricsStatus.ready => AssetMetrics.formatBytes(
+                          state.metrics.sizeInBytes,
+                        ),
+                      },
+                    ),
+                    _Row(
+                      label: asset.source == AssetSource.bundled
+                          ? PreviewHubStrings.detailPath
+                          : PreviewHubStrings.detailUrl,
+                      value: asset.locator,
+                      onCopy: () => _copy(context, asset.locator),
+                    ),
+                    ValueListenableBuilder<bool>(
+                      valueListenable: _failed,
+                      builder:
+                          (BuildContext context, bool failed, Widget? child) =>
+                              failed || state.status == MetricsStatus.failed
+                              ? _Row(
+                                  label: PreviewHubStrings.detailError,
+                                  value: _describeFailure(),
+                                  valueColor: Theme.of(
+                                    context,
+                                  ).colorScheme.error,
+                                )
+                              : const SizedBox.shrink(),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+          ),
+        ],
+      ),
     );
   }
 

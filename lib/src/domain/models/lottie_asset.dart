@@ -52,7 +52,8 @@ class LottieAsset implements MeasurableAsset {
   final String locator;
 
   static String _lastSegment(String path) =>
-      path.split('/').where((String part) => part.isNotEmpty).lastOrNull ?? path;
+      path.split('/').where((String part) => part.isNotEmpty).lastOrNull ??
+      path;
 
   @override
   bool operator ==(Object other) =>

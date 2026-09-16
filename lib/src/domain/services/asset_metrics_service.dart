@@ -128,9 +128,7 @@ class AssetMetricsService {
       final http.Response head = await _client.head(uri);
       if (head.statusCode < 400) {
         _checkContentType(asset, head.headers['content-type']);
-        final int? length = int.tryParse(
-          head.headers['content-length'] ?? '',
-        );
+        final int? length = int.tryParse(head.headers['content-length'] ?? '');
         if (length != null) {
           return length;
         }

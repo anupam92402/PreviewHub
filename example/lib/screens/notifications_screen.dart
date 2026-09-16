@@ -27,7 +27,8 @@ class NotificationsScreen extends StatelessWidget {
         AppToast(
           kind: AppToastKind.failure,
           title: 'Toll recharge failed',
-          message: 'The card issuer declined ₹3,200. No money left your '
+          message:
+              'The card issuer declined ₹3,200. No money left your '
               'account.',
           actionLabel: 'Retry payment',
           onAction: () {},

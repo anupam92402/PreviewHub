@@ -153,7 +153,10 @@ class _TileCard extends StatelessWidget {
                       Positioned(
                         bottom: 6,
                         right: 6,
-                        child: _PlayToggle(isPlaying: isPlaying, accent: accent),
+                        child: _PlayToggle(
+                          isPlaying: isPlaying,
+                          accent: accent,
+                        ),
                       ),
                   ],
                 ),
@@ -294,12 +297,12 @@ class _TileFooter extends StatelessWidget {
             builder:
                 (BuildContext context, Duration? duration, Widget? child) =>
                     _FactsLine(
-                  asset: asset,
-                  metrics: metrics,
-                  label: duration,
-                  failed: failed,
-                  accent: accent,
-                ),
+                      asset: asset,
+                      metrics: metrics,
+                      label: duration,
+                      failed: failed,
+                      accent: accent,
+                    ),
           ),
         ],
       ),
@@ -338,8 +341,8 @@ class _FactsLine extends StatelessWidget {
 
     return ValueListenableBuilder<AssetMetricsState>(
       valueListenable: metrics.watch(asset),
-      builder:
-          (BuildContext context, AssetMetricsState state, Widget? child) => Text(
+      builder: (BuildContext context, AssetMetricsState state, Widget? child) =>
+          Text(
             <String>[
               if (label != null) PreviewHubStrings.lottieDuration(label!),
               switch (state.status) {

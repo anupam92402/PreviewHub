@@ -35,9 +35,10 @@ class PreviewHubTheming extends StatelessWidget {
   ///
   /// Read without subscribing: callers want the controller to hand on, not to
   /// rebuild when the mode changes.
-  static PreviewHubThemeController? controllerOf(BuildContext context) => context
-      .getInheritedWidgetOfExactType<_PreviewHubThemeScope>()
-      ?.controller;
+  static PreviewHubThemeController? controllerOf(BuildContext context) =>
+      context
+          .getInheritedWidgetOfExactType<_PreviewHubThemeScope>()
+          ?.controller;
 
   @override
   Widget build(BuildContext context) {
@@ -49,14 +50,13 @@ class PreviewHubTheming extends StatelessWidget {
           ? child
           : ValueListenableBuilder<ThemeMode>(
               valueListenable: controller,
-              builder:
-                  (BuildContext context, ThemeMode mode, Widget? child) =>
-                      Theme(
-                        data: _isDark(context, mode)
-                            ? PreviewHubTheme.dark()
-                            : PreviewHubTheme.light(),
-                        child: child!,
-                      ),
+              builder: (BuildContext context, ThemeMode mode, Widget? child) =>
+                  Theme(
+                    data: _isDark(context, mode)
+                        ? PreviewHubTheme.dark()
+                        : PreviewHubTheme.light(),
+                    child: child!,
+                  ),
               child: child,
             ),
     );

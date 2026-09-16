@@ -41,12 +41,7 @@ class HistoryScreen extends StatelessWidget {
   /// The list, newest day first.
   static const List<_Day> _days = <_Day>[
     _Day('Today', <_Entry>[
-      _Entry(
-        'Meridian Freight',
-        '11:42 AM',
-        '-₹12,480',
-        _EntryStatus.settled,
-      ),
+      _Entry('Meridian Freight', '11:42 AM', '-₹12,480', _EntryStatus.settled),
       _Entry('Fuel card top-up', '9:15 AM', '-₹22,150', _EntryStatus.awaiting),
     ]),
     _Day('Yesterday', <_Entry>[
@@ -60,7 +55,12 @@ class HistoryScreen extends StatelessWidget {
       ),
     ]),
     _Day('12 September', <_Entry>[
-      _Entry('Driver payout batch', '7:20 PM', '-₹86,400', _EntryStatus.settled),
+      _Entry(
+        'Driver payout batch',
+        '7:20 PM',
+        '-₹86,400',
+        _EntryStatus.settled,
+      ),
       _Entry('Insurance premium', '11:55 AM', '-₹9,750', _EntryStatus.settled),
     ]),
   ];
@@ -108,10 +108,7 @@ class HistoryScreen extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 for (final _Entry entry in day.entries)
-                  _EntryRow(
-                    entry: entry,
-                    isLast: entry == day.entries.last,
-                  ),
+                  _EntryRow(entry: entry, isLast: entry == day.entries.last),
               ],
             ),
           ),

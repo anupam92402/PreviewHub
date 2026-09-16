@@ -5,11 +5,7 @@ import 'app_tokens.dart';
 /// What a toast is reporting.
 enum AppToastKind {
   /// The action completed.
-  success(
-    AppTokens.success,
-    AppTokens.successSoft,
-    Icons.check_circle_rounded,
-  ),
+  success(AppTokens.success, AppTokens.successSoft, Icons.check_circle_rounded),
 
   /// The action did not complete.
   failure(AppTokens.failure, AppTokens.failureSoft, Icons.error_rounded),

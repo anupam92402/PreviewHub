@@ -99,7 +99,8 @@ class _LottiePlayerState extends State<LottiePlayer>
   }
 
   @override
-  Widget build(BuildContext context) => widget.asset.source == AssetSource.bundled
+  Widget build(BuildContext context) =>
+      widget.asset.source == AssetSource.bundled
       ? Lottie.asset(
           widget.asset.locator,
           controller: _controller,
@@ -119,7 +120,11 @@ class _LottiePlayerState extends State<LottiePlayer>
 /// Stands in for an animation that could not be played.
 class LottiePlayerFailure extends StatelessWidget {
   /// Creates a failure panel tinted with [accent].
-  const LottiePlayerFailure({required this.accent, this.iconSize = 28, super.key});
+  const LottiePlayerFailure({
+    required this.accent,
+    this.iconSize = 28,
+    super.key,
+  });
 
   /// Colour of the glyph and caption.
   final Color accent;

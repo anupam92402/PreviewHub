@@ -13,7 +13,18 @@ class FontSampleViewModel extends ChangeNotifier {
 
   /// Sizes the sheet offers, in points.
   static const List<double> sizeChoices = <double>[
-    8, 10, 12, 14, 16, 18, 20, 24, 28, 32, 40, 48,
+    8,
+    10,
+    12,
+    14,
+    16,
+    18,
+    20,
+    24,
+    28,
+    32,
+    40,
+    48,
   ];
 
   /// Families the sheet can set text in.

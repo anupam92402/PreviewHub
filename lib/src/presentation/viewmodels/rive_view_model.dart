@@ -76,8 +76,7 @@ class RiveViewModel extends ChangeNotifier {
         }
         return asset.name.toLowerCase().contains(needle) ||
             asset.locator.toLowerCase().contains(needle);
-      }).toList()
-        ..sort(_order),
+      }).toList()..sort(_order),
     );
   }
 

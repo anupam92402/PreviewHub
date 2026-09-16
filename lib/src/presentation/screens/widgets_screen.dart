@@ -49,24 +49,22 @@ class _WidgetsScreenState extends State<WidgetsScreen> {
     final PreviewHubThemeController? controller =
         PreviewHubTheming.controllerOf(context);
 
-    Navigator.of(context).push(
-      switch (preview.section) {
-        WidgetSection.components => PreviewHubRouter.route(
-          PreviewHubRoutes.widgetDetail,
-          arguments: WidgetDetailArguments(
-            preview: preview,
-            themeController: controller,
-          ),
+    Navigator.of(context).push(switch (preview.section) {
+      WidgetSection.components => PreviewHubRouter.route(
+        PreviewHubRoutes.widgetDetail,
+        arguments: WidgetDetailArguments(
+          preview: preview,
+          themeController: controller,
         ),
-        WidgetSection.screens => PreviewHubRouter.route(
-          PreviewHubRoutes.widgetStage,
-          arguments: WidgetStageArguments(
-            preview: preview,
-            themeController: controller,
-          ),
+      ),
+      WidgetSection.screens => PreviewHubRouter.route(
+        PreviewHubRoutes.widgetStage,
+        arguments: WidgetStageArguments(
+          preview: preview,
+          themeController: controller,
         ),
-      },
-    );
+      ),
+    });
   }
 
   /// Flattens the groups into the rows the sliver list draws.
@@ -82,10 +80,7 @@ class _WidgetsScreenState extends State<WidgetsScreen> {
       }
       for (final WidgetPreview preview in group.previews) {
         rows.add(
-          _EntryRow(
-            preview: preview,
-            isLast: preview == group.previews.last,
-          ),
+          _EntryRow(preview: preview, isLast: preview == group.previews.last),
         );
       }
     }

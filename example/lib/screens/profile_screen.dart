@@ -33,9 +33,15 @@ class ProfileScreen extends StatelessWidget {
         const SizedBox(height: 22),
         const Row(
           children: <Widget>[
-            Expanded(child: _ProfileStat(label: 'Trips', value: '1,284')),
-            Expanded(child: _ProfileStat(label: 'Vehicles', value: '37')),
-            Expanded(child: _ProfileStat(label: 'Rating', value: '4.8')),
+            Expanded(
+              child: _ProfileStat(label: 'Trips', value: '1,284'),
+            ),
+            Expanded(
+              child: _ProfileStat(label: 'Vehicles', value: '37'),
+            ),
+            Expanded(
+              child: _ProfileStat(label: 'Rating', value: '4.8'),
+            ),
           ],
         ),
         const SizedBox(height: 26),
