@@ -41,13 +41,13 @@ class ProfileScreen extends StatelessWidget {
         const SizedBox(height: 26),
         const AppTextField(
           label: 'Full name',
-          initialText: 'Anupam Gupta',
+          initialText: 'John Doe',
           prefixIcon: Icons.person_outline_rounded,
         ),
         const SizedBox(height: 18),
         const AppTextField(
           label: 'Work email',
-          initialText: 'anupam@wheelseye.com',
+          initialText: 'johndoe@work.com',
           prefixIcon: Icons.mail_outline_rounded,
           helperText: 'Used for invoices and receipts.',
           keyboardType: TextInputType.emailAddress,
@@ -110,7 +110,7 @@ class _ProfileHeader extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              'Anupam Gupta',
+              'John Doe',
               style: TextStyle(
                 fontSize: 19,
                 fontWeight: FontWeight.w700,

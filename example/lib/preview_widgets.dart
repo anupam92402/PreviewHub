@@ -16,7 +16,6 @@ import 'screens/sign_in_screen.dart';
 import 'screens/success_screen.dart';
 
 /// Every component and screen this app hands to the gallery.
-///
 /// One list, in the order it should be read: components first, then whole
 /// screens. The gallery files each entry under its group and section.
 const List<WidgetPreview> previewWidgets = <WidgetPreview>[
@@ -277,7 +276,7 @@ Widget _fieldEmpty(BuildContext context) => const AppTextField(
 
 Widget _fieldFilled(BuildContext context) => const AppTextField(
   label: 'Work email',
-  initialText: 'anupam@wheelseye.com',
+  initialText: 'john@work.com',
   prefixIcon: Icons.mail_outline_rounded,
   helperText: 'Used for invoices and receipts.',
 );

@@ -30,13 +30,15 @@ class PreviewFilter {
   final IconData? icon;
 }
 
-/// A labelled row of filter chips.
+/// A row of filter chips, titled or not.
 class PreviewFilterGroup {
-  /// Creates a row titled [label].
-  const PreviewFilterGroup({required this.label, required this.filters});
+  /// Creates a row titled [label], or untitled when [label] is null.
+  const PreviewFilterGroup({required this.filters, this.label});
 
   /// Title shown to the left of the chips.
-  final String label;
+  /// Null on a bar of one row, where a title only repeats what the chips
+  /// already say.
+  final String? label;
 
   /// Chips in this row, in display order.
   final List<PreviewFilter> filters;
@@ -74,23 +76,29 @@ class PreviewFilterBar extends StatelessWidget {
             height: rowHeight,
             child: Row(
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(left: 16),
-                  child: SizedBox(
-                    width: _labelWidth,
-                    child: Text(
-                      group.label,
-                      style: theme.textTheme.labelLarge?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
-                        fontWeight: FontWeight.w600,
+                if (group.label != null)
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16),
+                    child: SizedBox(
+                      width: _labelWidth,
+                      child: Text(
+                        group.label ?? '',
+                        style: theme.textTheme.labelLarge?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ),
-                ),
                 Expanded(
                   child: ListView(
                     scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.fromLTRB(0, 4, 16, 10),
+                    padding: EdgeInsets.fromLTRB(
+                      group.label == null ? 16 : 0,
+                      4,
+                      16,
+                      10,
+                    ),
                     children: <Widget>[
                       for (final PreviewFilter filter in group.filters)
                         _Chip(filter: filter),
