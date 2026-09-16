@@ -109,7 +109,7 @@ class _DashboardGreeting extends StatelessWidget {
             ),
             SizedBox(height: 2),
             Text(
-              'Anupam',
+              'John Doe',
               style: TextStyle(
                 fontSize: 23,
                 fontWeight: FontWeight.w700,
