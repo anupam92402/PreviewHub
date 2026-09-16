@@ -39,13 +39,15 @@ class WidgetPreviewCase {
   bool get isUsable => label.trim().isNotEmpty;
 }
 
-/// One entry in the widget gallery, holding every case of a single widget.
+/// One entry in the widget gallery.
 ///
 /// Supplied by the host app through [PreviewHubConfig.widgets], since a widget
-/// is code and cannot be discovered from an asset manifest.
+/// is code and cannot be discovered from an asset manifest. Build one with
+/// [WidgetPreview.component] or [WidgetPreview.screen]; the section follows
+/// from which you pick, so it can never disagree with the shape.
 ///
 /// ```dart
-/// WidgetPreview(
+/// WidgetPreview.component(
 ///   group: 'Buttons',
 ///   title: 'AppButton · primary',
 ///   cases: <WidgetPreviewCase>[
@@ -55,16 +57,36 @@ class WidgetPreviewCase {
 ///     ),
 ///   ],
 /// )
+///
+/// WidgetPreview.screen(
+///   group: 'Auth',
+///   title: 'SignInScreen',
+///   builder: (BuildContext context) => const SignInScreen(),
+/// )
 /// ```
 @immutable
 class WidgetPreview {
-  /// Creates an entry titled [title], filed under [group].
-  const WidgetPreview({
+  /// Creates a component entry, showing each of [cases] down one page.
+  const WidgetPreview.component({
     required this.group,
     required this.title,
-    required this.cases,
-    this.section = WidgetSection.components,
-  });
+    required List<WidgetPreviewCase> cases,
+  }) : section = WidgetSection.components,
+       _componentCases = cases,
+       _screenBuilder = null;
+
+  /// Creates a screen entry, shown at full size.
+  ///
+  /// A screen has no second axis to label: its states, such as empty against
+  /// loaded, read better as separate entries under the same [group], where the
+  /// index can count and search them.
+  const WidgetPreview.screen({
+    required this.group,
+    required this.title,
+    required WidgetBuilder builder,
+  }) : section = WidgetSection.screens,
+       _componentCases = null,
+       _screenBuilder = builder;
 
   /// Heading this entry is listed under, such as `Buttons` or `Auth`.
   final String group;
@@ -72,11 +94,25 @@ class WidgetPreview {
   /// Name of the entry, including any variant, as one string.
   final String title;
 
-  /// Every labelled rendering, in the order the host declared them.
-  final List<WidgetPreviewCase> cases;
-
   /// Whether this is a component or a whole screen.
+  ///
+  /// Set by the constructor rather than by the host, so the two can never
+  /// disagree.
   final WidgetSection section;
+
+  final List<WidgetPreviewCase>? _componentCases;
+  final WidgetBuilder? _screenBuilder;
+
+  /// Every labelled rendering, in the order the host declared them.
+  ///
+  /// A screen has exactly one, synthesised from its builder and named after
+  /// the entry, so the screens that draw an entry need no second code path.
+  List<WidgetPreviewCase> get cases => switch (_screenBuilder) {
+    null => _componentCases ?? const <WidgetPreviewCase>[],
+    final WidgetBuilder builder => <WidgetPreviewCase>[
+      WidgetPreviewCase(label: title, builder: builder),
+    ],
+  };
 
   /// Cases that carry a label, which are the only ones ever shown.
   List<WidgetPreviewCase> get usableCases => cases

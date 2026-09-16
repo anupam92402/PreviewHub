@@ -19,7 +19,7 @@ import 'screens/success_screen.dart';
 /// One list, in the order it should be read: components first, then whole
 /// screens. The gallery files each entry under its group and section.
 const List<WidgetPreview> previewWidgets = <WidgetPreview>[
-  WidgetPreview(
+  WidgetPreview.component(
     group: 'Buttons',
     title: 'AppButton · primary',
     cases: <WidgetPreviewCase>[
@@ -35,7 +35,7 @@ const List<WidgetPreview> previewWidgets = <WidgetPreview>[
       WidgetPreviewCase(label: 'disabled', builder: _primaryDisabled),
     ],
   ),
-  WidgetPreview(
+  WidgetPreview.component(
     group: 'Buttons',
     title: 'AppButton · secondary',
     cases: <WidgetPreviewCase>[
@@ -47,7 +47,7 @@ const List<WidgetPreview> previewWidgets = <WidgetPreview>[
       WidgetPreviewCase(label: 'text · medium (44)', builder: _secondaryText),
     ],
   ),
-  WidgetPreview(
+  WidgetPreview.component(
     group: 'Buttons',
     title: 'AppButton · tertiary',
     cases: <WidgetPreviewCase>[
@@ -59,7 +59,7 @@ const List<WidgetPreview> previewWidgets = <WidgetPreview>[
       WidgetPreviewCase(label: 'text · small (36)', builder: _tertiaryText),
     ],
   ),
-  WidgetPreview(
+  WidgetPreview.component(
     group: 'Feedback',
     title: 'AppToast · success / failure / pending',
     cases: <WidgetPreviewCase>[
@@ -68,7 +68,7 @@ const List<WidgetPreview> previewWidgets = <WidgetPreview>[
       WidgetPreviewCase(label: 'pending · spinner', builder: _toastPending),
     ],
   ),
-  WidgetPreview(
+  WidgetPreview.component(
     group: 'Inputs',
     title: 'AppTextField · states',
     cases: <WidgetPreviewCase>[
@@ -82,7 +82,7 @@ const List<WidgetPreview> previewWidgets = <WidgetPreview>[
       WidgetPreviewCase(label: 'disabled', builder: _fieldDisabled),
     ],
   ),
-  WidgetPreview(
+  WidgetPreview.component(
     group: 'Selection',
     title: 'AppCheckbox · states',
     cases: <WidgetPreviewCase>[
@@ -95,7 +95,7 @@ const List<WidgetPreview> previewWidgets = <WidgetPreview>[
       WidgetPreviewCase(label: 'disabled', builder: _checkboxDisabled),
     ],
   ),
-  WidgetPreview(
+  WidgetPreview.component(
     group: 'Typography',
     title: 'GradientText · brand',
     cases: <WidgetPreviewCase>[
@@ -110,61 +110,40 @@ const List<WidgetPreview> previewWidgets = <WidgetPreview>[
       WidgetPreviewCase(label: 'title · two lines', builder: _gradientTwoLines),
     ],
   ),
-  WidgetPreview(
-    section: WidgetSection.screens,
+  WidgetPreview.screen(
     group: 'Auth',
-    title: 'SignInScreen · default',
-    cases: <WidgetPreviewCase>[
-      WidgetPreviewCase(label: 'default', builder: _signIn),
-    ],
+    title: 'SignInScreen',
+    builder: _signIn,
   ),
-  WidgetPreview(
-    section: WidgetSection.screens,
+  WidgetPreview.screen(
     group: 'Money',
-    title: 'DashboardScreen · default',
-    cases: <WidgetPreviewCase>[
-      WidgetPreviewCase(label: 'default', builder: _dashboard),
-    ],
+    title: 'DashboardScreen',
+    builder: _dashboard,
   ),
-  WidgetPreview(
-    section: WidgetSection.screens,
+  WidgetPreview.screen(
     group: 'Money',
     title: 'SuccessScreen · payment sent',
-    cases: <WidgetPreviewCase>[
-      WidgetPreviewCase(label: 'payment sent', builder: _success),
-    ],
+    builder: _success,
   ),
-  WidgetPreview(
-    section: WidgetSection.screens,
+  WidgetPreview.screen(
     group: 'Money',
-    title: 'HistoryScreen · grouped by day',
-    cases: <WidgetPreviewCase>[
-      WidgetPreviewCase(label: 'grouped by day', builder: _history),
-    ],
+    title: 'HistoryScreen',
+    builder: _history,
   ),
-  WidgetPreview(
-    section: WidgetSection.screens,
+  WidgetPreview.screen(
     group: 'Account',
     title: 'ProfileScreen · with field error',
-    cases: <WidgetPreviewCase>[
-      WidgetPreviewCase(label: 'with field error', builder: _profile),
-    ],
+    builder: _profile,
   ),
-  WidgetPreview(
-    section: WidgetSection.screens,
+  WidgetPreview.screen(
     group: 'Account',
-    title: 'SettingsScreen · default',
-    cases: <WidgetPreviewCase>[
-      WidgetPreviewCase(label: 'default', builder: _settings),
-    ],
+    title: 'SettingsScreen',
+    builder: _settings,
   ),
-  WidgetPreview(
-    section: WidgetSection.screens,
+  WidgetPreview.screen(
     group: 'Inbox',
     title: 'NotificationsScreen · unread',
-    cases: <WidgetPreviewCase>[
-      WidgetPreviewCase(label: 'unread', builder: _notifications),
-    ],
+    builder: _notifications,
   ),
 ];
 
