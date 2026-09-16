@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 
+import 'measurable_asset.dart';
+
 /// Where a previewed asset comes from.
 enum AssetSource {
   /// Bundled with the app and listed in the asset manifest.
@@ -61,7 +63,7 @@ enum AssetType {
 
 /// A single asset the gallery can show.
 @immutable
-class PreviewAsset {
+class PreviewAsset implements MeasurableAsset {
   /// Creates an asset described by [locator].
   const PreviewAsset({
     required this.name,
@@ -107,10 +109,13 @@ class PreviewAsset {
   /// Format this asset is encoded in.
   final AssetType type;
 
-  /// Whether the asset is bundled or fetched.
+  @override
   final AssetSource source;
 
   /// The manifest key exactly as Flutter exposes it, or the full URL.
+  /// Never cleaned up or shortened — this is the string a consumer has to
+  /// paste into their own code, so it is shown and copied verbatim.
+  @override
   final String locator;
 
   static String _lastSegment(String path) =>
