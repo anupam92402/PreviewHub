@@ -1,3 +1,7 @@
+## 0.0.2
+- Thumbnail preview in screens and widgets 
+- Filtering non-lottie json 
+
 ## 0.0.1
 
 - First release, with five collections: widgets, icons and images, fonts,

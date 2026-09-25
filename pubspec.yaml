@@ -1,6 +1,6 @@
 name: preview_hub
 description: "A runnable gallery for previewing a design system's widgets, icons, images, animations and font families on a real device."
-version: 0.0.1
+version: 0.0.2
 repository: https://github.com/anupam92402/PreviewHub
 issue_tracker: https://github.com/anupam92402/PreviewHub/issues
 documentation: https://github.com/anupam92402/PreviewHub#readme
