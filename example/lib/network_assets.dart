@@ -45,6 +45,8 @@ const List<String> gifs = <String>[
   'https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif',
   'https://media.giphy.com/media/ZVik7pBtu9dNS/giphy.gif',
   'https://media.giphy.com/media/xTiTnxpQ3ghPiB2Hp6/giphy.gif',
+  "https://wheelseye.com/static-content/img/fastag_can_not_cross_toll.gif"
+
 ];
 
 /// Every entry above, in the order the gallery lists them.

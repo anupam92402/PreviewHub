@@ -14,8 +14,9 @@ class LottieAsset implements MeasurableAsset {
   });
 
   /// Describes a bundled animation from its manifest [key]. Returns null for
-  /// anything that is not JSON. Whether the JSON is really a Lottie is known
-  /// only once parsed, so a stray config file fails visibly.
+  /// anything that is not JSON; whether the JSON is really Bodymovin is
+  /// decided by `LottieDocument` once the catalogue reads the file, so a
+  /// stray config file never becomes an entry.
   static LottieAsset? bundled(String key) {
     if (!key.toLowerCase().endsWith('.json')) {
       return null;

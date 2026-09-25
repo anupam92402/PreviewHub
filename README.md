@@ -5,9 +5,13 @@ fonts, Lottie animations, and Rive files inside your own app. Everything is rend
 Flutter engine, theme, assets, and runtime configuration used by your application.  No code generation. 
 No build_runner. No custom tooling.
 
-| Collections | Dark theme | Widgets | One component | One screen |
-| --- | --- | --- | --- | --- |
-| ![Landing screen](https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/dashboard.png) | ![Landing screen in dark](https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/dashboard_dark.png) | ![Widget index](https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/widgets_index.png) | ![Component detail](https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/widgets_detail.png) | ![Screen preview](https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/widgets_stage.png) |
+| Collections | Dark theme | Widgets |
+| --- | --- | --- |
+| <img src="https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/dashboard.png" alt="Landing screen" width="180"> | <img src="https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/dashboard_dark.png" alt="Landing screen in dark" width="180"> | <img src="https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/widgets_index.png" alt="Widget index" width="180"> |
+
+| One component | One screen |
+| --- | --- |
+| <img src="https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/widgets_detail.png" alt="Component detail" width="180"> | <img src="https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/widgets_stage.png" alt="Screen preview" width="180"> |
 
 ## Requirements
 
@@ -109,10 +113,10 @@ used by your application.
 
 | Collection | Contents |
 | --- | --- |
-| Widgets | Registered components and screens, grouped, searchable, folded by default |
+| Widgets | Registered components and screens, grouped, searchable, folded by default; every entry is listed with a thumbnail of itself |
 | Icons & Images | SVG, PNG, WebP, JPEG and GIF, with pixel size and byte size per asset |
 | Fonts | Every family and weight from the font manifest, set on an 8 to 32 size ramp, plus a type tester for your own words |
-| Lottie | Bundled and remote JSON animations, playing in the grid, with duration and frame count |
+| Lottie | Bundled and remote JSON animations, playing in the grid, with duration and frame count. Bundled JSON is read before it is listed, so only real Bodymovin files appear |
 | Rive | Bundled and remote `.riv` files, with artboard and state machine |
 
 The four asset collections measure what they list. Bundled entries are read
@@ -120,9 +124,13 @@ from the bundle, remote ones through a `HEAD` request that falls back to a
 `GET`, and every remote entry is checked so the screen can report which ones
 could not be used.
 
-| Icons & Images | Fonts | Lottie | Rive |
-| --- | --- | --- | --- |
-| ![Icons and images](https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/icons.png) | ![Fonts](https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/fonts.png) | ![Lottie](https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/lottie.png) | ![Rive](https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/rive.png) |
+| Icons & Images | Fonts |
+| --- | --- |
+| <img src="https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/icons.png" alt="Icons and images" width="180"> | <img src="https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/fonts.png" alt="Fonts" width="180"> |
+
+| Lottie | Rive |
+| --- | --- |
+| <img src="https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/lottie.png" alt="Lottie" width="180"> | <img src="https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/rive.png" alt="Rive" width="180"> |
 
 ## Example
 

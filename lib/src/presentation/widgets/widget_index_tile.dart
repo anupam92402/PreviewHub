@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../../domain/models/widget_preview.dart';
+import 'widget_preview_thumbnail.dart';
 
-/// One entry in the widget index: a title, a rail and a chevron.
-/// Draws no host widget, so the index stays cheap however many entries the
-/// gallery holds.
+/// One entry in the widget index: a thumbnail of what was registered, a title,
+/// a rail and a chevron. The thumbnail draws the host's own widget, built only
+/// while the row is on screen, so the index costs no more than the rows it is
+/// showing however many entries the gallery holds.
 class WidgetIndexTile extends StatelessWidget {
   /// Creates a tile for [preview].
   const WidgetIndexTile({
@@ -44,6 +46,8 @@ class WidgetIndexTile extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 child: Row(
                   children: <Widget>[
+                    WidgetPreviewThumbnail(preview: preview),
+                    const SizedBox(width: 12),
                     Expanded(
                       child: Text(
                         preview.title,

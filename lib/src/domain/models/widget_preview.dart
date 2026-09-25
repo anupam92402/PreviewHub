@@ -60,21 +60,31 @@ class WidgetPreviewCase {
 /// ```
 @immutable
 class WidgetPreview {
-  /// Creates a component entry, showing each of [cases] down one page.
+  /// Creates a component entry, showing each of [cases] down one page. The
+  /// index draws its first case as the thumbnail beside the title, unless
+  /// [thumbnail] gives it a picture to show instead.
   const WidgetPreview.component({
     required this.group,
     required this.title,
     required List<WidgetPreviewCase> cases,
+    this.thumbnail,
   }) : section = WidgetSection.components,
        _componentCases = cases,
        _screenBuilder = null;
 
   /// Creates a screen entry, shown at full size. A screen has no second axis to
   /// label; its states read better as separate entries under the same [group].
+  ///
+  /// The index draws a thumbnail beside the title so a long list of screens can
+  /// be read without opening each one. By default that thumbnail is the screen
+  /// itself, built small and held still. Pass [thumbnail] to show a picture
+  /// instead, for a screen too costly to build twice or one that needs
+  /// scaffolding the index cannot give it.
   const WidgetPreview.screen({
     required this.group,
     required this.title,
     required WidgetBuilder builder,
+    this.thumbnail,
   }) : section = WidgetSection.screens,
        _componentCases = null,
        _screenBuilder = builder;
@@ -88,6 +98,10 @@ class WidgetPreview {
   /// Whether this is a component or a whole screen. Set by the constructor
   /// rather than by the host, so the two can never disagree.
   final WidgetSection section;
+
+  /// Picture standing in for this entry in the index, or null to let the index
+  /// build the widget itself.
+  final ImageProvider<Object>? thumbnail;
 
   final List<WidgetPreviewCase>? _componentCases;
   final WidgetBuilder? _screenBuilder;

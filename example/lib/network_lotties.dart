@@ -14,4 +14,7 @@ const List<String> lotties = <String>[
   'https://assets5.lottiefiles.com/pdwackages/lf20_wdl5u2mpnv.json',
   'https://assets9.lottiefiles.com/packages/lf20_wdn8nbikex.json',
   'https://assets3.lottiefiles.com/packages/lf20_7fCbvNSmFD.json',
+  "https://wheelseye.com/static-content/docs/WIND.json",
+  "https://wheelseye.com/static-content/docs/WIND2.json",
+  "https://wheelseye.com/static-content/docs/WIND3.json",
 ];
