@@ -1,0 +1,8 @@
+{
+  "apiBaseUrl": "https://api.example.com",
+  "featureFlags": {
+    "newCheckout": true,
+    "darkModeDefault": false
+  },
+  "supportEmail": "help@example.com"
+}

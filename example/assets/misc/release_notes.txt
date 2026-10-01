@@ -1,0 +1,4 @@
+Preview Hub example
+
+1.0.0
+- First release of the sample client app.
