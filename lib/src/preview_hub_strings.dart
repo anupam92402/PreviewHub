@@ -1,4 +1,4 @@
-/// Every user-facing string on the landing screen.
+/// Every user-facing string in the gallery.
 class PreviewHubStrings {
   const PreviewHubStrings._();
 
@@ -280,4 +280,14 @@ class PreviewHubStrings {
   /// Summary of the Rive section.
   static const String sectionRiveDescription =
       'Animations and state machines, live and interactive.';
+
+  /// Placeholder in the landing screen's search field.
+  static const String searchEverythingHint =
+      'Search widgets, icons, fonts, animations';
+
+  /// Shown when the landing search matches nothing in any collection.
+  static const String searchEverythingEmpty = 'Nothing matches that search';
+
+  /// Heading above the recently opened entries.
+  static const String recentLabel = 'RECENTLY VIEWED';
 }

@@ -66,8 +66,11 @@ final class IconsAndImagesArguments extends PreviewHubArguments {
 /// manifest, so there is nothing to supply beyond the theme every route
 /// carries.
 final class FontsArguments extends PreviewHubArguments {
-  /// Creates arguments for the fonts route.
-  const FontsArguments({super.themeController});
+  /// Creates arguments opening on [initialFamily], or the first family.
+  const FontsArguments({super.themeController, this.initialFamily});
+
+  /// Manifest key of the family to open on, or null for the first.
+  final String? initialFamily;
 }
 
 /// Arguments for the type tester.

@@ -17,8 +17,12 @@ import '../widgets/preview_search_bar.dart';
 /// Every font family bundled with the app, shown one family at a time.
 /// Families come from the font manifest; nothing is registered by hand.
 class FontsScreen extends StatefulWidget {
-  /// Creates the screen.
-  const FontsScreen({super.key});
+  /// Creates the screen, opening on the family whose manifest key is
+  /// [initialFamily], or on the first family.
+  const FontsScreen({this.initialFamily, super.key});
+
+  /// Manifest key of the family to open on.
+  final String? initialFamily;
 
   @override
   State<FontsScreen> createState() => _FontsScreenState();
@@ -36,7 +40,7 @@ class _FontsScreenState extends State<FontsScreen> {
   @override
   void initState() {
     super.initState();
-    _viewModel.load();
+    _viewModel.load(initialFamily: widget.initialFamily);
   }
 
   @override

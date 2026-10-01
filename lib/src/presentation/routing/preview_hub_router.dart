@@ -56,7 +56,8 @@ class PreviewHubRouter {
         return IconsAndImagesScreen(networkImages: args.config.networkImages);
 
       case PreviewHubRoutes.fonts:
-        return const FontsScreen();
+        final FontsArguments args = settings.arguments as FontsArguments;
+        return FontsScreen(initialFamily: args.initialFamily);
 
       case PreviewHubRoutes.fontSample:
         final FontSampleArguments args =

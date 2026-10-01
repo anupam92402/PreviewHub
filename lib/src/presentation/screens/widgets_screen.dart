@@ -7,6 +7,7 @@ import '../../preview_hub_strings.dart';
 import '../../preview_hub_theme.dart';
 import '../routing/preview_hub_router.dart';
 import '../routing/preview_hub_routes.dart';
+import '../session/preview_history.dart';
 import '../theme/preview_hub_theme_controller.dart';
 import '../viewmodels/widgets_view_model.dart';
 import '../widgets/preview_filter_bar.dart';
@@ -42,8 +43,10 @@ class _WidgetsScreenState extends State<WidgetsScreen> {
     super.dispose();
   }
 
-  /// Opens [preview]: a component lists its cases, a screen takes the display.
+  /// Opens [preview] and remembers it as recently opened: a component lists
+  /// its cases, a screen takes the display.
   void _open(WidgetPreview preview) {
+    PreviewHistory.instance.recordOpened(preview.path);
     final PreviewHubThemeController? controller =
         PreviewHubTheming.controllerOf(context);
 
