@@ -42,4 +42,7 @@ class PreviewHubRoutes {
 
   /// Every bundled file the other collections do not show.
   static const String otherAssets = '$previewHub/other-assets';
+
+  /// What each kind of bundled asset adds to the app.
+  static const String assetSizes = '$previewHub/asset-sizes';
 }

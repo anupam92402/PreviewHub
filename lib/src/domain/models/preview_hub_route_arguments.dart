@@ -160,3 +160,17 @@ final class OtherAssetsArguments extends PreviewHubArguments {
   /// Creates arguments for the Other screen.
   const OtherAssetsArguments({super.themeController});
 }
+
+/// Arguments for the asset size breakdown. The sizes are read from the
+/// bundle; [config] is carried only so the breakdown can open a collection
+/// screen with the same remote entries the landing screen would give it.
+final class AssetSizesArguments extends PreviewHubArguments {
+  /// Creates arguments carrying [config].
+  const AssetSizesArguments({
+    this.config = const PreviewHubConfig(),
+    super.themeController,
+  });
+
+  /// Tells the collections opened from the breakdown about remote assets.
+  final PreviewHubConfig config;
+}

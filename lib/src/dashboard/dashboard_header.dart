@@ -1,10 +1,23 @@
 import 'package:flutter/material.dart';
 
+import '../domain/models/preview_hub_config.dart';
+import '../domain/models/preview_hub_route_arguments.dart';
+import '../presentation/routing/preview_hub_router.dart';
+import '../presentation/routing/preview_hub_routes.dart';
+import '../presentation/theme/preview_hub_theme_controller.dart';
 import '../preview_hub_strings.dart';
 
 /// Gradient hero at the top of the landing screen.
 class DashboardHeader extends StatelessWidget {
-  const DashboardHeader({required this.onThemeToggle, super.key});
+  const DashboardHeader({
+    required this.config,
+    required this.onThemeToggle,
+    super.key,
+  });
+
+  /// Handed to the size breakdown, so the collections it opens list the same
+  /// remote entries as everywhere else.
+  final PreviewHubConfig config;
 
   /// Called when the theme toggle is tapped.
   final VoidCallback onThemeToggle;
@@ -48,6 +61,8 @@ class DashboardHeader extends StatelessWidget {
                   children: <Widget>[
                     const _HeaderBadge(),
                     const Spacer(),
+                    _SizeBreakdownButton(config: config),
+                    const SizedBox(width: 8),
                     _ThemeToggle(onPressed: onThemeToggle),
                   ],
                 ),
@@ -123,6 +138,42 @@ class _ThemeToggle extends StatelessWidget {
         foregroundColor: scheme.onSurfaceVariant,
       ),
       icon: Icon(isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded),
+    );
+  }
+}
+
+/// Opens the breakdown of what each kind of bundled asset weighs. Pushes the
+/// route itself: the screen needs nothing from the dashboard beyond the
+/// gallery's theme, which the header can already reach.
+class _SizeBreakdownButton extends StatelessWidget {
+  const _SizeBreakdownButton({required this.config});
+
+  final PreviewHubConfig config;
+
+  void _open(BuildContext context) => Navigator.of(context).push(
+    PreviewHubRouter.route(
+      PreviewHubRoutes.assetSizes,
+      arguments: AssetSizesArguments(
+        config: config,
+        themeController: PreviewHubTheming.controllerOf(context),
+      ),
+    ),
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    final ColorScheme scheme = Theme.of(context).colorScheme;
+
+    return IconButton.filledTonal(
+      tooltip: PreviewHubStrings.sizeTooltip,
+      onPressed: () => _open(context),
+      iconSize: 18,
+      visualDensity: VisualDensity.compact,
+      style: IconButton.styleFrom(
+        backgroundColor: scheme.surface.withValues(alpha: 0.7),
+        foregroundColor: scheme.onSurfaceVariant,
+      ),
+      icon: const Icon(Icons.bar_chart_outlined),
     );
   }
 }

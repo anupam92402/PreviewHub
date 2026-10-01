@@ -177,7 +177,7 @@ class _PreviewHubDashboardState extends State<PreviewHubDashboard> {
       child: _DashboardBody(
         themeController: _themeController,
         search: _search,
-        previews: widget.config.widgets,
+        config: widget.config,
         onSectionTap: _openSection,
         onPreviewTap: _openPreview,
         onPush: _push,
@@ -191,7 +191,7 @@ class _DashboardBody extends StatelessWidget {
   const _DashboardBody({
     required this.themeController,
     required this.search,
-    required this.previews,
+    required this.config,
     required this.onSectionTap,
     required this.onPreviewTap,
     required this.onPush,
@@ -203,8 +203,9 @@ class _DashboardBody extends StatelessWidget {
   /// The search across every collection.
   final GlobalSearchViewModel search;
 
-  /// Registered widget entries, for the recently viewed row.
-  final List<WidgetPreview> previews;
+  /// What the host supplied: widget entries for the recently viewed row, and
+  /// remote assets for the size breakdown to pass on.
+  final PreviewHubConfig config;
 
   /// Called when a collection card is tapped.
   final ValueChanged<PreviewSection> onSectionTap;
@@ -226,6 +227,7 @@ class _DashboardBody extends StatelessWidget {
           slivers: <Widget>[
             SliverToBoxAdapter(
               child: DashboardHeader(
+                config: config,
                 onThemeToggle: () =>
                     themeController.toggle(Theme.of(context).brightness),
               ),
@@ -260,7 +262,7 @@ class _DashboardBody extends StatelessWidget {
               SliverToBoxAdapter(
                 child: RecentPreviews(
                   history: PreviewHistory.instance,
-                  previews: previews,
+                  previews: config.widgets,
                   onTap: onPreviewTap,
                 ),
               ),

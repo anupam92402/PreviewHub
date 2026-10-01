@@ -324,4 +324,57 @@ class PreviewHubStrings {
   static const String otherNote =
       'Listed by name and size only. Nothing is played or opened. Tap a file to copy its '
       'path.';
+
+  /// Tooltip on the size breakdown button.
+  static const String sizeTooltip = 'App size breakdown';
+
+  /// Title of the size breakdown.
+  static const String sizeTitle = 'Asset size breakdown';
+
+  /// Shown while every bundled file is being read.
+  static const String sizeMeasuring = 'Measuring bundled assets…';
+
+  /// Shown when no bundled asset falls into any category.
+  static const String sizeEmpty = 'The app bundles no assets.';
+
+  /// Shown when the asset manifest could not be read.
+  static const String sizeFailed = 'The asset manifest could not be read.';
+
+  /// `42 files`, under the total.
+  static String sizeFiles(int count) =>
+      '$count ${count == 1 ? 'file' : 'files'}';
+
+  /// `12 assets`, under a category name.
+  static String sizeAssets(int count) =>
+      '$count ${count == 1 ? 'asset' : 'assets'}';
+
+  /// `3 files` beside an asset shipped at several resolutions.
+  static String sizeVariants(int count) => '$count files';
+
+  /// `12.4%`, `3%` or `<1%`: a share from 0 to 1 as a percentage.
+  static String sizePercent(double share) {
+    final double value = share * 100;
+    if (value > 0 && value < 1) {
+      return '<1%';
+    }
+    final bool tenths = value < 10 && value != value.roundToDouble();
+    return '${value.toStringAsFixed(tenths ? 1 : 0)}%';
+  }
+
+  /// Button opening the collection named [name] from the size breakdown.
+  static String sizeOpenCollection(String name) => 'Open $name';
+
+  /// `and 4 more` under a category's heaviest files.
+  static String sizeMore(int count) => 'and $count more';
+
+  /// What the chart shows, for a screen reader.
+  static String sizeChartLabel(List<String> shares) =>
+      'Asset size by kind: ${shares.join(', ')}';
+
+  /// What the numbers include and leave out.
+  static const String sizeNote =
+      'Bytes of the files as bundled, every resolution variant included, '
+      'before the store compresses the app. Remote assets are not counted, and '
+      'neither are the Material and Cupertino icon fonts, which a release '
+      'build shrinks to the icons you use.';
 }

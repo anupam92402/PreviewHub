@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../domain/models/preview_hub_route_arguments.dart';
 import '../screens/asset_detail_screen.dart';
+import '../screens/asset_size_screen.dart';
 import '../screens/font_sample_screen.dart';
 import '../screens/fonts_screen.dart';
 import '../screens/lottie_detail_screen.dart';
@@ -90,6 +91,11 @@ class PreviewHubRouter {
 
       case PreviewHubRoutes.otherAssets:
         return const OtherAssetsScreen();
+
+      case PreviewHubRoutes.assetSizes:
+        final AssetSizesArguments args =
+            settings.arguments as AssetSizesArguments;
+        return AssetSizeScreen(config: args.config);
 
       default:
         return const SizedBox.shrink();
