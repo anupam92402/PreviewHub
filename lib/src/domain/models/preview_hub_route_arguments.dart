@@ -153,3 +153,10 @@ final class AssetDetailArguments extends PreviewHubArguments {
   /// Shared measurement cache, so the detail screen reuses what the grid read.
   final AssetMetricsService metrics;
 }
+
+/// Arguments for the Other screen. Its files are read from the bundle, so
+/// there is nothing to supply beyond the theme every route carries.
+final class OtherAssetsArguments extends PreviewHubArguments {
+  /// Creates arguments for the Other screen.
+  const OtherAssetsArguments({super.themeController});
+}

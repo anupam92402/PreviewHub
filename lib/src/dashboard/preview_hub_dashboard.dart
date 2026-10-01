@@ -109,6 +109,12 @@ class _PreviewHubDashboardState extends State<PreviewHubDashboard> {
             themeController: _themeController,
           ),
         );
+
+      case PreviewSectionType.other:
+        _push(
+          PreviewHubRoutes.otherAssets,
+          OtherAssetsArguments(themeController: _themeController),
+        );
     }
   }
 

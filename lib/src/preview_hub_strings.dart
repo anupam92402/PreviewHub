@@ -283,11 +283,45 @@ class PreviewHubStrings {
 
   /// Placeholder in the landing screen's search field.
   static const String searchEverythingHint =
-      'Search widgets, icons, fonts, animations';
+      'Search widgets, icons, fonts and more...';
 
   /// Shown when the landing search matches nothing in any collection.
   static const String searchEverythingEmpty = 'Nothing matches that search';
 
   /// Heading above the recently opened entries.
   static const String recentLabel = 'RECENTLY VIEWED';
+
+  /// Title of the Other section.
+  static const String sectionOtherTitle = 'Other';
+
+  /// Summary of the Other section.
+  static const String sectionOtherDescription =
+      'Audio, video, JSON, PDF and every other bundled file, by size.';
+
+  /// Shown while the bundle is being read for the Other screen.
+  static const String otherLoading = 'Reading bundled files…';
+
+  /// Shown when the app bundles nothing beyond the other collections.
+  static const String otherEmpty =
+      'Nothing else is bundled.\nAudio, video, JSON, PDF and any other file '
+      'the app bundles would be listed here.';
+
+  /// Shown when the asset manifest could not be read.
+  static const String otherFailed = 'The asset manifest could not be read.';
+
+  /// `8 files · 1.2 MB` at the top of the Other screen.
+  static String otherSummary(int count, String size) =>
+      '$count ${count == 1 ? 'file' : 'files'} · $size';
+
+  /// `3 files · 240 KB` beside a heading on the Other screen.
+  static String otherGroupSummary(int count, String size) =>
+      otherSummary(count, size);
+
+  /// Confirmation after copying a file's path.
+  static String copiedPath(String path) => 'Copied $path';
+
+  /// Why nothing on the Other screen plays.
+  static const String otherNote =
+      'Listed by name and size only. Nothing is played or opened. Tap a file to copy its '
+      'path.';
 }

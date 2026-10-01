@@ -41,6 +41,7 @@ class GlobalSearchResults extends StatelessWidget {
     final List<FontSearchResult> fonts = searchVM.fonts;
     final List<LottieSearchResult> lotties = searchVM.lotties;
     final List<RiveSearchResult> rives = searchVM.rives;
+    final List<OtherSearchResult> others = searchVM.others;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -136,6 +137,23 @@ class GlobalSearchResults extends StatelessWidget {
                       metrics: searchVM.riveMetrics,
                       themeController: themeController,
                     ),
+                  ),
+                ),
+            ],
+          ),
+        if (others.isNotEmpty)
+          _ResultBlock(
+            type: PreviewSectionType.other,
+            title: PreviewHubStrings.sectionOtherTitle,
+            children: <Widget>[
+              for (final OtherSearchResult hit in others)
+                _Hit(
+                  title: hit.location.name,
+                  subtitle:
+                      '${hit.location.kind.label} · ${hit.location.locator}',
+                  onTap: () => onPush(
+                    PreviewHubRoutes.otherAssets,
+                    OtherAssetsArguments(themeController: themeController),
                   ),
                 ),
             ],

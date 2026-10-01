@@ -18,6 +18,9 @@ enum PreviewSectionType {
 
   /// Rive animations.
   rive,
+
+  /// Every other bundled file: audio, video, JSON, PDF and the rest.
+  other,
 }
 
 /// One card on the landing screen.
@@ -55,6 +58,11 @@ class PreviewSection {
       type: PreviewSectionType.rive,
       title: PreviewHubStrings.sectionRiveTitle,
       description: PreviewHubStrings.sectionRiveDescription,
+    ),
+    PreviewSection(
+      type: PreviewSectionType.other,
+      title: PreviewHubStrings.sectionOtherTitle,
+      description: PreviewHubStrings.sectionOtherDescription,
     ),
   ];
 
@@ -119,6 +127,11 @@ class PreviewSectionStyle {
       icon: Icons.auto_awesome_motion_rounded,
       accentStart: Color(0xFF14B8A6),
       accentEnd: Color(0xFF06B6D4),
+    ),
+    PreviewSectionType.other => const PreviewSectionStyle(
+      icon: Icons.folder_open_rounded,
+      accentStart: Color(0xFF64748B),
+      accentEnd: Color(0xFF94A3B8),
     ),
   };
 }

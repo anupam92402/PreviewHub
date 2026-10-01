@@ -39,4 +39,7 @@ class PreviewHubRoutes {
 
   /// Everything known about one asset.
   static const String assetDetail = '$previewHub/asset-detail';
+
+  /// Every bundled file the other collections do not show.
+  static const String otherAssets = '$previewHub/other-assets';
 }

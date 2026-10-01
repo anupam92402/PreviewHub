@@ -6,6 +6,7 @@ import '../screens/font_sample_screen.dart';
 import '../screens/fonts_screen.dart';
 import '../screens/lottie_detail_screen.dart';
 import '../screens/lottie_screen.dart';
+import '../screens/other_assets_screen.dart';
 import '../screens/rive_detail_screen.dart';
 import '../screens/rive_screen.dart';
 import '../screens/icons_and_images_screen.dart';
@@ -86,6 +87,9 @@ class PreviewHubRouter {
         final AssetDetailArguments args =
             settings.arguments as AssetDetailArguments;
         return AssetDetailScreen(asset: args.asset, metrics: args.metrics);
+
+      case PreviewHubRoutes.otherAssets:
+        return const OtherAssetsScreen();
 
       default:
         return const SizedBox.shrink();

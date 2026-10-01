@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../domain/models/font_family_info.dart';
 import '../../domain/models/lottie_asset.dart';
+import '../../domain/models/other_asset.dart';
 import '../../domain/models/preview_asset.dart';
 import '../../domain/models/preview_hub_config.dart';
 import '../../domain/models/rive_asset.dart';
@@ -10,6 +11,7 @@ import '../../domain/services/asset_catalog_service.dart';
 import '../../domain/services/asset_metrics_service.dart';
 import '../../domain/services/font_catalog_service.dart';
 import '../../domain/services/lottie_catalog_service.dart';
+import '../../domain/services/other_asset_catalog_service.dart';
 import '../../domain/services/rive_catalog_service.dart';
 
 /// One hit in the landing screen's search, naming what it found.
@@ -62,12 +64,23 @@ final class RiveSearchResult extends GlobalSearchResult {
   final RiveAsset asset;
 }
 
+/// A bundled file no other collection shows: audio, video, JSON, PDF and the
+/// rest.
+final class OtherSearchResult extends GlobalSearchResult {
+  /// Wraps [location].
+  const OtherSearchResult(this.location);
+
+  /// File found.
+  final OtherAssetLocation location;
+}
+
 /// Searches every collection at once from the landing screen.
 ///
 /// Widgets are in memory already. The asset collections are read from the
 /// manifests the first time something is typed, not when the gallery opens,
 /// so a developer who never searches pays nothing. Remote entries are matched
-/// by URL only; nothing is fetched to search them.
+/// by URL only; nothing is fetched to search them, and other bundled files are
+/// found by name without being measured.
 class GlobalSearchViewModel extends ChangeNotifier {
   /// Creates a search over what [config] and the manifests describe.
   GlobalSearchViewModel({
@@ -76,10 +89,12 @@ class GlobalSearchViewModel extends ChangeNotifier {
     FontCatalogService? fonts,
     LottieCatalogService? lotties,
     RiveCatalogService? rives,
+    OtherAssetCatalogService? others,
   }) : _assetCatalog = assets ?? AssetCatalogService(),
        _fontCatalog = fonts ?? FontCatalogService(),
        _lottieCatalog = lotties ?? LottieCatalogService(),
-       _riveCatalog = rives ?? RiveCatalogService();
+       _riveCatalog = rives ?? RiveCatalogService(),
+       _otherCatalog = others ?? OtherAssetCatalogService();
 
   /// Most hits listed per collection.
   static const int perCollectionLimit = 12;
@@ -89,6 +104,7 @@ class GlobalSearchViewModel extends ChangeNotifier {
   final FontCatalogService _fontCatalog;
   final LottieCatalogService _lottieCatalog;
   final RiveCatalogService _riveCatalog;
+  final OtherAssetCatalogService _otherCatalog;
 
   /// Measurement caches handed to a detail screen opened from a hit, typed the
   /// way each collection's own grid types them.
@@ -108,6 +124,7 @@ class GlobalSearchViewModel extends ChangeNotifier {
   List<FontFamilyInfo> _fonts = const <FontFamilyInfo>[];
   List<LottieAsset> _lotties = const <LottieAsset>[];
   List<RiveAsset> _rives = const <RiveAsset>[];
+  List<OtherAssetLocation> _others = const <OtherAssetLocation>[];
   Future<void>? _loading;
   bool _isLoaded = false;
   bool _disposed = false;
@@ -162,6 +179,16 @@ class GlobalSearchViewModel extends ChangeNotifier {
       .map(RiveSearchResult.new)
       .toList(growable: false);
 
+  /// Other bundled files matching the query.
+  List<OtherSearchResult> get others => _others
+      .where(
+        (OtherAssetLocation location) =>
+            _matches(location.name, location.locator),
+      )
+      .take(perCollectionLimit)
+      .map(OtherSearchResult.new)
+      .toList(growable: false);
+
   /// Whether nothing at all matches.
   bool get hasNoResults =>
       !isLoading &&
@@ -169,7 +196,8 @@ class GlobalSearchViewModel extends ChangeNotifier {
       assets.isEmpty &&
       fonts.isEmpty &&
       lotties.isEmpty &&
-      rives.isEmpty;
+      rives.isEmpty &&
+      others.isEmpty;
 
   bool _matches(String name, String locator) =>
       name.toLowerCase().contains(_query) ||
@@ -197,6 +225,7 @@ class GlobalSearchViewModel extends ChangeNotifier {
       List<FontFamilyInfo> fonts,
       List<LottieAsset> lotties,
       List<RiveAsset> rives,
+      List<OtherAssetLocation> others,
     ) = await (
       _orEmpty(
         _assetCatalog
@@ -206,6 +235,7 @@ class GlobalSearchViewModel extends ChangeNotifier {
       _orEmpty(_fontCatalog.load()),
       _orEmpty(_lottieCatalog.load(networkLotties: _config.networkLotties)),
       _orEmpty(_riveCatalog.load(networkRives: _config.networkRives)),
+      _orEmpty(_otherCatalog.locate()),
     ).wait;
     if (_disposed) {
       return;
@@ -214,6 +244,7 @@ class GlobalSearchViewModel extends ChangeNotifier {
     _fonts = fonts;
     _lotties = lotties;
     _rives = rives;
+    _others = others;
     _isLoaded = true;
     notifyListeners();
   }
