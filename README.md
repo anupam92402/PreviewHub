@@ -1,6 +1,6 @@
 # PreviewHub
 
-A real-device gallery for your Flutter design system. Preview components, screens, icons, images, fonts, Lottie animations, Rive files, and other assets inside your own app.
+A real-device gallery for your Flutter design system. Preview components, screens, icons, images, fonts, Lottie animations, and Rive files.
 
 Everything is rendered using the same Flutter engine, theme, assets, and runtime configuration used by your application.
 
@@ -24,7 +24,7 @@ PreviewHub keeps dependencies to a minimum and currently uses `flutter_svg`, `ht
 
 ```yaml
 dependencies:
-  preview_hub: ^0.0.1
+  preview_hub: ^0.0.3
 ```
 
 ## Use
@@ -98,20 +98,18 @@ Widget _primaryLarge(BuildContext context) =>
 
 `group` defines the collapsible heading and `title` defines the preview name. Components can contain multiple cases, while screens open as full-size previews.
 
-Builders run only when a preview is displayed.
-
 ## Collections
 
 The landing screen provides global search and recently viewed items for quickly navigating through the gallery.
 
 | Collection         | Contents                                                                                                                            |
-| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------- |
+| ------------------ |-------------------------------------------------------------------------------------------------------------------------------------|
 | **Widgets**        | Registered components and screens, grouped and searchable.                                                                          |
 | **Icons & Images** | SVG, PNG, WebP, JPEG and GIF with dimensions and file size. Icon and image previews support different sizes, backgrounds, and tint. |
 | **Fonts**          | Font families and weights from the font manifest with size previews and a type tester.                                              |
 | **Lottie**         | Bundled and remote JSON animations with duration and frame count.                                                                   |
 | **Rive**           | Bundled and remote `.riv` files with artboard and state machine information.                                                        |
-| **Other**          | Additional assets such as PDF, JSON, and audio files.                                                                               |
+| **Other**          | Additional bundled assets such as PDF, JSON, and audio files.                                                                       |
 
 | Icons & Images                                                                                                                       | Fonts                                                                                                                     |
 | ------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
