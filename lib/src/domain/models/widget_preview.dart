@@ -129,8 +129,7 @@ class WidgetPreview {
       group.trim().isNotEmpty &&
       usableCases.isNotEmpty;
 
-  /// `group/title`, which is how [PreviewHubDashboard.initialPreview] names an
-  /// entry and how recently opened entries are remembered.
+  /// `group/title`, which is how recently opened entries are remembered.
   String get path => '$group/$title';
 
   /// Lower-cased text the search field matches against. Case labels are

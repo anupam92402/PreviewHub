@@ -13,7 +13,7 @@ class PreviewHistory {
   static final PreviewHistory instance = PreviewHistory._();
 
   /// Most entries the recent list keeps.
-  static const int recentLimit = 8;
+  static const int recentLimit = 5;
 
   final ValueNotifier<Set<String>> _favourites = ValueNotifier<Set<String>>(
     const <String>{},

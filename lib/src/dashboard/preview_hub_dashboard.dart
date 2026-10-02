@@ -20,21 +20,14 @@ import 'recent_previews.dart';
 
 /// Landing screen listing every previewable collection.
 class PreviewHubDashboard extends StatefulWidget {
-  /// Creates the landing screen. [initialPreview] opens one entry straight
-  /// away, as `group/title` or just the title, so a hot restart lands back on
-  /// the widget being worked on.
+  /// Creates the landing screen.
   const PreviewHubDashboard({
     this.config = const PreviewHubConfig(),
-    this.initialPreview,
     super.key,
   });
 
   /// Tells the gallery about assets it cannot discover, such as remote URLs.
   final PreviewHubConfig config;
-
-  /// Entry to open on arrival, as `group/title` or its title alone. Ignored
-  /// when no registered entry matches.
-  final String? initialPreview;
 
   @override
   State<PreviewHubDashboard> createState() => _PreviewHubDashboardState();
@@ -46,15 +39,6 @@ class _PreviewHubDashboardState extends State<PreviewHubDashboard> {
   late final GlobalSearchViewModel _search = GlobalSearchViewModel(
     config: widget.config,
   );
-
-  @override
-  void initState() {
-    super.initState();
-    final String? initial = widget.initialPreview;
-    if (initial != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) => _openPath(initial));
-    }
-  }
 
   @override
   void dispose() {
@@ -116,31 +100,6 @@ class _PreviewHubDashboardState extends State<PreviewHubDashboard> {
           OtherAssetsArguments(themeController: _themeController),
         );
     }
-  }
-
-  /// Opens the entry registered at [path], by way of the widget index so the
-  /// back button lands somewhere sensible.
-  void _openPath(String path) {
-    if (!mounted) {
-      return;
-    }
-    final WidgetPreview? preview = widget.config.widgets
-        .where(
-          (WidgetPreview item) =>
-              item.isUsable && (item.path == path || item.title == path),
-        )
-        .firstOrNull;
-    if (preview == null) {
-      return;
-    }
-    _push(
-      PreviewHubRoutes.widgets,
-      WidgetsArguments(
-        config: widget.config,
-        themeController: _themeController,
-      ),
-    );
-    _openPreview(preview);
   }
 
   /// Opens [preview] on its own page and remembers it as recently opened.
