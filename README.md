@@ -121,6 +121,10 @@ The landing screen provides global search and recently viewed items for quickly 
 
 The landing screen also provides an asset size breakdown to visualise the size contribution of each asset type.
 
+| Asset size breakdown                                                                                                                        |
+| ------------------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/asset_sizes.png" alt="Asset size breakdown" width="180"> |
+
 Bundled assets are discovered from Flutter's asset and font manifests, so they don't need to be registered manually. Remote assets are validated before being displayed.
 
 ## Why PreviewHub?
