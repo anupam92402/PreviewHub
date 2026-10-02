@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../domain/models/validation_issue.dart';
 import '../../preview_hub_strings.dart';
+import 'copy_button.dart';
 
 /// Lists every entry that failed validation, so none is dropped silently.
 /// Only shown once the check has finished, so the all-clear means the entries
@@ -160,6 +161,12 @@ class _Problems extends StatelessWidget {
                 ],
               ),
             ),
+            CopyButton(
+              text: _reportText(issues),
+              tooltip: PreviewHubStrings.copyAll,
+              size: 20,
+              color: scheme.error,
+            ),
           ],
         ),
         const SizedBox(height: 18),
@@ -179,7 +186,16 @@ class _Problems extends StatelessWidget {
   }
 }
 
-/// A single failed entry, boxed so a long URL stays readable.
+/// The whole report as plain text, ready to paste into a ticket or a chat.
+String _reportText(List<ValidationIssue> issues) =>
+    issues.map(_issueText).join('\n\n');
+
+/// One entry and its reason, on two lines.
+String _issueText(ValidationIssue issue) =>
+    '${issue.entry}\n  ${issue.description}';
+
+/// A single failed entry, boxed so a long URL stays readable, with a button
+/// copying the URL and why it failed.
 class _IssueCard extends StatelessWidget {
   const _IssueCard({required this.issue});
 
@@ -190,31 +206,41 @@ class _IssueCard extends StatelessWidget {
     final ThemeData theme = Theme.of(context);
     final ColorScheme scheme = theme.colorScheme;
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      decoration: BoxDecoration(
-        color: scheme.error.withValues(alpha: 0.06),
+    return Material(
+      color: scheme.error.withValues(alpha: 0.06),
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: scheme.error.withValues(alpha: 0.18)),
+        side: BorderSide(color: scheme.error.withValues(alpha: 0.18)),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          SelectableText(
-            issue.entry,
-            style: theme.textTheme.bodySmall?.copyWith(
-              height: 1.35,
-              fontWeight: FontWeight.w600,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(14, 12, 4, 12),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SelectableText(
+                    issue.entry,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      height: 1.35,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    issue.description,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: scheme.error,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 5),
-          Text(
-            issue.detail == null
-                ? issue.failure.message
-                : '${issue.failure.message} (${issue.detail})',
-            style: theme.textTheme.labelSmall?.copyWith(color: scheme.error),
-          ),
-        ],
+            CopyButton(text: _issueText(issue), color: scheme.error),
+          ],
+        ),
       ),
     );
   }

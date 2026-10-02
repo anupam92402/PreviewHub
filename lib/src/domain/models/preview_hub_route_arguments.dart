@@ -66,8 +66,11 @@ final class IconsAndImagesArguments extends PreviewHubArguments {
 /// manifest, so there is nothing to supply beyond the theme every route
 /// carries.
 final class FontsArguments extends PreviewHubArguments {
-  /// Creates arguments for the fonts route.
-  const FontsArguments({super.themeController});
+  /// Creates arguments opening on [initialFamily], or the first family.
+  const FontsArguments({super.themeController, this.initialFamily});
+
+  /// Manifest key of the family to open on, or null for the first.
+  final String? initialFamily;
 }
 
 /// Arguments for the type tester.
@@ -149,4 +152,25 @@ final class AssetDetailArguments extends PreviewHubArguments {
 
   /// Shared measurement cache, so the detail screen reuses what the grid read.
   final AssetMetricsService metrics;
+}
+
+/// Arguments for the Other screen. Its files are read from the bundle, so
+/// there is nothing to supply beyond the theme every route carries.
+final class OtherAssetsArguments extends PreviewHubArguments {
+  /// Creates arguments for the Other screen.
+  const OtherAssetsArguments({super.themeController});
+}
+
+/// Arguments for the asset size breakdown. The sizes are read from the
+/// bundle; [config] is carried only so the breakdown can open a collection
+/// screen with the same remote entries the landing screen would give it.
+final class AssetSizesArguments extends PreviewHubArguments {
+  /// Creates arguments carrying [config].
+  const AssetSizesArguments({
+    this.config = const PreviewHubConfig(),
+    super.themeController,
+  });
+
+  /// Tells the collections opened from the breakdown about remote assets.
+  final PreviewHubConfig config;
 }

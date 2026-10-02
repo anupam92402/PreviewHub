@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../../domain/models/preview_hub_route_arguments.dart';
 import '../screens/asset_detail_screen.dart';
+import '../screens/asset_size_screen.dart';
 import '../screens/font_sample_screen.dart';
 import '../screens/fonts_screen.dart';
 import '../screens/lottie_detail_screen.dart';
 import '../screens/lottie_screen.dart';
+import '../screens/other_assets_screen.dart';
 import '../screens/rive_detail_screen.dart';
 import '../screens/rive_screen.dart';
 import '../screens/icons_and_images_screen.dart';
@@ -56,7 +58,8 @@ class PreviewHubRouter {
         return IconsAndImagesScreen(networkImages: args.config.networkImages);
 
       case PreviewHubRoutes.fonts:
-        return const FontsScreen();
+        final FontsArguments args = settings.arguments as FontsArguments;
+        return FontsScreen(initialFamily: args.initialFamily);
 
       case PreviewHubRoutes.fontSample:
         final FontSampleArguments args =
@@ -85,6 +88,14 @@ class PreviewHubRouter {
         final AssetDetailArguments args =
             settings.arguments as AssetDetailArguments;
         return AssetDetailScreen(asset: args.asset, metrics: args.metrics);
+
+      case PreviewHubRoutes.otherAssets:
+        return const OtherAssetsScreen();
+
+      case PreviewHubRoutes.assetSizes:
+        final AssetSizesArguments args =
+            settings.arguments as AssetSizesArguments;
+        return AssetSizeScreen(config: args.config);
 
       default:
         return const SizedBox.shrink();

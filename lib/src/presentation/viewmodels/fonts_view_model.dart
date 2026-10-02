@@ -47,8 +47,9 @@ class FontsViewModel extends ChangeNotifier {
   /// Measured size of every face in [family], or null while unknown.
   int? totalSizeOf(FontFamilyInfo family) => _metrics.totalOf(family);
 
-  /// Reads the font manifest and opens the first family.
-  Future<void> load() async {
+  /// Reads the font manifest and opens the family whose manifest key is
+  /// [initialFamily], or the first one.
+  Future<void> load({String? initialFamily}) async {
     _isLoading = true;
     notifyListeners();
 
@@ -56,7 +57,11 @@ class FontsViewModel extends ChangeNotifier {
     _isLoading = false;
     notifyListeners();
 
-    final FontFamilyInfo? first = _families.firstOrNull;
+    final FontFamilyInfo? first =
+        _families
+            .where((FontFamilyInfo f) => f.manifestKey == initialFamily)
+            .firstOrNull ??
+        _families.firstOrNull;
     if (first != null) {
       await select(first);
     }

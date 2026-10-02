@@ -1,35 +1,35 @@
-# preview_hub
+# PreviewHub
 
-A real-device gallery for your Flutter design system. Preview components, screens, icons, images,
-fonts, Lottie animations, and Rive files inside your own app. Everything is rendered by the same 
-Flutter engine, theme, assets, and runtime configuration used by your application.  No code generation. 
-No build_runner. No custom tooling.
+A real-device gallery for your Flutter design system. Preview components, screens, icons, images, fonts, Lottie animations, and Rive files.
 
-| Collections | Dark theme | Widgets |
-| --- | --- | --- |
+Everything is rendered using the same Flutter engine, theme, assets, and runtime configuration used by your application.
+
+No code generation. No `build_runner`. No custom tooling.
+
+| Collections                                                                                                                            | Dark theme                                                                                                                                          | Widgets                                                                                                                                  |
+| -------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | <img src="https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/dashboard.png" alt="Landing screen" width="180"> | <img src="https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/dashboard_dark.png" alt="Landing screen in dark" width="180"> | <img src="https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/widgets_index.png" alt="Widget index" width="180"> |
 
-| One component | One screen |
-| --- | --- |
+| Component                                                                                                                                     | Screen                                                                                                                                     |
+| --------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
 | <img src="https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/widgets_detail.png" alt="Component detail" width="180"> | <img src="https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/widgets_stage.png" alt="Screen preview" width="180"> |
 
 ## Requirements
 
-Flutter 3.44 or newer. The package depends on `flutter_svg`, `http`, `lottie`
-and `rive`; `rive` ships platform binaries, so it is the heaviest of the four.
+Flutter **3.44 or newer**.
+
+PreviewHub keeps dependencies to a minimum and currently uses `flutter_svg`, `http`, `lottie`, and `rive`. `rive` ships platform binaries, making it the heaviest dependency.
 
 ## Install
 
 ```yaml
 dependencies:
-  preview_hub: ^0.0.1
+  preview_hub: ^0.0.3
 ```
 
 ## Use
 
-Push `PreviewHubDashboard` from anywhere in your app, behind `kDebugMode`.
-It is a compile-time constant, so the gallery is tree-shaken out of a release
-build rather than merely hidden.
+Push `PreviewHubDashboard` from anywhere in your app, preferably behind `kDebugMode` or your own development flag.
 
 ```dart
 import 'package:flutter/foundation.dart';
@@ -41,9 +41,15 @@ if (kDebugMode) {
       builder: (BuildContext context) => const PreviewHubDashboard(
         config: PreviewHubConfig(
           widgets: previewWidgets,
-          networkImages: <String>['https://example.com/logo.svg'],
-          networkLotties: <String>['https://example.com/loader.json'],
-          networkRives: <String>['https://example.com/rating.riv'],
+          networkImages: <String>[
+            'https://example.com/logo.svg',
+          ],
+          networkLotties: <String>[
+            'https://example.com/loader.json',
+          ],
+          networkRives: <String>[
+            'https://example.com/rating.riv',
+          ],
         ),
       ),
     ),
@@ -51,22 +57,13 @@ if (kDebugMode) {
 }
 ```
 
-Bundled assets are found in the asset and font manifests and never need
-registering, so the config carries only the remote URLs and the widgets. A URL
-that cannot be used is ignored rather than thrown over.
+Since `kDebugMode` is a compile-time constant, PreviewHub can be tree-shaken from release builds rather than simply hidden at runtime.
 
-The gallery carries its own theme and its own light and dark toggle, so it does
-not inherit or disturb your app's.
-
-Gating removes the Dart code, not the native libraries the dependencies bring:
-`rive` ships a prebuilt binary that is packaged whether or not the gallery can
-be reached.
+> Gating PreviewHub removes its Dart code, but native libraries brought by dependencies such as `rive` may still be packaged with the application.
 
 ## Registering widgets
 
-A widget is code, not an asset, so there is no manifest to read. Use
-`WidgetPreview.component` for a piece of the design system and
-`WidgetPreview.screen` for a whole screen.
+A widget is code rather than an asset, so it cannot be discovered through a manifest. Use `WidgetPreview.component` for individual components and `WidgetPreview.screen` for complete screens.
 
 ```dart
 const List<WidgetPreview> previewWidgets = <WidgetPreview>[
@@ -74,8 +71,14 @@ const List<WidgetPreview> previewWidgets = <WidgetPreview>[
     group: 'Buttons',
     title: 'AppButton · primary',
     cases: <WidgetPreviewCase>[
-      WidgetPreviewCase(label: 'filled · large (52)', builder: _primaryLarge),
-      WidgetPreviewCase(label: 'disabled', builder: _primaryDisabled),
+      WidgetPreviewCase(
+        label: 'filled · large (52)',
+        builder: _primaryLarge,
+      ),
+      WidgetPreviewCase(
+        label: 'disabled',
+        builder: _primaryDisabled,
+      ),
     ],
   ),
   WidgetPreview.screen(
@@ -86,57 +89,57 @@ const List<WidgetPreview> previewWidgets = <WidgetPreview>[
 ];
 
 Widget _primaryLarge(BuildContext context) =>
-    AppButton(label: 'Continue', size: AppButtonSize.large, onPressed: () {});
+    AppButton(
+      label: 'Continue',
+      size: AppButtonSize.large,
+      onPressed: () {},
+    );
 ```
 
-`group` is the collapsible heading and `title` is the whole name. A component
-lists each of its `cases` down one page, with the label above the rendering it
-describes. A screen opens full size. Builders run only when a preview is on
-screen.
+`group` defines the collapsible heading and `title` defines the preview name. Components can contain multiple cases, while screens open as full-size previews.
 
-## Why
+## Collections
 
-A design system looks fine in a design file and fine in a browser. What matters
-is how it looks on the handset your users actually hold, with their text scale,
-their theme and their pixel density. `preview_hub` puts that catalogue inside
-your own app, so every preview runs through the real Flutter engine on the real
-device.
+The landing screen provides global search and recently viewed items for quickly navigating through the gallery.
+
+| Collection         | Contents                                                                                                                            |
+| ------------------ |-------------------------------------------------------------------------------------------------------------------------------------|
+| **Widgets**        | Registered components and screens, grouped and searchable.                                                                          |
+| **Icons & Images** | SVG, PNG, WebP, JPEG and GIF with dimensions and file size. Icon and image previews support different sizes, backgrounds, and tint. |
+| **Fonts**          | Font families and weights from the font manifest with size previews and a type tester.                                              |
+| **Lottie**         | Bundled and remote JSON animations with duration and frame count.                                                                   |
+| **Rive**           | Bundled and remote `.riv` files with artboard and state machine information.                                                        |
+| **Other**          | Additional bundled assets such as PDF, JSON, and audio files.                                                                       |
+
+| Icons & Images                                                                                                                       | Fonts                                                                                                                     |
+| ------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/icons.png" alt="Icons and images" width="180"> | <img src="https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/fonts.png" alt="Fonts" width="180"> |
+
+| Lottie                                                                                                                      | Rive                                                                                                                    |
+| --------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/lottie.png" alt="Lottie" width="180"> | <img src="https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/rive.png" alt="Rive" width="180"> |
+
+The landing screen also provides an asset size breakdown to visualise the size contribution of each asset type.
+
+| Asset size breakdown                                                                                                                        |
+| ------------------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/asset_sizes.png" alt="Asset size breakdown" width="180"> |
+
+Bundled assets are discovered from Flutter's asset and font manifests, so they don't need to be registered manually. Remote assets are validated before being displayed.
+
+## Why PreviewHub?
+
+A design system can look different on a real device because of text scale, fonts, pixel density, themes, and runtime behaviour.
+
+PreviewHub puts your design system inside your own app, allowing you to browse and validate components and assets using the real Flutter engine and the same application environment.
 
 ## Why not IDE previews?
 
-IDE previews are great for individual widgets during development.
-preview_hub focuses on browsing an entire design system on a real device,
-with the same rendering engine, fonts, assets, theme and runtime behavior
-used by your application.
-
-## What each collection shows
-
-| Collection | Contents |
-| --- | --- |
-| Widgets | Registered components and screens, grouped, searchable, folded by default; every entry is listed with a thumbnail of itself |
-| Icons & Images | SVG, PNG, WebP, JPEG and GIF, with pixel size and byte size per asset |
-| Fonts | Every family and weight from the font manifest, set on an 8 to 32 size ramp, plus a type tester for your own words |
-| Lottie | Bundled and remote JSON animations, playing in the grid, with duration and frame count. Bundled JSON is read before it is listed, so only real Bodymovin files appear |
-| Rive | Bundled and remote `.riv` files, with artboard and state machine |
-
-The four asset collections measure what they list. Bundled entries are read
-from the bundle, remote ones through a `HEAD` request that falls back to a
-`GET`, and every remote entry is checked so the screen can report which ones
-could not be used.
-
-| Icons & Images | Fonts |
-| --- | --- |
-| <img src="https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/icons.png" alt="Icons and images" width="180"> | <img src="https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/fonts.png" alt="Fonts" width="180"> |
-
-| Lottie | Rive |
-| --- | --- |
-| <img src="https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/lottie.png" alt="Lottie" width="180"> | <img src="https://raw.githubusercontent.com/anupam92402/PreviewHub/master/screenshots/rive.png" alt="Rive" width="180"> |
+IDE previews are great for individual widgets during development. PreviewHub focuses on browsing an entire design system on a real device, with the same rendering engine, fonts, assets, theme, and runtime behaviour used by your application.
 
 ## Example
 
-The `example/` directory is an ordinary client app with its own small design
-system, five components and seven screens, plus a real asset set. It is the
-fastest way to see what a populated gallery looks like:
+The `example/` directory contains a small design system with five components, seven screens, and a real asset set.
 
 ```sh
 cd example

@@ -129,6 +129,9 @@ class WidgetPreview {
       group.trim().isNotEmpty &&
       usableCases.isNotEmpty;
 
+  /// `group/title`, which is how recently opened entries are remembered.
+  String get path => '$group/$title';
+
   /// Lower-cased text the search field matches against. Case labels are
   /// included, so searching `disabled` finds the entry that has a disabled
   /// rendering even though its title never says so.

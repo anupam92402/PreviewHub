@@ -61,6 +61,7 @@ flutter:
     - assets/icons/
     - assets/lottie/
     - assets/rive/
+    - assets/misc/
 
   # Declared under fonts, not assets, so FontManifest carries the family and
   # weight of each face. Flutter lists the files in AssetManifest as well; the

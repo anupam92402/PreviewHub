@@ -1,4 +1,4 @@
-/// Every user-facing string on the landing screen.
+/// Every user-facing string in the gallery.
 class PreviewHubStrings {
   const PreviewHubStrings._();
 
@@ -257,6 +257,9 @@ class PreviewHubStrings {
   /// Tooltip on the copy button.
   static const String copy = 'Copy';
 
+  /// Tooltip on a button copying every entry in a list.
+  static const String copyAll = 'Copy all';
+
   /// Confirmation after copying.
   static const String copied = 'Copied';
 
@@ -280,4 +283,125 @@ class PreviewHubStrings {
   /// Summary of the Rive section.
   static const String sectionRiveDescription =
       'Animations and state machines, live and interactive.';
+
+  /// Placeholder in the landing screen's search field.
+  static const String searchEverythingHint =
+      'Search widgets, icons, fonts and more...';
+
+  /// Shown when the landing search matches nothing in any collection.
+  static const String searchEverythingEmpty = 'Nothing matches that search';
+
+  /// Heading above the recently opened entries.
+  static const String recentLabel = 'RECENTLY VIEWED';
+
+  /// Title of the Other section.
+  static const String sectionOtherTitle = 'Other';
+
+  /// Summary of the Other section.
+  static const String sectionOtherDescription =
+      'Audio, video, JSON, PDF and every other bundled file, by size.';
+
+  /// Shown while the bundle is being read for the Other screen.
+  static const String otherLoading = 'Reading bundled files…';
+
+  /// Shown when the app bundles nothing beyond the other collections.
+  static const String otherEmpty =
+      'Nothing else is bundled.\nAudio, video, JSON, PDF and any other file '
+      'the app bundles would be listed here.';
+
+  /// Shown when the asset manifest could not be read.
+  static const String otherFailed = 'The asset manifest could not be read.';
+
+  /// `8 files · 1.2 MB` at the top of the Other screen.
+  static String otherSummary(int count, String size) =>
+      '$count ${count == 1 ? 'file' : 'files'} · $size';
+
+  /// `3 files · 240 KB` beside a heading on the Other screen.
+  static String otherGroupSummary(int count, String size) =>
+      otherSummary(count, size);
+
+  /// Confirmation after copying a file's path.
+  static String copiedPath(String path) => 'Copied $path';
+
+  /// Why nothing on the Other screen plays.
+  static const String otherNote =
+      'Listed by name and size only. Nothing is played or opened. Tap a file to copy its '
+      'path.';
+
+  /// Tooltip on the size breakdown button.
+  static const String sizeTooltip = 'App size breakdown';
+
+  /// Title of the size breakdown.
+  static const String sizeTitle = 'Asset size breakdown';
+
+  /// Shown while every bundled file is being read.
+  static const String sizeMeasuring = 'Measuring bundled assets…';
+
+  /// Shown when no bundled asset falls into any category.
+  static const String sizeEmpty = 'The app bundles no assets.';
+
+  /// Shown when the asset manifest could not be read.
+  static const String sizeFailed = 'The asset manifest could not be read.';
+
+  /// `42 files`, under the total.
+  static String sizeFiles(int count) =>
+      '$count ${count == 1 ? 'file' : 'files'}';
+
+  /// `12 assets`, under a category name.
+  static String sizeAssets(int count) =>
+      '$count ${count == 1 ? 'asset' : 'assets'}';
+
+  /// `3 files` beside an asset shipped at several resolutions.
+  static String sizeVariants(int count) => '$count files';
+
+  /// `12.4%`, `3%` or `<1%`: a share from 0 to 1 as a percentage.
+  static String sizePercent(double share) {
+    final double value = share * 100;
+    if (value > 0 && value < 1) {
+      return '<1%';
+    }
+    final bool tenths = value < 10 && value != value.roundToDouble();
+    return '${value.toStringAsFixed(tenths ? 1 : 0)}%';
+  }
+
+  /// Button opening the collection named [name] from the size breakdown.
+  static String sizeOpenCollection(String name) => 'Open $name';
+
+  /// `and 4 more` under a category's heaviest files.
+  static String sizeMore(int count) => 'and $count more';
+
+  /// What the chart shows, for a screen reader.
+  static String sizeChartLabel(List<String> shares) =>
+      'Asset size by kind: ${shares.join(', ')}';
+
+  /// What the numbers include and leave out.
+  static const String sizeNote =
+      'Bytes of the files as bundled, every resolution variant included, '
+      'before the store compresses the app. Remote assets are not counted, and '
+      'neither are the Material and Cupertino icon fonts, which a release '
+      'build shrinks to the icons you use.';
+
+  /// Heading above the artwork drawn at icon sizes.
+  static const String assetIconSizes = 'At icon sizes';
+
+  /// Label of the tint choices.
+  static const String assetTint = 'Tint';
+
+  /// The no-tint choice.
+  static const String assetTintNone = 'No tint';
+
+  /// Heading of the background choices.
+  static const String backdropLabel = 'Background';
+
+  /// The gallery's own panel.
+  static const String backdropSurface = 'Gallery surface';
+
+  /// A checkerboard.
+  static const String backdropChecker = 'Checkerboard';
+
+  /// Plain white.
+  static const String backdropLight = 'White';
+
+  /// Near black.
+  static const String backdropDark = 'Dark';
 }
