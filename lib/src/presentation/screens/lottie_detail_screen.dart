@@ -7,9 +7,16 @@ import '../../domain/models/lottie_asset.dart';
 import '../../domain/models/preview_asset.dart';
 import '../../domain/services/asset_metrics_service.dart';
 import '../../preview_hub_strings.dart';
+import '../widgets/lottie_markers.dart';
 import '../widgets/lottie_player.dart';
+import '../widgets/lottie_scrubber.dart';
+import '../widgets/lottie_speed_picker.dart';
+import '../widgets/lottie_transport.dart';
+import '../widgets/preview_backdrop.dart';
 
-/// Everything known about one animation, playing at full size.
+/// Everything known about one animation, playing at full size, with the
+/// controls a motion review needs: speed, a frame scrubber, loop or once, a
+/// choice of background, and the named markers the file carries.
 class LottieDetailScreen extends StatefulWidget {
   /// Creates the detail screen for [asset].
   const LottieDetailScreen({
@@ -30,13 +37,18 @@ class LottieDetailScreen extends StatefulWidget {
 
 class _LottieDetailScreenState extends State<LottieDetailScreen>
     with SingleTickerProviderStateMixin {
-  /// Owned here rather than by the player, because restarting rewinds the
-  /// animation instead of merely resuming it.
-  late final AnimationController _controller = AnimationController(vsync: this);
+  /// Owned here rather than by the player, because scrubbing and playing a
+  /// marker both move the animation rather than merely resuming it.
+  late final AnimationController _controller = AnimationController(vsync: this)
+    ..addStatusListener(_onStatus);
   final ValueNotifier<bool> _isPlaying = ValueNotifier<bool>(true);
   final ValueNotifier<bool> _failed = ValueNotifier<bool>(false);
   final ValueNotifier<LottieComposition?> _composition =
       ValueNotifier<LottieComposition?>(null);
+  final ValueNotifier<double> _speed = ValueNotifier<double>(1);
+  final ValueNotifier<bool> _loop = ValueNotifier<bool>(true);
+  final ValueNotifier<PreviewBackdrop> _backdrop =
+      ValueNotifier<PreviewBackdrop>(PreviewBackdrop.surface);
 
   @override
   void dispose() {
@@ -44,14 +56,40 @@ class _LottieDetailScreenState extends State<LottieDetailScreen>
     _isPlaying.dispose();
     _failed.dispose();
     _composition.dispose();
+    _speed.dispose();
+    _loop.dispose();
+    _backdrop.dispose();
     super.dispose();
   }
 
-  /// Plays from the first frame again.
-  void _restart() {
-    _controller.reset();
-    _controller.repeat();
-    _isPlaying.value = true;
+  /// Shows the play button again once a single run ends.
+  void _onStatus(AnimationStatus status) {
+    if (status == AnimationStatus.completed && !_loop.value) {
+      _isPlaying.value = false;
+    }
+  }
+
+  /// Holds the animation while the scrubber is dragged.
+  void _scrubStart(double _) => _isPlaying.value = false;
+
+  void _scrub(double value) => _controller.value = value;
+
+  /// Plays [marker]'s span once. The player stops the controller when told to
+  /// pause, so the span starts after that has happened, a frame later.
+  void _playMarker(Marker marker) {
+    _isPlaying.value = false;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final LottieComposition? composition = _composition.value;
+      if (!mounted || composition == null) {
+        return;
+      }
+      final double span = (marker.end - marker.start).clamp(0, 1);
+      _controller.value = marker.start.clamp(0, 1);
+      _controller.animateTo(
+        marker.end.clamp(0, 1),
+        duration: composition.duration * (span / _speed.value),
+      );
+    });
   }
 
   void _copy() {
@@ -84,26 +122,34 @@ class _LottieDetailScreenState extends State<LottieDetailScreen>
           return ListView(
             padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
             children: <Widget>[
-              Container(
-                height: 300,
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: accent.withValues(alpha: failed ? 0.10 : 0.07),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: accent.withValues(alpha: 0.22)),
-                ),
+              ValueListenableBuilder<PreviewBackdrop>(
+                valueListenable: _backdrop,
+                builder:
+                    (
+                      BuildContext context,
+                      PreviewBackdrop backdrop,
+                      Widget? child,
+                    ) => PreviewBackdropBox(
+                      backdrop: backdrop,
+                      accent: accent,
+                      height: 300,
+                      failed: failed,
+                      child: child!,
+                    ),
                 child: failed
                     ? LottiePlayerFailure(accent: accent, iconSize: 44)
-                    : ValueListenableBuilder<bool>(
-                        valueListenable: _isPlaying,
-                        builder:
-                            (
-                              BuildContext context,
-                              bool playing,
-                              Widget? child,
-                            ) => LottiePlayer(
+                    : ListenableBuilder(
+                        listenable: Listenable.merge(<Listenable>[
+                          _isPlaying,
+                          _speed,
+                          _loop,
+                        ]),
+                        builder: (BuildContext context, Widget? child) =>
+                            LottiePlayer(
                               asset: asset,
-                              isPlaying: playing,
+                              isPlaying: _isPlaying.value,
+                              speed: _speed.value,
+                              loop: _loop.value,
                               controller: _controller,
                               onLoaded: (LottieComposition c) =>
                                   _composition.value = c,
@@ -112,12 +158,36 @@ class _LottieDetailScreenState extends State<LottieDetailScreen>
                       ),
               ),
               if (!failed) ...<Widget>[
-                const SizedBox(height: 14),
-                _Transport(
-                  isPlaying: _isPlaying,
+                const SizedBox(height: 10),
+                LottieScrubber(
+                  controller: _controller,
                   composition: _composition,
-                  onRestart: _restart,
+                  onChangeStart: _scrubStart,
+                  onChanged: _scrub,
                 ),
+                LottieTransport(isPlaying: _isPlaying, loop: _loop),
+                const SizedBox(height: 18),
+                ListenableBuilder(
+                  listenable: Listenable.merge(<Listenable>[_backdrop, _speed]),
+                  builder: (BuildContext context, Widget? child) => Wrap(
+                    spacing: 16,
+                    runSpacing: 10,
+                    alignment: WrapAlignment.center,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: <Widget>[
+                      PreviewBackdropPicker(
+                        value: _backdrop.value,
+                        onChanged: (PreviewBackdrop value) =>
+                            _backdrop.value = value,
+                      ),
+                      LottieSpeedPicker(
+                        value: _speed.value,
+                        onChanged: (double value) => _speed.value = value,
+                      ),
+                    ],
+                  ),
+                ),
+                LottieMarkers(composition: _composition, onTap: _playMarker),
               ],
               const SizedBox(height: 18),
               _Row(label: PreviewHubStrings.detailName, value: asset.name),
@@ -142,13 +212,13 @@ class _LottieDetailScreenState extends State<LottieDetailScreen>
                                   composition.duration,
                                 ),
                         ),
-                        _Row(
-                          label: PreviewHubStrings.lottieDetailFrames,
-                          value: composition == null
-                              ? PreviewHubStrings.assetUnavailable
-                              : '${composition.endFrame.toInt()} '
-                                    '@ ${composition.frameRate.toInt()}fps',
-                        ),
+                        if (composition != null)
+                          _Row(
+                            label: PreviewHubStrings.detailDimensions,
+                            value:
+                                '${composition.bounds.width} × '
+                                '${composition.bounds.height}',
+                          ),
                       ],
                     ),
               ),
@@ -184,55 +254,6 @@ class _LottieDetailScreenState extends State<LottieDetailScreen>
       ),
     );
   }
-}
-
-/// Play, pause and restart, side by side.
-class _Transport extends StatelessWidget {
-  const _Transport({
-    required this.isPlaying,
-    required this.composition,
-    required this.onRestart,
-  });
-
-  final ValueNotifier<bool> isPlaying;
-  final ValueNotifier<LottieComposition?> composition;
-  final VoidCallback onRestart;
-
-  /// Builds the controls; restart stays disabled until the composition parses,
-  /// since before that there is no first frame to return to.
-  @override
-  Widget build(BuildContext context) => Row(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: <Widget>[
-      ValueListenableBuilder<bool>(
-        valueListenable: isPlaying,
-        builder: (BuildContext context, bool playing, Widget? child) =>
-            FilledButton.tonalIcon(
-              onPressed: () => isPlaying.value = !playing,
-              icon: Icon(
-                playing ? Icons.pause_rounded : Icons.play_arrow_rounded,
-                size: 18,
-              ),
-              label: Text(
-                playing
-                    ? PreviewHubStrings.lottiePause
-                    : PreviewHubStrings.lottiePlay,
-              ),
-            ),
-      ),
-      const SizedBox(width: 12),
-      ValueListenableBuilder<LottieComposition?>(
-        valueListenable: composition,
-        builder:
-            (BuildContext context, LottieComposition? loaded, Widget? child) =>
-                OutlinedButton.icon(
-                  onPressed: loaded == null ? null : onRestart,
-                  icon: const Icon(Icons.replay_rounded, size: 18),
-                  label: const Text(PreviewHubStrings.lottieRestart),
-                ),
-      ),
-    ],
-  );
 }
 
 /// One label/value line, optionally with a copy button.
