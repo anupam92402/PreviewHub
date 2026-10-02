@@ -257,6 +257,9 @@ class PreviewHubStrings {
   /// Tooltip on the copy button.
   static const String copy = 'Copy';
 
+  /// Tooltip on a button copying every entry in a list.
+  static const String copyAll = 'Copy all';
+
   /// Confirmation after copying.
   static const String copied = 'Copied';
 
@@ -377,4 +380,28 @@ class PreviewHubStrings {
       'before the store compresses the app. Remote assets are not counted, and '
       'neither are the Material and Cupertino icon fonts, which a release '
       'build shrinks to the icons you use.';
+
+  /// Heading above the artwork drawn at icon sizes.
+  static const String assetIconSizes = 'At icon sizes';
+
+  /// Label of the tint choices.
+  static const String assetTint = 'Tint';
+
+  /// The no-tint choice.
+  static const String assetTintNone = 'No tint';
+
+  /// Heading of the background choices.
+  static const String backdropLabel = 'Background';
+
+  /// The gallery's own panel.
+  static const String backdropSurface = 'Gallery surface';
+
+  /// A checkerboard.
+  static const String backdropChecker = 'Checkerboard';
+
+  /// Plain white.
+  static const String backdropLight = 'White';
+
+  /// Near black.
+  static const String backdropDark = 'Dark';
 }

@@ -43,6 +43,11 @@ class ValidationIssue {
   /// Extra context, such as a status code or the content type actually served.
   final String? detail;
 
+  /// The reason in one line, with [detail] in brackets when there is one, such
+  /// as `Could not be reached (HTTP 404)`.
+  String get description =>
+      detail == null ? failure.message : '${failure.message} ($detail)';
+
   @override
   bool operator ==(Object other) =>
       other is ValidationIssue &&

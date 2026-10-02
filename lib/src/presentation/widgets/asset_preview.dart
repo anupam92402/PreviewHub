@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ class AssetPreview extends StatelessWidget {
     this.fit = BoxFit.contain,
     this.onDimensions,
     this.onFailed,
+    this.tint,
     super.key,
   });
 
@@ -31,6 +33,57 @@ class AssetPreview extends StatelessWidget {
   /// Called when the artwork cannot be drawn at all. A failed measurement is
   /// not a failure; an image whose size cannot be read still draws fine.
   final VoidCallback? onFailed;
+
+  /// Colour to fill the artwork's shape with, as an icon tinted by
+  /// `IconTheme` would be, or null to draw it as authored.
+  final Color? tint;
+
+  /// The provider a raster [asset] is drawn from. Shared with [load], so the
+  /// image it loads is the one the preview then draws from the image cache.
+  static ImageProvider<Object> providerFor(PreviewAsset asset) =>
+      asset.source == AssetSource.bundled
+      ? AssetImage(asset.locator)
+      : NetworkImage(asset.locator);
+
+  /// Loads [asset] the way the preview would and reports whether it can be
+  /// drawn, so a screen can wait for the outcome instead of showing the
+  /// artwork's controls and then snatching them away. A raster image is
+  /// resolved against [configuration] into the image cache and an SVG is
+  /// parsed through the SVG byte cache, so the preview drawn afterwards reuses
+  /// the work rather than fetching the file again.
+  static Future<bool> load(
+    PreviewAsset asset,
+    ImageConfiguration configuration,
+  ) async {
+    try {
+      if (asset.type == AssetType.svg) {
+        final BytesLoader loader = asset.source == AssetSource.bundled
+            ? SvgAssetLoader(asset.locator)
+            : SvgNetworkLoader(asset.locator);
+        final PictureInfo info = await vg.loadPicture(loader, null);
+        info.picture.dispose();
+        return true;
+      }
+      final Completer<bool> outcome = Completer<bool>();
+      final ImageStream stream = providerFor(asset).resolve(configuration);
+      late final ImageStreamListener listener;
+      void finish(bool drawable) {
+        stream.removeListener(listener);
+        if (!outcome.isCompleted) {
+          outcome.complete(drawable);
+        }
+      }
+
+      listener = ImageStreamListener((ImageInfo info, bool synchronousCall) {
+        info.dispose();
+        finish(true);
+      }, onError: (Object error, StackTrace? stack) => finish(false));
+      stream.addListener(listener);
+      return outcome.future;
+    } on Object catch (_) {
+      return false;
+    }
+  }
 
   /// Reports a failure after the current frame, since builders run during
   /// layout and the listener rebuilds the tile around them.
@@ -50,20 +103,29 @@ class AssetPreview extends StatelessWidget {
         return const SizedBox.shrink();
       }
 
+      final Color? tint = this.tint;
+      final ColorFilter? filter = tint == null
+          ? null
+          : ColorFilter.mode(tint, BlendMode.srcIn);
       return asset.source == AssetSource.bundled
-          ? SvgPicture.asset(asset.locator, fit: fit, errorBuilder: onSvgError)
+          ? SvgPicture.asset(
+              asset.locator,
+              fit: fit,
+              colorFilter: filter,
+              errorBuilder: onSvgError,
+            )
           : SvgPicture.network(
               asset.locator,
               fit: fit,
+              colorFilter: filter,
               placeholderBuilder: (BuildContext context) => const _Spinner(),
               errorBuilder: onSvgError,
             );
     }
     return _RasterPreview(
-      provider: asset.source == AssetSource.bundled
-          ? AssetImage(asset.locator)
-          : NetworkImage(asset.locator),
+      provider: providerFor(asset),
       fit: fit,
+      tint: tint,
       onDimensions: onDimensions,
       onFailed: onFailed,
     );
@@ -75,12 +137,14 @@ class _RasterPreview extends StatefulWidget {
   const _RasterPreview({
     required this.provider,
     required this.fit,
+    this.tint,
     this.onDimensions,
     this.onFailed,
   });
 
   final ImageProvider provider;
   final BoxFit fit;
+  final Color? tint;
   final void Function(int width, int height)? onDimensions;
   final VoidCallback? onFailed;
 
@@ -140,6 +204,8 @@ class _RasterPreviewState extends State<_RasterPreview> {
     return Image(
       image: widget.provider,
       fit: widget.fit,
+      color: widget.tint,
+      colorBlendMode: widget.tint == null ? null : BlendMode.srcIn,
       filterQuality: FilterQuality.medium,
       loadingBuilder:
           (BuildContext context, Widget child, ImageChunkEvent? progress) =>

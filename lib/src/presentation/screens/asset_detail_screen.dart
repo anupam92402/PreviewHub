@@ -8,10 +8,16 @@ import '../../domain/services/asset_metrics_service.dart';
 import '../../preview_hub_strings.dart';
 import '../theme/asset_type_style.dart';
 import '../widgets/asset_preview.dart';
+import '../widgets/asset_preview_ramp.dart';
 import '../widgets/asset_tile.dart';
+import '../widgets/asset_tint_picker.dart';
+import '../widgets/preview_backdrop.dart';
 
 /// Everything known about one asset, with the artwork at full size. Where
 /// the grid only says an asset is broken, this names the failure.
+///
+/// The artwork can be put on a checkerboard, white or near black, tinted the
+/// way an icon theme would tint it, and drawn at the sizes icons ship at.
 class AssetDetailScreen extends StatefulWidget {
   /// Creates the detail screen for [asset].
   const AssetDetailScreen({
@@ -30,12 +36,53 @@ class AssetDetailScreen extends StatefulWidget {
   State<AssetDetailScreen> createState() => _AssetDetailScreenState();
 }
 
+/// Where loading the artwork has got to. Nothing about the artwork is shown
+/// until it leaves [loading], so a file that turns out to be broken never
+/// flashes its controls before the error replaces them.
+enum _Artwork {
+  /// Still being loaded.
+  loading,
+
+  /// Loaded and drawable.
+  ready,
+
+  /// Could not be drawn.
+  failed,
+}
+
 class _AssetDetailScreenState extends State<AssetDetailScreen> {
-  final ValueNotifier<bool> _failed = ValueNotifier<bool>(false);
+  final ValueNotifier<_Artwork> _artwork = ValueNotifier<_Artwork>(
+    _Artwork.loading,
+  );
+  final ValueNotifier<PreviewBackdrop> _backdrop =
+      ValueNotifier<PreviewBackdrop>(PreviewBackdrop.surface);
+  final ValueNotifier<Color?> _tint = ValueNotifier<Color?>(null);
+  bool _loadStarted = false;
+
+  /// Loads the artwork once, against this screen's image configuration so the
+  /// preview drawn afterwards comes straight from the cache.
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_loadStarted) {
+      return;
+    }
+    _loadStarted = true;
+    AssetPreview.load(
+      widget.asset,
+      createLocalImageConfiguration(context),
+    ).then((bool drawable) {
+      if (mounted && _artwork.value == _Artwork.loading) {
+        _artwork.value = drawable ? _Artwork.ready : _Artwork.failed;
+      }
+    });
+  }
 
   @override
   void dispose() {
-    _failed.dispose();
+    _artwork.dispose();
+    _backdrop.dispose();
+    _tint.dispose();
     super.dispose();
   }
 
@@ -65,31 +112,101 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
         children: <Widget>[
-          ValueListenableBuilder<bool>(
-            valueListenable: _failed,
-            builder: (BuildContext context, bool failed, Widget? child) {
+          ListenableBuilder(
+            listenable: Listenable.merge(<Listenable>[
+              _artwork,
+              _backdrop,
+              _tint,
+            ]),
+            builder: (BuildContext context, Widget? child) {
+              final bool failed = _artwork.value == _Artwork.failed;
               final Color accent = failed
                   ? Theme.of(context).colorScheme.error
                   : AssetTypeStyle.colorOf(asset.type);
 
-              return Container(
-                height: 280,
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: accent.withValues(alpha: failed ? 0.10 : 0.07),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: accent.withValues(alpha: 0.22)),
-                ),
-                child: failed
-                    ? AssetPreviewFailure(accent: accent, iconSize: 44)
-                    : AssetPreview(
-                        asset: asset,
-                        onDimensions: (int width, int height) =>
-                            metrics.recordDimensions(asset, width, height),
-                        onFailed: () => _failed.value = true,
-                      ),
+              return PreviewBackdropBox(
+                backdrop: _backdrop.value,
+                accent: accent,
+                failed: failed,
+                child: switch (_artwork.value) {
+                  _Artwork.loading => const _Loading(),
+                  _Artwork.failed => AssetPreviewFailure(
+                    accent: accent,
+                    iconSize: 44,
+                  ),
+                  _Artwork.ready => AssetPreview(
+                    asset: asset,
+                    tint: _tint.value,
+                    onDimensions: (int width, int height) =>
+                        metrics.recordDimensions(asset, width, height),
+                    onFailed: () => _artwork.value = _Artwork.failed,
+                  ),
+                },
               );
             },
+          ),
+          const SizedBox(height: 14),
+          // Background and tint choices, then the artwork at icon sizes in a
+          // panel of its own on the same background. Shown only once the
+          // artwork has loaded: a broken file never gets them.
+          ListenableBuilder(
+            listenable: Listenable.merge(<Listenable>[
+              _artwork,
+              _backdrop,
+              _tint,
+            ]),
+            builder: (BuildContext context, Widget? child) =>
+                _artwork.value != _Artwork.ready
+                ? const SizedBox.shrink()
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Wrap(
+                        spacing: 16,
+                        runSpacing: 10,
+                        alignment: WrapAlignment.center,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: <Widget>[
+                          PreviewBackdropPicker(
+                            value: _backdrop.value,
+                            onChanged: (PreviewBackdrop value) =>
+                                _backdrop.value = value,
+                          ),
+                          AssetTintPicker(
+                            value: _tint.value,
+                            onChanged: (Color? value) => _tint.value = value,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      Text(
+                        PreviewHubStrings.assetIconSizes,
+                        style: Theme.of(context).textTheme.labelMedium
+                            ?.copyWith(
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurfaceVariant,
+                            ),
+                      ),
+                      const SizedBox(height: 8),
+                      PreviewBackdropBox(
+                        backdrop: _backdrop.value,
+                        accent: AssetTypeStyle.colorOf(asset.type),
+                        height: 116,
+                        // Shrinks rather than clips at large text sizes or
+                        // on a narrow phone.
+                        child: Center(
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: AssetPreviewRamp(
+                              asset: asset,
+                              tint: _tint.value,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
           ),
           const SizedBox(height: 22),
           ValueListenableBuilder<AssetMetricsState>(
@@ -138,11 +255,16 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
                       value: asset.locator,
                       onCopy: () => _copy(context, asset.locator),
                     ),
-                    ValueListenableBuilder<bool>(
-                      valueListenable: _failed,
+                    ValueListenableBuilder<_Artwork>(
+                      valueListenable: _artwork,
                       builder:
-                          (BuildContext context, bool failed, Widget? child) =>
-                              failed || state.status == MetricsStatus.failed
+                          (
+                            BuildContext context,
+                            _Artwork artwork,
+                            Widget? child,
+                          ) =>
+                              artwork == _Artwork.failed ||
+                                  state.status == MetricsStatus.failed
                               ? _Row(
                                   label: PreviewHubStrings.detailError,
                                   value: _describeFailure(),
@@ -227,4 +349,18 @@ class _Row extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Fills the artwork box while the file is still loading.
+class _Loading extends StatelessWidget {
+  const _Loading();
+
+  @override
+  Widget build(BuildContext context) => const Center(
+    child: SizedBox(
+      width: 22,
+      height: 22,
+      child: CircularProgressIndicator(strokeWidth: 2),
+    ),
+  );
 }
