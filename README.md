@@ -24,7 +24,7 @@ PreviewHub keeps dependencies to a minimum and currently uses `flutter_svg`, `ht
 
 ```yaml
 dependencies:
-  preview_hub: ^0.0.3
+  preview_hub: ^0.0.4
 ```
 
 ## Use
