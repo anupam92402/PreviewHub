@@ -8,12 +8,10 @@ import '../../domain/models/preview_asset.dart';
 import '../../domain/services/asset_metrics_service.dart';
 import '../../preview_hub_strings.dart';
 import '../widgets/preview_backdrop.dart';
-import '../widgets/rive_inputs.dart';
 import '../widgets/rive_player.dart';
 
-/// Everything known about one Rive animation, playing at full size, with every
-/// input its state machine declares laid out as a control, so each state can
-/// be reached without writing code.
+/// Everything known about one Rive animation, playing at full size on a
+/// choice of background.
 class RiveDetailScreen extends StatefulWidget {
   /// Creates the detail screen for [asset].
   const RiveDetailScreen({
@@ -141,20 +139,6 @@ class _RiveDetailScreenState extends State<RiveDetailScreen> {
                               _backdrop.value = value,
                         ),
                       ),
-                ),
-                ValueListenableBuilder<rive.RiveWidgetController?>(
-                  valueListenable: _controller,
-                  builder:
-                      (
-                        BuildContext context,
-                        rive.RiveWidgetController? controller,
-                        Widget? child,
-                      ) => controller == null
-                      ? const SizedBox.shrink()
-                      : RiveInputs(
-                          key: ObjectKey(controller),
-                          controller: controller,
-                        ),
                 ),
               ],
               const SizedBox(height: 18),
