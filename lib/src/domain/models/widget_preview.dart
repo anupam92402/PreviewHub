@@ -39,7 +39,6 @@ class WidgetPreviewCase {
 /// [PreviewHubConfig.widgets], since a widget is code and cannot be discovered
 /// from a manifest. Build one with [WidgetPreview.component] or
 /// [WidgetPreview.screen]; the section follows from which you pick.
-///
 /// ```dart
 /// WidgetPreview.component(
 ///   group: 'Buttons',
@@ -51,7 +50,6 @@ class WidgetPreviewCase {
 ///     ),
 ///   ],
 /// )
-///
 /// WidgetPreview.screen(
 ///   group: 'Auth',
 ///   title: 'SignInScreen',
@@ -74,7 +72,6 @@ class WidgetPreview {
 
   /// Creates a screen entry, shown at full size. A screen has no second axis to
   /// label; its states read better as separate entries under the same [group].
-  ///
   /// The index draws a thumbnail beside the title so a long list of screens can
   /// be read without opening each one. By default that thumbnail is the screen
   /// itself, built small and held still. Pass [thumbnail] to show a picture

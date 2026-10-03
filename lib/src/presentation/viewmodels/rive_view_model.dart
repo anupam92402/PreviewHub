@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 
 import '../../domain/models/asset_sort_order.dart';
-import '../../domain/models/rive_asset.dart';
 import '../../domain/models/preview_asset.dart';
+import '../../domain/models/rive_asset.dart';
 import '../../domain/models/validation_issue.dart';
 import '../../domain/services/asset_metrics_service.dart';
 import '../../domain/services/rive_catalog_service.dart';

@@ -8,11 +8,10 @@ import 'lottie_document.dart';
 
 /// Finds the bundled files no other collection shows: audio, video, data,
 /// documents and anything else in the asset manifest that is not an image,
-/// icon, font, Lottie or Rive file.
-///
-/// [load] reads each file once to measure it; nothing is decoded or played, so
-/// listing a video costs a read, not a media dependency. [locate] skips the
-/// measuring and reads only JSON, which is needed to leave Lottie files out.
+/// icon, font, Lottie or Rive file. [load] reads each file once to measure it;
+/// nothing is decoded or played, so listing a video costs a read, not a media
+/// dependency. [locate] skips the measuring and reads only JSON, which is
+/// needed to leave Lottie files out.
 class OtherAssetCatalogService {
   /// Reads files from [bundle], defaulting to the app's own bundle.
   OtherAssetCatalogService({AssetBundle? bundle})

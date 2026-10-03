@@ -1,0 +1,81 @@
+import 'package:flutter/material.dart';
+
+import '../../../domain/models/widget_preview.dart';
+import 'widget_group_rail.dart';
+import 'widget_preview_thumbnail.dart';
+
+/// One entry in the widget index: a thumbnail of what was registered, a title,
+/// a rail and a chevron. The thumbnail draws the host's own widget, built only
+/// while the row is on screen, so the index costs no more than the rows it is
+/// showing however many entries the gallery holds.
+class WidgetIndexTile extends StatelessWidget {
+  /// Creates a tile for [preview].
+  const WidgetIndexTile({
+    required this.preview,
+    required this.isLast,
+    required this.onTap,
+    super.key,
+  });
+
+  /// Entry this row stands for.
+  final WidgetPreview preview;
+
+  /// Whether this is the final row of its group, which shortens the rail.
+  final bool isLast;
+
+  /// Called when the row is tapped.
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme scheme = theme.colorScheme;
+
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(left: 6, right: 16),
+            child: WidgetGroupRail(
+              color: scheme.outlineVariant,
+              stopsShort: isLast,
+            ),
+          ),
+          Expanded(
+            child: InkWell(
+              onTap: onTap,
+              borderRadius: BorderRadius.circular(8),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                child: Row(
+                  children: <Widget>[
+                    WidgetPreviewThumbnail(preview: preview),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        preview.title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.bodyLarge?.copyWith(
+                          color: scheme.onSurface,
+                          height: 1.3,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Icon(
+                      Icons.chevron_right_rounded,
+                      size: 20,
+                      color: scheme.onSurfaceVariant,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

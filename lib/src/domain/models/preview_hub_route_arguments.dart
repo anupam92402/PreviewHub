@@ -1,12 +1,12 @@
 import 'package:flutter/foundation.dart';
 
-import '../../presentation/theme/preview_hub_theme_controller.dart';
+import '../../theme/preview_hub_theme_controller.dart';
 import '../services/asset_metrics_service.dart';
 import 'font_family_info.dart';
 import 'lottie_asset.dart';
-import 'rive_asset.dart';
 import 'preview_asset.dart';
 import 'preview_hub_config.dart';
+import 'rive_asset.dart';
 import 'widget_preview.dart';
 
 /// What every gallery route carries. The theme controller rides on all of them,
@@ -17,6 +17,8 @@ sealed class PreviewHubArguments {
   /// Creates arguments carrying [themeController].
   const PreviewHubArguments({this.themeController});
 
+  /// Light and dark switch shared by every gallery screen, or null to leave
+  /// the host app's theme in place.
   final PreviewHubThemeController? themeController;
 }
 
