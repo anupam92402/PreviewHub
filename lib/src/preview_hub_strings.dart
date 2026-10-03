@@ -230,8 +230,22 @@ class PreviewHubStrings {
   /// Label of the animation's running time.
   static const String lottieDetailDuration = 'Duration';
 
-  /// Label of the animation's frame count and rate.
-  static const String lottieDetailFrames = 'Frames';
+  /// Tooltip on the speed picker.
+  static const String lottieSpeed = 'Speed';
+
+  /// Play on repeat.
+  static const String lottieLoop = 'Loop';
+
+  /// Play once and hold the last frame.
+  static const String lottieOnce = 'Once';
+
+  /// `0.5×` or `1.0×`, a playback speed.
+  static String speedLabel(double speed) => speed == speed.roundToDouble()
+      ? '${speed.toStringAsFixed(1)}×'
+      : '${speed.toStringAsFixed(2).replaceFirst(RegExp(r'0$'), '')}×';
+
+  /// `24 / 120`, the current frame of the total.
+  static String lottieFrame(int frame, int total) => '$frame / $total';
 
   /// Placeholder in the Rive search field.
   static const String searchRiveHint = 'Search name or path';

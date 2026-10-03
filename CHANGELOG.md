@@ -1,3 +1,7 @@
+## 0.0.4
+- Enhanced the Lottie detail page with playback speed, loop or once, and background choice.
+- Added a background choice to the Rive detail page.
+
 ## 0.0.3
 - Added a global search option to the landing screen, along with recently viewed widgets.
 - Introduced an Other section covering assets such as PDFs, JSON files, and audio files for better visibility.

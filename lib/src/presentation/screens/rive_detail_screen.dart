@@ -7,9 +7,11 @@ import '../../domain/models/rive_asset.dart';
 import '../../domain/models/preview_asset.dart';
 import '../../domain/services/asset_metrics_service.dart';
 import '../../preview_hub_strings.dart';
+import '../widgets/preview_backdrop.dart';
 import '../widgets/rive_player.dart';
 
-/// Everything known about one Rive animation, playing at full size.
+/// Everything known about one Rive animation, playing at full size on a
+/// choice of background.
 class RiveDetailScreen extends StatefulWidget {
   /// Creates the detail screen for [asset].
   const RiveDetailScreen({
@@ -33,6 +35,8 @@ class _RiveDetailScreenState extends State<RiveDetailScreen> {
   final ValueNotifier<bool> _failed = ValueNotifier<bool>(false);
   final ValueNotifier<rive.RiveWidgetController?> _controller =
       ValueNotifier<rive.RiveWidgetController?>(null);
+  final ValueNotifier<PreviewBackdrop> _backdrop =
+      ValueNotifier<PreviewBackdrop>(PreviewBackdrop.surface);
 
   /// Disposes the notifiers; the Rive controller itself belongs to the player.
   @override
@@ -40,6 +44,7 @@ class _RiveDetailScreenState extends State<RiveDetailScreen> {
     _isPlaying.dispose();
     _failed.dispose();
     _controller.dispose();
+    _backdrop.dispose();
     super.dispose();
   }
 
@@ -80,14 +85,20 @@ class _RiveDetailScreenState extends State<RiveDetailScreen> {
           return ListView(
             padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
             children: <Widget>[
-              Container(
-                height: 300,
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: accent.withValues(alpha: failed ? 0.10 : 0.07),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: accent.withValues(alpha: 0.22)),
-                ),
+              ValueListenableBuilder<PreviewBackdrop>(
+                valueListenable: _backdrop,
+                builder:
+                    (
+                      BuildContext context,
+                      PreviewBackdrop backdrop,
+                      Widget? child,
+                    ) => PreviewBackdropBox(
+                      backdrop: backdrop,
+                      accent: accent,
+                      height: 300,
+                      failed: failed,
+                      child: child!,
+                    ),
                 child: failed
                     ? RivePlayerFailure(accent: accent, iconSize: 44)
                     : ValueListenableBuilder<bool>(
@@ -112,6 +123,22 @@ class _RiveDetailScreenState extends State<RiveDetailScreen> {
                   isPlaying: _isPlaying,
                   controller: _controller,
                   onRestart: _restart,
+                ),
+                const SizedBox(height: 16),
+                ValueListenableBuilder<PreviewBackdrop>(
+                  valueListenable: _backdrop,
+                  builder:
+                      (
+                        BuildContext context,
+                        PreviewBackdrop backdrop,
+                        Widget? child,
+                      ) => Center(
+                        child: PreviewBackdropPicker(
+                          value: backdrop,
+                          onChanged: (PreviewBackdrop value) =>
+                              _backdrop.value = value,
+                        ),
+                      ),
                 ),
               ],
               const SizedBox(height: 18),

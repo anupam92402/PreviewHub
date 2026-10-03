@@ -5,7 +5,8 @@ import '../../domain/models/lottie_asset.dart';
 import '../../domain/models/preview_asset.dart';
 import '../../preview_hub_strings.dart';
 
-/// Plays [asset], looping, with the play state under the caller's control.
+/// Plays [asset] at [speed], looping or once, with the play state under the
+/// caller's control.
 /// Drives its own [AnimationController] rather than letting Lottie animate
 /// itself, so pausing holds the current frame instead of snapping to the first.
 class LottiePlayer extends StatefulWidget {
@@ -17,6 +18,8 @@ class LottiePlayer extends StatefulWidget {
     this.onLoaded,
     this.onFailed,
     this.fit = BoxFit.contain,
+    this.speed = 1,
+    this.loop = true,
     super.key,
   });
 
@@ -40,6 +43,12 @@ class LottiePlayer extends StatefulWidget {
   /// How the animation fills its box.
   final BoxFit fit;
 
+  /// Playback rate, where 1 is the speed the animation was authored at.
+  final double speed;
+
+  /// Whether the animation starts over when it ends, or holds its last frame.
+  final bool loop;
+
   @override
   State<LottiePlayer> createState() => _LottiePlayerState();
 }
@@ -54,10 +63,17 @@ class _LottiePlayerState extends State<LottiePlayer>
       widget.controller ??
       (_ownController ??= AnimationController(vsync: this));
 
+  LottieComposition? _composition;
+
   @override
   void didUpdateWidget(LottiePlayer oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.isPlaying != oldWidget.isPlaying) {
+    if (widget.speed != oldWidget.speed) {
+      _applyDuration();
+    }
+    if (widget.isPlaying != oldWidget.isPlaying ||
+        widget.speed != oldWidget.speed ||
+        widget.loop != oldWidget.loop) {
       _applyPlayState();
     }
   }
@@ -70,17 +86,41 @@ class _LottiePlayerState extends State<LottiePlayer>
     super.dispose();
   }
 
-  /// Starts or holds the animation, without rewinding when it is held.
+  /// Stretches or squeezes the authored duration to the chosen speed.
+  void _applyDuration() {
+    final LottieComposition? composition = _composition;
+    if (composition == null || widget.speed <= 0) {
+      return;
+    }
+    _controller.duration = composition.duration * (1 / widget.speed);
+  }
+
+  /// Starts or holds the animation, without rewinding when it is held. Playing
+  /// once from the last frame starts again from the first.
   void _applyPlayState() {
-    if (widget.isPlaying) {
-      _controller.repeat();
-    } else {
+    if (_controller.duration == null) {
+      return;
+    }
+    if (!widget.isPlaying) {
       _controller.stop();
+    } else if (widget.loop) {
+      _controller.repeat();
+    } else if (_controller.value < 1) {
+      _controller.forward();
+    } else {
+      // Rewinding notifies the controller's listeners, which may sit outside
+      // this subtree, so it waits until the tree has finished building.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && widget.isPlaying && !widget.loop) {
+          _controller.forward(from: 0);
+        }
+      });
     }
   }
 
   void _onLoaded(LottieComposition composition) {
-    _controller.duration = composition.duration;
+    _composition = composition;
+    _applyDuration();
     _applyPlayState();
     widget.onLoaded?.call(composition);
   }
