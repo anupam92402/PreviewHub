@@ -265,6 +265,23 @@ class PreviewHubStrings {
   /// Stands in for a file with no state machine.
   static const String riveNoStateMachine = 'None';
 
+  /// Heading of the state machine inputs.
+  static const String riveInputs = 'State machine inputs';
+
+  /// Shown when the state machine declares no inputs.
+  static const String riveNoInputs =
+      'This state machine declares no inputs. It may be driven by data '
+      'binding or by pointer events instead.';
+
+  /// Button firing a trigger input.
+  static const String riveFire = 'Fire';
+
+  /// Tooltip on the button lowering a number input.
+  static const String riveDecrease = 'Decrease';
+
+  /// Tooltip on the button raising a number input.
+  static const String riveIncrease = 'Increase';
+
   /// Tooltip on a button that empties a field.
   static const String clear = 'Clear';
 

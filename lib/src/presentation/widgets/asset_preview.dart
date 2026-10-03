@@ -79,7 +79,7 @@ class AssetPreview extends StatelessWidget {
         finish(true);
       }, onError: (Object error, StackTrace? stack) => finish(false));
       stream.addListener(listener);
-      return outcome.future;
+      return await outcome.future;
     } on Object catch (_) {
       return false;
     }
