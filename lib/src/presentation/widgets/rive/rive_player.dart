@@ -15,6 +15,7 @@ class RivePlayer extends StatefulWidget {
   const RivePlayer({
     required this.asset,
     required this.isPlaying,
+    this.restartCount = 0,
     this.onLoaded,
     this.onFailed,
     this.fit = rive.Fit.contain,
@@ -26,6 +27,11 @@ class RivePlayer extends StatefulWidget {
 
   /// Whether the animation should be running.
   final bool isPlaying;
+
+  /// Raised to play the animation from its start again. Each new value builds
+  /// a fresh artboard and state machine from the already loaded file, so every
+  /// state and input returns to how the file begins, without fetching it again.
+  final int restartCount;
 
   /// Called once the file has loaded, with what it describes.
   final ValueChanged<rive.RiveWidgetController>? onLoaded;
@@ -59,6 +65,9 @@ class _RivePlayerState extends State<RivePlayer> {
     super.didUpdateWidget(oldWidget);
     if (widget.isPlaying != oldWidget.isPlaying) {
       _applyPlayState();
+    }
+    if (widget.restartCount != oldWidget.restartCount) {
+      _controller = null;
     }
     if (widget.asset != oldWidget.asset) {
       _loader.value?.dispose();
@@ -136,6 +145,7 @@ class _RivePlayerState extends State<RivePlayer> {
                 loader == null
                 ? const SmallSpinner()
                 : rive.RiveWidgetBuilder(
+                    key: ValueKey<int>(widget.restartCount),
                     fileLoader: loader,
                     onLoaded: _onLoaded,
                     onFailed: (Object error, StackTrace stack) => _onFailed(),

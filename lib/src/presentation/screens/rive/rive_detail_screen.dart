@@ -10,11 +10,13 @@ import '../../widgets/common/animation_playback_failure.dart';
 import '../../widgets/common/copied_snack_bar.dart';
 import '../../widgets/common/detail_row.dart';
 import '../../widgets/common/preview_backdrop.dart';
+import '../../widgets/rive/rive_inputs.dart';
 import '../../widgets/rive/rive_player.dart';
 import '../../widgets/rive/rive_transport.dart';
 
-/// Everything known about one Rive animation, playing at full size on a
-/// choice of background.
+/// Everything known about one Rive animation, playing at full size on a choice
+/// of background, with every input its state machine declares laid out as a
+/// control, so each state can be reached without writing code.
 class RiveDetailScreen extends StatefulWidget {
   /// Creates the detail screen for [asset].
   const RiveDetailScreen({
@@ -35,6 +37,9 @@ class RiveDetailScreen extends StatefulWidget {
 
 class _RiveDetailScreenState extends State<RiveDetailScreen> {
   final ValueNotifier<bool> _isPlaying = ValueNotifier<bool>(true);
+
+  /// Raised by restart, which rebuilds the animation from its start.
+  final ValueNotifier<int> _restartCount = ValueNotifier<int>(0);
   final ValueNotifier<bool> _failed = ValueNotifier<bool>(false);
   final ValueNotifier<rive.RiveWidgetController?> _controller =
       ValueNotifier<rive.RiveWidgetController?>(null);
@@ -45,16 +50,19 @@ class _RiveDetailScreenState extends State<RiveDetailScreen> {
   @override
   void dispose() {
     _isPlaying.dispose();
+    _restartCount.dispose();
     _failed.dispose();
     _controller.dispose();
     _backdrop.dispose();
     super.dispose();
   }
 
-  /// Plays from the start again.
+  /// Plays from the start again, with every state and input back where the
+  /// file begins. The old controller is dropped first so the inputs panel
+  /// never reads one that is being disposed.
   void _restart() {
-    _controller.value?.stateMachine.advanceAndApply(0);
-    _controller.value?.active = true;
+    _controller.value = null;
+    _restartCount.value++;
     _isPlaying.value = true;
   }
 
@@ -99,16 +107,16 @@ class _RiveDetailScreenState extends State<RiveDetailScreen> {
                         accent: accent,
                         iconSize: 44,
                       )
-                    : ValueListenableBuilder<bool>(
-                        valueListenable: _isPlaying,
-                        builder:
-                            (
-                              BuildContext context,
-                              bool playing,
-                              Widget? child,
-                            ) => RivePlayer(
+                    : ListenableBuilder(
+                        listenable: Listenable.merge(<Listenable>[
+                          _isPlaying,
+                          _restartCount,
+                        ]),
+                        builder: (BuildContext context, Widget? child) =>
+                            RivePlayer(
                               asset: asset,
-                              isPlaying: playing,
+                              isPlaying: _isPlaying.value,
+                              restartCount: _restartCount.value,
                               onLoaded: (rive.RiveWidgetController c) =>
                                   _controller.value = c,
                               onFailed: () => _failed.value = true,
@@ -137,6 +145,20 @@ class _RiveDetailScreenState extends State<RiveDetailScreen> {
                               _backdrop.value = value,
                         ),
                       ),
+                ),
+                ValueListenableBuilder<rive.RiveWidgetController?>(
+                  valueListenable: _controller,
+                  builder:
+                      (
+                        BuildContext context,
+                        rive.RiveWidgetController? controller,
+                        Widget? child,
+                      ) => controller == null
+                      ? const SizedBox.shrink()
+                      : RiveInputs(
+                          key: ObjectKey(controller),
+                          controller: controller,
+                        ),
                 ),
               ],
               const SizedBox(height: 18),
