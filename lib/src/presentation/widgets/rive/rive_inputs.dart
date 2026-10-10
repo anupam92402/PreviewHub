@@ -5,6 +5,10 @@ import 'package:rive/rive.dart' as rive;
 
 import '../../../util/preview_hub_strings.dart';
 import 'rive_number_input.dart';
+import 'rive_panel_card.dart';
+import 'rive_panel_message.dart';
+import 'rive_switch_row.dart';
+import 'rive_trigger_row.dart';
 
 /// Every input the state machine declares, each as a control: a switch for a
 /// boolean, a stepper for a number, a button for a trigger. Rive now
@@ -32,7 +36,8 @@ class _RiveInputsState extends State<RiveInputs>
 
   /// Reads the inputs every frame, since the animation itself can change
   /// them: a tap on the artboard, or a state that sets an input on entry.
-  late final Ticker _ticker = createTicker(_poll);
+  /// Created only when there is a value to follow; triggers hold none.
+  Ticker? _ticker;
 
   /// Values the controls were last drawn with, in the order of [_inputs].
   late List<Object> _drawn = _values();
@@ -41,13 +46,13 @@ class _RiveInputsState extends State<RiveInputs>
   void initState() {
     super.initState();
     if (_inputs.any((rive.Input input) => input is! rive.TriggerInput)) {
-      _ticker.start();
+      _ticker = createTicker(_poll)..start();
     }
   }
 
   @override
   void dispose() {
-    _ticker.dispose();
+    _ticker?.dispose();
     _revision.dispose();
     super.dispose();
   }
@@ -84,87 +89,42 @@ class _RiveInputsState extends State<RiveInputs>
   }
 
   @override
-  Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final ColorScheme scheme = theme.colorScheme;
-
-    return Padding(
-      padding: const EdgeInsets.only(top: 18),
-      child: Material(
-        color: scheme.surfaceContainerLow,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18),
-          side: BorderSide(color: scheme.outlineVariant.withValues(alpha: 0.6)),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 12, 8, 12),
-          child: ValueListenableBuilder<int>(
-            valueListenable: _revision,
-            builder: (BuildContext context, int revision, Widget? child) =>
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Text(
-                      PreviewHubStrings.riveInputs,
-                      style: theme.textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    if (_inputs.isEmpty)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 4, right: 8),
-                        child: Text(
-                          PreviewHubStrings.riveNoInputs,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: scheme.onSurfaceVariant,
-                          ),
-                        ),
-                      ),
-                    for (final rive.Input input in _inputs)
-                      switch (input) {
-                        final rive.BooleanInput input => SwitchListTile(
-                          contentPadding: const EdgeInsets.only(right: 8),
-                          dense: true,
-                          title: Text(input.name),
-                          value: input.value,
-                          onChanged: (bool value) {
-                            input.value = value;
-                            _changed();
-                          },
-                        ),
-                        final rive.NumberInput input => RiveNumberInput(
-                          name: input.name,
-                          value: input.value,
-                          onChanged: (double value) {
-                            input.value = value;
-                            _changed();
-                          },
-                        ),
-                        final rive.TriggerInput input => Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4),
-                          child: Row(
-                            children: <Widget>[
-                              Expanded(child: Text(input.name)),
-                              FilledButton.tonalIcon(
-                                onPressed: () {
-                                  input.fire();
-                                  _changed();
-                                },
-                                icon: const Icon(Icons.bolt_rounded, size: 18),
-                                label: const Text(PreviewHubStrings.riveFire),
-                              ),
-                              const SizedBox(width: 8),
-                            ],
-                          ),
-                        ),
-                        _ => const SizedBox.shrink(),
-                      },
-                  ],
+  Widget build(BuildContext context) => ValueListenableBuilder<int>(
+    valueListenable: _revision,
+    builder: (BuildContext context, int revision, Widget? child) =>
+        RivePanelCard(
+          title: PreviewHubStrings.riveInputs,
+          children: <Widget>[
+            if (_inputs.isEmpty)
+              const RivePanelMessage(message: PreviewHubStrings.riveNoInputs),
+            for (final rive.Input input in _inputs)
+              switch (input) {
+                final rive.BooleanInput input => RiveSwitchRow(
+                  name: input.name,
+                  value: input.value,
+                  onChanged: (bool value) {
+                    input.value = value;
+                    _changed();
+                  },
                 ),
-          ),
+                final rive.NumberInput input => RiveNumberInput(
+                  name: input.name,
+                  value: input.value,
+                  onChanged: (double value) {
+                    input.value = value;
+                    _changed();
+                  },
+                ),
+                final rive.TriggerInput input => RiveTriggerRow(
+                  name: input.name,
+                  onFire: () {
+                    input.fire();
+                    _changed();
+                  },
+                ),
+                _ => const SizedBox.shrink(),
+              },
+          ],
         ),
-      ),
-    );
-  }
+  );
 }

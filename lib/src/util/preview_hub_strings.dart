@@ -334,6 +334,28 @@ class PreviewHubStrings {
   /// Tooltip on the button raising a number input.
   static const String riveIncrease = 'Increase';
 
+  /// Heading of the events a Rive state machine reported.
+  static const String riveEvents = 'Events';
+
+  /// Button emptying the events list.
+  static const String riveEventsClear = 'Clear';
+
+  /// Tooltip shown on the events button when the first event arrives.
+  static const String riveEventsReceived = 'Event received';
+
+  /// Kind of a plain named Rive event.
+  static const String riveEventGeneral = 'Event';
+
+  /// Kind of a Rive event asking to open a URL.
+  static const String riveEventOpenUrl = 'Open URL';
+
+  /// Kind of a Rive event playing a sound.
+  static const String riveEventAudio = 'Audio';
+
+  /// `+3.2s`, when an event fired, counted from when the animation started.
+  static String riveEventTime(Duration elapsed) =>
+      '+${(elapsed.inMilliseconds / 1000).toStringAsFixed(1)}s';
+
   /// Tooltip on a button that empties a field.
   static const String clear = 'Clear';
 
