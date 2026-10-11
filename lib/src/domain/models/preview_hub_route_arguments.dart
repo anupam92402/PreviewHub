@@ -84,6 +84,15 @@ final class FontSampleArguments extends PreviewHubArguments {
   final List<FontFamilyInfo> families;
 }
 
+/// Arguments for the family comparison.
+final class FontCompareArguments extends PreviewHubArguments {
+  /// Creates arguments offering a choice between [families].
+  const FontCompareArguments({required this.families, super.themeController});
+
+  /// Families either side of the comparison can be set in.
+  final List<FontFamilyInfo> families;
+}
+
 /// Arguments for the Lottie route.
 final class LottieArguments extends PreviewHubArguments {
   /// Creates arguments carrying [config].

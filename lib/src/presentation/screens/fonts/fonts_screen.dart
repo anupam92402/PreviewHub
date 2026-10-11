@@ -10,12 +10,17 @@ import '../../../theme/preview_hub_theming.dart';
 import '../../../util/preview_hub_strings.dart';
 import '../../viewmodels/fonts_view_model.dart';
 import '../../widgets/common/preview_filter_bar.dart';
+import '../../widgets/fonts/font_compare_button.dart';
 import '../../widgets/fonts/font_family_summary.dart';
+import '../../widgets/fonts/font_metrics_button.dart';
+import '../../widgets/fonts/font_missing_weights.dart';
 import '../../widgets/fonts/font_weight_section.dart';
 import '../../widgets/fonts/fonts_header.dart';
 
 /// Every font family bundled with the app, shown one family at a time.
-/// Families come from the font manifest; nothing is registered by hand.
+/// Families come from the font manifest; nothing is registered by hand. Each
+/// family lists the weights it ships no file for, and the app bar draws
+/// baselines or opens a comparison of two families.
 class FontsScreen extends StatefulWidget {
   /// Creates the screen, opening on the family whose manifest key is
   /// [initialFamily], or on the first family.
@@ -37,6 +42,9 @@ class _FontsScreenState extends State<FontsScreen> {
     metrics: FontMetricsService(),
   );
 
+  /// Whether every sample line draws its baseline.
+  final ValueNotifier<bool> _showMetrics = ValueNotifier<bool>(false);
+
   @override
   void initState() {
     super.initState();
@@ -46,14 +54,16 @@ class _FontsScreenState extends State<FontsScreen> {
   @override
   void dispose() {
     _viewModel.dispose();
+    _showMetrics.dispose();
     super.dispose();
   }
 
   /// Builds the family view; the sample button stays hidden while no family is
-  /// visible, so the sample screen never opens with an empty family list.
+  /// visible, so the sample screen never opens with an empty family list, and
+  /// the compare button while there is no second family to compare with.
   @override
   Widget build(BuildContext context) => ListenableBuilder(
-    listenable: _viewModel,
+    listenable: Listenable.merge(<Listenable>[_viewModel, _showMetrics]),
     builder: (BuildContext context, Widget? child) {
       final FontFamilyInfo? family = _viewModel.selected;
       final List<FontFamilyInfo> families = _viewModel.visibleFamilies;
@@ -86,6 +96,12 @@ class _FontsScreenState extends State<FontsScreen> {
               scrolledUnderElevation: 0,
               surfaceTintColor: Colors.transparent,
               title: const Text(PreviewHubStrings.sectionFontsTitle),
+              actions: <Widget>[
+                FontMetricsButton(showMetrics: _showMetrics),
+                if (_viewModel.families.length > 1)
+                  FontCompareButton(families: _viewModel.families),
+                const SizedBox(width: 4),
+              ],
               flexibleSpace: FlexibleSpaceBar(
                 collapseMode: CollapseMode.pin,
                 background: FontsHeader(viewModel: _viewModel),
@@ -105,12 +121,15 @@ class _FontsScreenState extends State<FontsScreen> {
                       family: family,
                       sizeInBytes: _viewModel.totalSizeOf(family),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 14),
+                    FontMissingWeights(family: family),
+                    const SizedBox(height: 6),
                     for (final FontFace face in family.faces)
                       FontWeightSection(
                         family: family,
                         face: face,
                         sizeInBytes: _viewModel.sizeOf(face),
+                        showMetrics: _showMetrics.value,
                       ),
                   ],
                 ),

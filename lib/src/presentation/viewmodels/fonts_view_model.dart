@@ -23,6 +23,10 @@ class FontsViewModel extends ChangeNotifier {
   /// Whether the first load is still running.
   bool get isLoading => _isLoading;
 
+  /// Every family, whatever the search says.
+  List<FontFamilyInfo> get families =>
+      List<FontFamilyInfo>.unmodifiable(_families);
+
   /// The family currently on show, or null while none has been chosen.
   FontFamilyInfo? get selected => _selected;
 

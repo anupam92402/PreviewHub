@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../domain/models/font_family_info.dart';
 import '../../../util/preview_hub_strings.dart';
+import 'font_metrics_text.dart';
 
 /// The sample words at one step of a font weight section's size ramp, with
 /// the size in points beside them.
@@ -11,6 +12,7 @@ class FontWeightSampleRow extends StatelessWidget {
     required this.family,
     required this.face,
     required this.size,
+    required this.showMetrics,
     super.key,
   });
 
@@ -22,6 +24,9 @@ class FontWeightSampleRow extends StatelessWidget {
 
   /// Font size of the sample, in points.
   final double size;
+
+  /// Whether the line draws its baseline.
+  final bool showMetrics;
 
   @override
   Widget build(BuildContext context) {
@@ -40,10 +45,9 @@ class FontWeightSampleRow extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Text(
-              PreviewHubStrings.fontSampleText,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+            child: FontMetricsText(
+              text: PreviewHubStrings.fontSampleText,
+              showMetrics: showMetrics,
               style: TextStyle(
                 fontFamily: family.manifestKey,
                 fontSize: size,

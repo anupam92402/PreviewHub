@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../domain/models/preview_hub_route_arguments.dart';
 import '../presentation/screens/asset_size/asset_size_screen.dart';
+import '../presentation/screens/fonts/font_compare_screen.dart';
 import '../presentation/screens/fonts/font_sample_screen.dart';
 import '../presentation/screens/fonts/fonts_screen.dart';
 import '../presentation/screens/icons_and_images/asset_detail_screen.dart';
@@ -65,6 +66,11 @@ class PreviewHubRouter {
         final FontSampleArguments args =
             settings.arguments as FontSampleArguments;
         return FontSampleScreen(families: args.families);
+
+      case PreviewHubRoutes.fontCompare:
+        final FontCompareArguments args =
+            settings.arguments as FontCompareArguments;
+        return FontCompareScreen(families: args.families);
 
       case PreviewHubRoutes.lottie:
         final LottieArguments args = settings.arguments as LottieArguments;

@@ -25,6 +25,9 @@ class PreviewHubRoutes {
   /// A type tester for the consumer's own words.
   static const String fontSample = '$previewHub/font-sample';
 
+  /// Two families set side by side.
+  static const String fontCompare = '$previewHub/font-compare';
+
   /// Every bundled and supplied Lottie animation.
   static const String lottie = '$previewHub/lottie';
 

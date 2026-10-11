@@ -11,6 +11,7 @@ class FontWeightSection extends StatelessWidget {
     required this.family,
     required this.face,
     required this.sizeInBytes,
+    required this.showMetrics,
     super.key,
   });
 
@@ -26,6 +27,9 @@ class FontWeightSection extends StatelessWidget {
   /// Size of the file behind [face], or null while it is unknown.
   final int? sizeInBytes;
 
+  /// Whether each line draws its baseline.
+  final bool showMetrics;
+
   @override
   Widget build(BuildContext context) => Padding(
     padding: const EdgeInsets.only(bottom: 26),
@@ -35,7 +39,12 @@ class FontWeightSection extends StatelessWidget {
         FontWeightHeading(face: face, sizeInBytes: sizeInBytes),
         const SizedBox(height: 10),
         for (final double size in sizeRamp)
-          FontWeightSampleRow(family: family, face: face, size: size),
+          FontWeightSampleRow(
+            family: family,
+            face: face,
+            size: size,
+            showMetrics: showMetrics,
+          ),
       ],
     ),
   );

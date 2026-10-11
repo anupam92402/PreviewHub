@@ -164,6 +164,40 @@ class PreviewHubStrings {
   static String fontFaceCount(int count) =>
       '$count ${count == 1 ? 'face' : 'faces'}';
 
+  /// Tooltip on the button while the baseline is hidden.
+  static const String fontMetricsShow = 'Show baseline';
+
+  /// Tooltip on the button while the baseline is drawn.
+  static const String fontMetricsHide = 'Hide baseline';
+
+  /// Tooltip on the button opening the family comparison.
+  static const String fontCompareTooltip = 'Compare two families';
+
+  /// Title of the family comparison.
+  static const String fontCompareTitle = 'Compare families';
+
+  /// Label of the first family menu.
+  static const String fontCompareFirst = 'First';
+
+  /// Label of the second family menu.
+  static const String fontCompareSecond = 'Second';
+
+  /// Says [family] has no file at [weight], so the [nearest] one stands in;
+  /// a lighter face standing in for a bold weight may also be thickened.
+  static String fontNearestWeight(String family, int weight, int nearest) {
+    final String note =
+        '$family has no $weight file, so the nearest one, $nearest, is used.';
+    return weight >= 600 && nearest < 600
+        ? '$note It may also be thickened artificially.'
+        : note;
+  }
+
+  /// Names the standard weights a family ships no file for.
+  static String fontMissingWeights(List<int> weights) =>
+      'No file for ${weights.join(', ')}. Text asking for these weights gets '
+      'the nearest face, and bold without a bold face is thickened '
+      'artificially.';
+
   /// Tooltip on the sort button.
   static const String sortTooltip = 'Sort by size';
 
