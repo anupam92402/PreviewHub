@@ -1,3 +1,9 @@
+## 0.0.5
+- Added a state machine inputs panel to the Rive detail page: switches, number fields and trigger buttons that stay in sync with the animation.
+- Added a Rive events button to the app bar, with a count badge and a sheet listing each event the animation reports.
+- Added a baseline toggle to the Fonts screen and a note naming the weights a family has no file for.
+- Added a font comparison screen: two families side by side at the same weight and sizes, noting when a missing weight falls back to the nearest one.
+
 ## 0.0.4
 - Enhanced the Lottie detail page with playback speed, loop or once, and background choice.
 - Added a background choice to the Rive detail page.
