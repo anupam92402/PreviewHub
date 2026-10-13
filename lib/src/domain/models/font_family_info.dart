@@ -84,6 +84,55 @@ class FontFamilyInfo {
   /// Every face, lightest first.
   final List<FontFace> faces;
 
+  /// Standard weights the family ships no upright file for. A style asking for
+  /// one of these gets the nearest face Flutter can find, and a bold request
+  /// with no bold face is thickened artificially, which never matches the
+  /// design. Empty for a family that ships all nine.
+  List<int> get missingWeights {
+    final Set<int> shipped = faces
+        .where((FontFace face) => !face.isItalic)
+        .map((FontFace face) => face.weight)
+        .toSet();
+    return <int>[
+      for (int weight = 100; weight <= 900; weight += 100)
+        if (!shipped.contains(weight)) weight,
+    ];
+  }
+
+  /// Weight of the upright face a style asking for [weight] is drawn with,
+  /// following the CSS font matching order the engine approximates: 400 tries
+  /// 500 first and 500 tries 400, both then going lighter before heavier;
+  /// below 400 goes lighter first, above 500 goes heavier first. Null for a
+  /// family with no upright face.
+  int? nearestWeight(int weight) {
+    final List<int> shipped =
+        faces
+            .where((FontFace face) => !face.isItalic)
+            .map((FontFace face) => face.weight)
+            .toSet()
+            .toList()
+          ..sort();
+    if (shipped.isEmpty) {
+      return null;
+    }
+    if (shipped.contains(weight)) {
+      return weight;
+    }
+    final List<int> lighter = shipped.where((int w) => w < weight).toList()
+      ..sort((int a, int b) => b.compareTo(a));
+    final List<int> heavier = shipped.where((int w) => w > weight).toList();
+    if (weight == 400 && shipped.contains(500)) {
+      return 500;
+    }
+    if (weight == 500 && shipped.contains(400)) {
+      return 400;
+    }
+    final List<int> order = weight > 500
+        ? <int>[...heavier, ...lighter]
+        : <int>[...lighter, ...heavier];
+    return order.first;
+  }
+
   /// The face closest to regular, used for the family's own sample line.
   FontFace get representativeFace => faces.firstWhere(
     (FontFace face) => face.weight == 400 && !face.isItalic,

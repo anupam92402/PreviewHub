@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'preview_hub_strings.dart';
+import 'util/preview_hub_colors.dart';
+import 'util/preview_hub_strings.dart';
 
 /// A collection listed on the landing screen.
 enum PreviewSectionType {
@@ -105,33 +106,33 @@ class PreviewSectionStyle {
   static PreviewSectionStyle of(PreviewSectionType type) => switch (type) {
     PreviewSectionType.widgets => const PreviewSectionStyle(
       icon: Icons.widgets_rounded,
-      accentStart: Color(0xFF0EA5E9),
-      accentEnd: Color(0xFF6366F1),
+      accentStart: PreviewHubColors.sky,
+      accentEnd: PreviewHubColors.indigo,
     ),
     PreviewSectionType.iconsAndImages => const PreviewSectionStyle(
       icon: Icons.photo_library_rounded,
-      accentStart: Color(0xFF6366F1),
-      accentEnd: Color(0xFF8B5CF6),
+      accentStart: PreviewHubColors.indigo,
+      accentEnd: PreviewHubColors.violet,
     ),
     PreviewSectionType.fonts => const PreviewSectionStyle(
       icon: Icons.text_fields_rounded,
-      accentStart: Color(0xFFF59E0B),
-      accentEnd: Color(0xFFF97316),
+      accentStart: PreviewHubColors.amber,
+      accentEnd: PreviewHubColors.orange,
     ),
     PreviewSectionType.lottie => const PreviewSectionStyle(
       icon: Icons.animation_rounded,
-      accentStart: Color(0xFFEC4899),
-      accentEnd: Color(0xFFF43F5E),
+      accentStart: PreviewHubColors.pink,
+      accentEnd: PreviewHubColors.rose,
     ),
     PreviewSectionType.rive => const PreviewSectionStyle(
       icon: Icons.auto_awesome_motion_rounded,
-      accentStart: Color(0xFF14B8A6),
-      accentEnd: Color(0xFF06B6D4),
+      accentStart: PreviewHubColors.teal,
+      accentEnd: PreviewHubColors.cyan,
     ),
     PreviewSectionType.other => const PreviewSectionStyle(
       icon: Icons.folder_open_rounded,
-      accentStart: Color(0xFF64748B),
-      accentEnd: Color(0xFF94A3B8),
+      accentStart: PreviewHubColors.slate,
+      accentEnd: PreviewHubColors.slateLight,
     ),
   };
 }

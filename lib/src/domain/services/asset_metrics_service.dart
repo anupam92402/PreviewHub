@@ -17,9 +17,26 @@ class AssetMetricsService {
   AssetMetricsService({
     AssetBundle? bundle,
     http.Client? client,
-    this.contentTypePrefixes = const <String>{'image/'},
+    this.contentTypePrefixes = imageContentTypes,
   }) : _bundle = bundle ?? rootBundle,
        _client = client ?? http.Client();
+
+  /// Content types an image may be served as.
+  static const Set<String> imageContentTypes = <String>{'image/'};
+
+  /// Content types a Lottie animation may be served as: it is JSON, often
+  /// labelled as plain text.
+  static const Set<String> lottieContentTypes = <String>{
+    'application/json',
+    'text/',
+  };
+
+  /// Content types a `.riv` file may be served as; servers label the binary
+  /// inconsistently, so anything other than a page is accepted.
+  static const Set<String> riveContentTypes = <String>{
+    'application/',
+    'binary/',
+  };
 
   /// Content types a served body may claim to be. Set per collection, since an
   /// image gallery wants `image/` while a Lottie gallery wants JSON.

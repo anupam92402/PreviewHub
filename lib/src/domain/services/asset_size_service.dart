@@ -7,14 +7,13 @@ import '../models/preview_asset.dart';
 import 'lottie_document.dart';
 
 /// Adds up what the bundled images, icons, fonts, Lottie and Rive files weigh,
-/// and everything else the app bundles as Other.
-///
-/// Every asset in the manifest is classified and every file behind it is
-/// loaded once to read its length, resolution variants included, since a
-/// 2.0x and a 3.0x copy ship alongside the 1x one. Remote assets are not
-/// counted: they do not add to the app. The icon fonts Flutter injects are left
-/// out too, because in a debug build they are measured before tree shaking and
-/// would dwarf everything the app itself ships.
+/// and everything else the app bundles as Other. Every asset in the manifest is
+/// classified and every file behind it is loaded once to read its length,
+/// resolution variants included, since a 2.0x and a 3.0x copy ship alongside
+/// the 1x one. Remote assets are not counted: they do not add to the app. The
+/// icon fonts Flutter injects are left out too, because in a debug build they
+/// are measured before tree shaking and would dwarf everything the app itself
+/// ships.
 class AssetSizeService {
   /// Reads files from [bundle], defaulting to the app's own bundle.
   AssetSizeService({AssetBundle? bundle}) : _bundle = bundle ?? rootBundle;
@@ -65,8 +64,9 @@ class AssetSizeService {
     Map<String, String> fontFiles,
   ) async {
     final String extension = _extensionOf(key);
-    // JSON stays undecided until it has been read: a Lottie animation or
-    // anything else. Every other file is decided by its name alone.
+
+    /// JSON stays undecided until it has been read: a Lottie animation or
+    /// anything else. Every other file is decided by its name alone.
     AssetSizeCategory? category = switch (AssetType.fromLocator(key)) {
       AssetType() => AssetSizeCategory.iconsAndImages,
       null =>
@@ -85,8 +85,8 @@ class AssetSizeService {
       try {
         final ByteData data = await _bundle.load(file);
         if (category == null) {
-          // Only JSON gets here, and only its main file: a Lottie has no
-          // resolution variants.
+          /// Only JSON gets here, and only its main file: a Lottie has no
+          /// resolution variants.
           final String text = utf8.decode(
             data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes),
             allowMalformed: true,

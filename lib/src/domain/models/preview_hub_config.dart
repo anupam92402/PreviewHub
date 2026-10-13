@@ -5,7 +5,6 @@ import 'widget_preview.dart';
 /// What the gallery cannot work out for itself. Bundled assets are discovered
 /// through the asset manifest and never need registering, so this carries only
 /// the remote URLs:
-///
 /// ```dart
 /// PreviewHubDashboard(
 ///   config: PreviewHubConfig(

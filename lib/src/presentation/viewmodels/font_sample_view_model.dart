@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import '../../domain/models/font_family_info.dart';
-import '../../preview_hub_strings.dart';
+import '../../util/preview_hub_strings.dart';
 
 /// Drives the sheet where a consumer sets their own text in a chosen face. The
 /// text field stays gated until a family, a weight and a size are all chosen.

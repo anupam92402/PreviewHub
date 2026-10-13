@@ -16,6 +16,7 @@ import '../../domain/services/rive_catalog_service.dart';
 
 /// One hit in the landing screen's search, naming what it found.
 sealed class GlobalSearchResult {
+  /// Base constructor for the result kinds below.
   const GlobalSearchResult();
 }
 
@@ -74,13 +75,12 @@ final class OtherSearchResult extends GlobalSearchResult {
   final OtherAssetLocation location;
 }
 
-/// Searches every collection at once from the landing screen.
-///
-/// Widgets are in memory already. The asset collections are read from the
-/// manifests the first time something is typed, not when the gallery opens,
-/// so a developer who never searches pays nothing. Remote entries are matched
-/// by URL only; nothing is fetched to search them, and other bundled files are
-/// found by name without being measured.
+/// Searches every collection at once from the landing screen. Widgets are in
+/// memory already. The asset collections are read from the manifests the first
+/// time something is typed, not when the gallery opens, so a developer who
+/// never searches pays nothing. Remote entries are matched by URL only; nothing
+/// is fetched to search them, and other bundled files are found by name without
+/// being measured.
 class GlobalSearchViewModel extends ChangeNotifier {
   /// Creates a search over what [config] and the manifests describe.
   GlobalSearchViewModel({
@@ -106,18 +106,20 @@ class GlobalSearchViewModel extends ChangeNotifier {
   final RiveCatalogService _riveCatalog;
   final OtherAssetCatalogService _otherCatalog;
 
-  /// Measurement caches handed to a detail screen opened from a hit, typed the
-  /// way each collection's own grid types them.
+  /// Measurement cache handed to an image detail screen opened from a hit,
+  /// accepting `image/` bodies as the icons and images grid does.
   final AssetMetricsService imageMetrics = AssetMetricsService();
 
-  /// See [imageMetrics].
+  /// Measurement cache handed to a Lottie detail screen opened from a hit,
+  /// accepting JSON and text bodies as the Lottie grid does.
   final AssetMetricsService lottieMetrics = AssetMetricsService(
-    contentTypePrefixes: const <String>{'application/json', 'text/'},
+    contentTypePrefixes: AssetMetricsService.lottieContentTypes,
   );
 
-  /// See [imageMetrics].
+  /// Measurement cache handed to a Rive detail screen opened from a hit,
+  /// accepting `application/` and `binary/` bodies as the Rive grid does.
   final AssetMetricsService riveMetrics = AssetMetricsService(
-    contentTypePrefixes: const <String>{'application/', 'binary/'},
+    contentTypePrefixes: AssetMetricsService.riveContentTypes,
   );
 
   List<PreviewAsset> _assets = const <PreviewAsset>[];
